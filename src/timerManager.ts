@@ -25,7 +25,7 @@ export class TimerManager {
 
   private restorePersistedState() {
     if (!this.globalState) return;
-    const saved = this.globalState.get<any>('pomopixel_saved_state');
+    const saved = this.globalState.get<any>('pomobuddy_saved_state');
     if (saved) {
       this.mode = saved.mode || 'WORK';
       this.currentRound = saved.currentRound || 1;
@@ -52,7 +52,7 @@ export class TimerManager {
 
   private persistState() {
     if (!this.globalState) return;
-    this.globalState.update('pomopixel_saved_state', {
+    this.globalState.update('pomobuddy_saved_state', {
       mode: this.mode,
       status: this.status,
       targetEndTime: this.targetEndTime,

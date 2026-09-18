@@ -42,38 +42,38 @@ export function activate(context: vscode.ExtensionContext) {
 
   // Registrar comandos de la paleta y atajos
   context.subscriptions.push(
-    vscode.commands.registerCommand('pomopixel.start', () => {
+    vscode.commands.registerCommand('pomobuddy.start', () => {
       timerManager.start();
     }),
-    vscode.commands.registerCommand('pomopixel.pause', () => {
+    vscode.commands.registerCommand('pomobuddy.pause', () => {
       timerManager.pause();
     }),
-    vscode.commands.registerCommand('pomopixel.reset', () => {
+    vscode.commands.registerCommand('pomobuddy.reset', () => {
       timerManager.reset();
     }),
-    vscode.commands.registerCommand('pomopixel.skip', () => {
+    vscode.commands.registerCommand('pomobuddy.skip', () => {
       timerManager.skip();
     }),
-    vscode.commands.registerCommand('pomopixel.toggleMute', () => {
-      const wsConfig = vscode.workspace.getConfiguration('pomopixel');
+    vscode.commands.registerCommand('pomobuddy.toggleMute', () => {
+      const wsConfig = vscode.workspace.getConfiguration('pomobuddy');
       const current = wsConfig.get<boolean>('soundEnabled', true);
       const updated = !current;
       wsConfig.update('soundEnabled', updated, vscode.ConfigurationTarget.Global);
       const newConfig = { ...timerManager.getConfig(), soundEnabled: updated };
       timerManager.updateConfig(newConfig);
       webviewProvider.sendConfig(newConfig);
-      const msg = updated ? '🔊 PomoPixel: Sonidos activados' : '🔇 PomoPixel: Modo silencioso activado';
+      const msg = updated ? '🔊 PomoBuddy: Sonidos activados' : '🔇 PomoBuddy: Modo silencioso activado';
       vscode.window.setStatusBarMessage(msg, 3000);
     }),
-    vscode.commands.registerCommand('pomopixel.openCompanion', () => {
-      vscode.commands.executeCommand('pomopixel.companionView.focus');
+    vscode.commands.registerCommand('pomobuddy.openCompanion', () => {
+      vscode.commands.executeCommand('pomobuddy.companionView.focus');
     })
   );
 
   // Escuchar cambios en la configuración del usuario
   context.subscriptions.push(
     vscode.workspace.onDidChangeConfiguration((e) => {
-      if (e.affectsConfiguration('pomopixel')) {
+      if (e.affectsConfiguration('pomobuddy')) {
         const updatedConfig = getExtensionConfig();
         timerManager.updateConfig(updatedConfig);
         webviewProvider.sendConfig(updatedConfig);
@@ -89,7 +89,7 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 function getExtensionConfig(): PomodoroConfig {
-  const wsConfig = vscode.workspace.getConfiguration('pomopixel');
+  const wsConfig = vscode.workspace.getConfiguration('pomobuddy');
   return {
     workDuration: wsConfig.get<number>('workDuration', 25),
     shortBreakDuration: wsConfig.get<number>('shortBreakDuration', 5),

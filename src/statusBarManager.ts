@@ -9,8 +9,8 @@ export class StatusBarManager {
       vscode.StatusBarAlignment.Right,
       100
     );
-    this.statusBarItem.command = 'pomopixel.openCompanion';
-    this.statusBarItem.tooltip = 'PomoPixel: Haz clic para abrir el compañero en la barra lateral';
+    this.statusBarItem.command = 'pomobuddy.openCompanion';
+    this.statusBarItem.tooltip = 'PomoBuddy: Haz clic para abrir tu compañero en la barra lateral';
     this.renderDefault();
     this.statusBarItem.show();
   }
@@ -24,30 +24,30 @@ export class StatusBarManager {
 
     if (snapshot.status === 'IDLE') {
       const modeLabel = snapshot.mode === 'WORK' ? 'Pomodoro' : 'Descanso';
-      this.statusBarItem.text = `$(watch) PomoPixel: ${modeLabel} listo (${timeFormatted})`;
-      this.statusBarItem.tooltip = `PomoPixel [Inactivo] - Ronda ${snapshot.currentRound}/${snapshot.totalRounds}. Clic para abrir.`;
+      this.statusBarItem.text = `$(watch) PomoBuddy: ${modeLabel} listo (${timeFormatted})`;
+      this.statusBarItem.tooltip = `PomoBuddy [Inactivo] - Ronda ${snapshot.currentRound}/${snapshot.totalRounds}. Clic para abrir.`;
       return;
     }
 
     if (snapshot.status === 'PAUSED') {
       this.statusBarItem.text = `$(debug-pause) ${timeFormatted} [Pausado]`;
-      this.statusBarItem.tooltip = `PomoPixel en pausa. Clic para abrir el panel y reanudar.`;
+      this.statusBarItem.tooltip = `PomoBuddy en pausa. Clic para abrir el panel y reanudar.`;
       return;
     }
 
     if (snapshot.mode === 'WORK') {
       this.statusBarItem.text = `$(flame) ${timeFormatted} (${snapshot.currentRound}/${snapshot.totalRounds})`;
-      this.statusBarItem.tooltip = `PomoPixel: Modo Enfoque - Ronda ${snapshot.currentRound}/${snapshot.totalRounds}. Clic para abrir el panel.`;
+      this.statusBarItem.tooltip = `PomoBuddy: Modo Enfoque - Ronda ${snapshot.currentRound}/${snapshot.totalRounds}. Clic para abrir el panel.`;
     } else {
       const icon = snapshot.mode === 'LONG_BREAK' ? '$(star-full)' : '$(coffee)';
       const label = snapshot.mode === 'LONG_BREAK' ? 'Descanso Largo 🌟' : 'Descanso 🕺';
       this.statusBarItem.text = `${icon} ${timeFormatted} [${label}]`;
-      this.statusBarItem.tooltip = `PomoPixel: ¡Tiempo de descansar y despejarse! Clic para ver a tu avatar bailar.`;
+      this.statusBarItem.tooltip = `PomoBuddy: ¡Tiempo de descansar y despejarse! Clic para ver a tu avatar bailar.`;
     }
   }
 
   private renderDefault() {
-    this.statusBarItem.text = '$(watch) PomoPixel';
+    this.statusBarItem.text = '$(watch) PomoBuddy';
   }
 
   public dispose() {

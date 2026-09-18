@@ -1,13 +1,13 @@
 {
-  "name": "pomopixel",
-  "displayName": "PomoPixel: Pomodoro Pixel Art Companion",
+  "name": "pomobuddy",
+  "displayName": "PomoBuddy: Pomodoro Pixel Art Companion",
   "description": "Tu compañero de concentración en pixel art para VS Code y Antigravity. Temporizador Pomodoro, animaciones de baile en descansos y reacciones a tu código.",
   "version": "0.1.0",
   "publisher": "rgarduno",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/rgarduno/pomopixel"
+    "url": "https://github.com/rgarduno/pomobuddy"
   },
   "engines": {
     "vscode": "^1.85.0"
@@ -17,6 +17,7 @@
     "Productivity"
   ],
   "keywords": [
+    "pomobuddy",
     "pomodoro",
     "pixel art",
     "companion",
@@ -33,87 +34,87 @@
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "pomopixel-sidebar",
-          "title": "PomoPixel",
+          "id": "pomobuddy-sidebar",
+          "title": "PomoBuddy",
           "icon": "media/icon.svg"
         }
       ]
     },
     "views": {
-      "pomopixel-sidebar": [
+      "pomobuddy-sidebar": [
         {
           "type": "webview",
-          "id": "pomopixel.companionView",
-          "name": "PomoPixel Companion"
+          "id": "pomobuddy.companionView",
+          "name": "PomoBuddy Companion"
         }
       ]
     },
     "commands": [
       {
-        "command": "pomopixel.start",
+        "command": "pomobuddy.start",
         "title": "Iniciar Pomodoro",
-        "category": "PomoPixel",
+        "category": "PomoBuddy",
         "icon": "$(play)"
       },
       {
-        "command": "pomopixel.pause",
+        "command": "pomobuddy.pause",
         "title": "Pausar Pomodoro",
-        "category": "PomoPixel",
+        "category": "PomoBuddy",
         "icon": "$(debug-pause)"
       },
       {
-        "command": "pomopixel.reset",
+        "command": "pomobuddy.reset",
         "title": "Reiniciar Pomodoro",
-        "category": "PomoPixel",
+        "category": "PomoBuddy",
         "icon": "$(debug-restart)"
       },
       {
-        "command": "pomopixel.skip",
+        "command": "pomobuddy.skip",
         "title": "Saltar al siguiente intervalo",
-        "category": "PomoPixel",
+        "category": "PomoBuddy",
         "icon": "$(debug-step-over)"
       },
       {
-        "command": "pomopixel.toggleMute",
+        "command": "pomobuddy.toggleMute",
         "title": "Silenciar / Activar Sonidos",
-        "category": "PomoPixel",
+        "category": "PomoBuddy",
         "icon": "$(mute)"
       },
       {
-        "command": "pomopixel.openCompanion",
+        "command": "pomobuddy.openCompanion",
         "title": "Abrir Compañero Pixel",
-        "category": "PomoPixel"
+        "category": "PomoBuddy"
       }
     ],
     "configuration": {
-      "title": "PomoPixel",
+      "title": "PomoBuddy",
       "properties": {
-        "pomopixel.workDuration": {
+        "pomobuddy.workDuration": {
           "type": "number",
           "default": 25,
           "description": "Duración de la sesión de trabajo/enfoque (en minutos)"
         },
-        "pomopixel.shortBreakDuration": {
+        "pomobuddy.shortBreakDuration": {
           "type": "number",
           "default": 5,
           "description": "Duración del descanso corto (en minutos)"
         },
-        "pomopixel.longBreakDuration": {
+        "pomobuddy.longBreakDuration": {
           "type": "number",
           "default": 15,
           "description": "Duración del descanso largo (en minutos)"
         },
-        "pomopixel.roundsBeforeLongBreak": {
+        "pomobuddy.roundsBeforeLongBreak": {
           "type": "number",
           "default": 4,
           "description": "Número de rondas de trabajo antes de un descanso largo"
         },
-        "pomopixel.soundEnabled": {
+        "pomobuddy.soundEnabled": {
           "type": "boolean",
           "default": true,
           "description": "Activar efectos de sonido retro 8-bit sintetizados"
         },
-        "pomopixel.avatar": {
+        "pomobuddy.avatar": {
           "type": "string",
           "enum": ["neko", "wizard", "robot"],
           "default": "neko",

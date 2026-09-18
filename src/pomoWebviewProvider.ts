@@ -11,7 +11,7 @@ import {
 import { TimerManager } from './timerManager';
 
 export class PomoWebviewProvider implements vscode.WebviewViewProvider {
-  public static readonly viewType = 'pomopixel.companionView';
+  public static readonly viewType = 'pomobuddy.companionView';
   private view?: vscode.WebviewView;
 
   constructor(
@@ -97,7 +97,7 @@ export class PomoWebviewProvider implements vscode.WebviewViewProvider {
   }
 
   private handleAvatarChange(avatar: AvatarId) {
-    const config = vscode.workspace.getConfiguration('pomopixel');
+    const config = vscode.workspace.getConfiguration('pomobuddy');
     config.update('avatar', avatar, vscode.ConfigurationTarget.Global);
     const updated = { ...this.timerManager.getConfig(), avatar };
     this.timerManager.updateConfig(updated);
@@ -105,7 +105,7 @@ export class PomoWebviewProvider implements vscode.WebviewViewProvider {
   }
 
   private handleSoundToggle(soundEnabled: boolean) {
-    const config = vscode.workspace.getConfiguration('pomopixel');
+    const config = vscode.workspace.getConfiguration('pomobuddy');
     config.update('soundEnabled', soundEnabled, vscode.ConfigurationTarget.Global);
     const updated = { ...this.timerManager.getConfig(), soundEnabled };
     this.timerManager.updateConfig(updated);

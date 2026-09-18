@@ -1,4 +1,4 @@
-# PomoPixel - Registro y Matriz de Características (Free vs. Pro)
+# PomoBuddy - Registro y Matriz de Características (Free vs. Pro)
 
 Este documento es la **fuente de la verdad** del proyecto. Se actualizará constantemente conforme desarrollemos e incorporemos nuevas funcionalidades a la extensión, clasificándolas entre la **Capa Gratuita** y la **Capa de Pago (Pro)**.
 

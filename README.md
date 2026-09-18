@@ -1,4 +1,4 @@
-# 🍅 PomoPixel
+# 🍅 PomoBuddy
 
 > **Tu compañero de concentración en pixel art para Visual Studio Code y Antigravity.**  
 > Temporizador Pomodoro con personajes animados en pixel art que te acompañan mientras programas, reaccionan a tus errores en tiempo real y **¡se ponen a bailar en tus descansos!** 🕺✨
@@ -12,6 +12,7 @@
 * 😵‍💫 **Reacción a Errores en Vivo:** Si cometes un error de sintaxis o linter en tu archivo activo, tu avatar se preocupa o se marea. ¡Al arreglarlo, celebra el código limpio!
 * 💾 **Reacción al Guardar (`Cmd+S`):** Gesto de aprobación inmediato cada vez que guardas tus cambios.
 * 🔊 **Audio Sintetizado Retro 8-bit:** Fanfarrias de descanso y pitidos de arcade usando la Web Audio API nativa (sin archivos pesados, funciona sin internet).
+* 🔇 **Comando Rápido de Silencio:** Atajo y comando para silenciar al instante en llamadas o reuniones (`PomoBuddy: Silenciar / Activar Sonidos`).
 * 🍅 **Temporizador Pomodoro Completo:** 
   * Tiempos de trabajo, descansos cortos y descansos largos.
   * Contador de rondas y ciclos.
@@ -32,23 +33,23 @@ npm install
 # Compilar y generar el paquete .vsix
 npm run package
 ```
-Esto creará un archivo `pomopixel-0.1.0.vsix` en la raíz del proyecto.
+Esto creará un archivo `pomobuddy-0.1.0.vsix` en la raíz del proyecto.
 
 ### 2. Instalar en VS Code o Antigravity
 * **Opción A (Desde el editor):**
   1. Abre la pestaña de **Extensiones** (`Cmd+Shift+X`).
   2. Haz clic en el menú de tres puntos (`...`) en la esquina superior de la pestaña.
-  3. Selecciona **Install from VSIX...** y elige el archivo `pomopixel-0.1.0.vsix`.
+  3. Selecciona **Install from VSIX...** y elige el archivo `pomobuddy-0.1.0.vsix`.
 * **Opción B (Desde la terminal):**
   ```bash
-  code --install-extension pomopixel-0.1.0.vsix
+  code --install-extension pomobuddy-0.1.0.vsix
   ```
 
 ---
 
 ## 🚀 Uso
 
-1. Haz clic en el icono del **Tomatito Pixel** en la barra de actividad izquierda.
+1. Haz clic en el icono del **Tomatito Pixel** en la barra de actividad izquierda (`PomoBuddy`).
 2. Selecciona tu avatar favorito (**Neko**, **Mago**, **Robot**).
 3. Pulsa **Iniciar ▶** para comenzar tu sesión de enfoque.
 4. ¡Cuando termine el bloque de trabajo, relájate y disfruta del baile de tu compañero!
@@ -61,12 +62,12 @@ Puedes modificar la duración de los intervalos en tu `settings.json` o desde la
 
 ```json
 {
-  "pomopixel.workDuration": 25,
-  "pomopixel.shortBreakDuration": 5,
-  "pomopixel.longBreakDuration": 15,
-  "pomopixel.roundsBeforeLongBreak": 4,
-  "pomopixel.soundEnabled": true,
-  "pomopixel.avatar": "neko"
+  "pomobuddy.workDuration": 25,
+  "pomobuddy.shortBreakDuration": 5,
+  "pomobuddy.longBreakDuration": 15,
+  "pomobuddy.roundsBeforeLongBreak": 4,
+  "pomobuddy.soundEnabled": true,
+  "pomobuddy.avatar": "neko"
 }
 ```
 

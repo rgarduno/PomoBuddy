@@ -25,7 +25,7 @@ Este archivo registra el avance en tiempo real del proyecto. Las tareas se irán
 ---
 
 ## 🔵 Fase 3: Preparación Open Source, Marca y GitHub
-- [ ] **Renombrar el proyecto oficialmente a `PomoBuddy`:** Actualizar identificadores, `package.json`, comandos, carpetas y documentación (pendiente de confirmación del usuario).
+- [x] **Renombrar el proyecto oficialmente a `PomoBuddy`:** Actualizar identificadores, `package.json`, comandos, configuración y documentación.
 - [ ] **GitHub Actions Workflow (`.github/workflows/build.yml`):** Compilación automática y generación del archivo `.vsix` en cada release.
 - [ ] **Capturas y GIF animado de demostración:** Crear un GIF de vista previa del muñeco bailando para el `README.md`.
 - [ ] **Guía de Contribución (`CONTRIBUTING.md`):** Explicar cómo la comunidad de GitHub puede dibujar y proponer nuevos avatares en pixel art.
