@@ -74,6 +74,12 @@
         "icon": "$(debug-step-over)"
       },
       {
+        "command": "pomopixel.toggleMute",
+        "title": "Silenciar / Activar Sonidos",
+        "category": "PomoPixel",
+        "icon": "$(mute)"
+      },
+      {
         "command": "pomopixel.openCompanion",
         "title": "Abrir Compañero Pixel",
         "category": "PomoPixel"

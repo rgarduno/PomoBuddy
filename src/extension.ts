@@ -54,6 +54,17 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand('pomopixel.skip', () => {
       timerManager.skip();
     }),
+    vscode.commands.registerCommand('pomopixel.toggleMute', () => {
+      const wsConfig = vscode.workspace.getConfiguration('pomopixel');
+      const current = wsConfig.get<boolean>('soundEnabled', true);
+      const updated = !current;
+      wsConfig.update('soundEnabled', updated, vscode.ConfigurationTarget.Global);
+      const newConfig = { ...timerManager.getConfig(), soundEnabled: updated };
+      timerManager.updateConfig(newConfig);
+      webviewProvider.sendConfig(newConfig);
+      const msg = updated ? '🔊 PomoPixel: Sonidos activados' : '🔇 PomoPixel: Modo silencioso activado';
+      vscode.window.setStatusBarMessage(msg, 3000);
+    }),
     vscode.commands.registerCommand('pomopixel.openCompanion', () => {
       vscode.commands.executeCommand('pomopixel.companionView.focus');
     })

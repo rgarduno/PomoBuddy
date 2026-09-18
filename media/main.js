@@ -69,26 +69,43 @@
       }
     }
     if (audioCtx && audioCtx.state === 'suspended') {
-      audioCtx.resume();
+      audioCtx.resume().catch(() => {});
     }
   }
 
+  // Desbloqueo proactivo ante cualquier primer gesto en el panel
+  window.addEventListener('click', initAudio, { once: true });
+  window.addEventListener('keydown', initAudio, { once: true });
+
   function playTone(freq, type, duration, startTime = 0, gainLevel = 0.1) {
-    if (!soundEnabled || !audioCtx) return;
+    if (!soundEnabled) return;
+    initAudio();
+    if (!audioCtx) return;
+
     try {
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.type = type;
-      osc.frequency.setValueAtTime(freq, audioCtx.currentTime + startTime);
-      gain.gain.setValueAtTime(gainLevel, audioCtx.currentTime + startTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + startTime + duration);
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      osc.start(audioCtx.currentTime + startTime);
-      osc.stop(audioCtx.currentTime + startTime + duration);
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume().then(() => {
+          doPlayTone(freq, type, duration, startTime, gainLevel);
+        }).catch(() => {});
+        return;
+      }
+      doPlayTone(freq, type, duration, startTime, gainLevel);
     } catch (e) {
-      console.warn('Error reproduciendo sonido', e);
+      console.warn('Audio no disponible', e);
     }
+  }
+
+  function doPlayTone(freq, type, duration, startTime, gainLevel) {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, audioCtx.currentTime + startTime);
+    gain.gain.setValueAtTime(gainLevel, audioCtx.currentTime + startTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + startTime + duration);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start(audioCtx.currentTime + startTime);
+    osc.stop(audioCtx.currentTime + startTime + duration);
   }
 
   function playWorkStartSound() {

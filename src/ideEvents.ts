@@ -58,6 +58,11 @@ export class IdeEventsListener {
       return;
     }
 
+    // Edge Case: Proteger contra archivos masivos (dumps, datasets JSON gigantes > 500 KB)
+    if (activeEditor.document.lineCount > 10000 || activeEditor.document.getText().length > 500000) {
+      return;
+    }
+
     const diagnostics = vscode.languages.getDiagnostics(uri);
     const errorCount = diagnostics.filter(
       (d) => d.severity === vscode.DiagnosticSeverity.Error
