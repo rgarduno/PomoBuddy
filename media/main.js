@@ -728,7 +728,10 @@
     // 7. El bocadillo de diálogo sigue suavemente la posición horizontal del avatar
     const avatarPx = Math.round(avatarX * PIXEL_SCALE);
     const stageWidth = stage.clientWidth || 280;
-    const clampedPx = Math.max(75, Math.min(stageWidth - 75, avatarPx));
+    const bubbleHalfWidth = (speechBubble.offsetWidth || 100) / 2;
+    const minX = bubbleHalfWidth + 10;
+    const maxX = Math.max(minX, stageWidth - bubbleHalfWidth - 10);
+    const clampedPx = Math.max(minX, Math.min(maxX, avatarPx));
     speechBubble.style.left = `${clampedPx}px`;
 
     animationFrameId = requestAnimationFrame(renderLoop);
