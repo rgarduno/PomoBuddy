@@ -19,8 +19,16 @@
   const startPauseLabel = document.getElementById('startPauseLabel');
   const btnReset = document.getElementById('btnReset');
   const btnSkip = document.getElementById('btnSkip');
+  const modeIcon = document.getElementById('modeIcon');
+  const btnBall = document.getElementById('btnBall');
+  const btnSettings = document.getElementById('btnSettings');
+  const btnCloseSettings = document.getElementById('btnCloseSettings');
+  const settingsBackdrop = document.getElementById('settingsBackdrop');
   const soundToggle = document.getElementById('soundToggle');
   const avatarButtons = document.querySelectorAll('.avatar-btn');
+
+  // Pelotita interactiva estilo pets
+  let toyBall = null;
 
   // Estado local
   let currentAvatar = 'neko';
@@ -709,6 +717,58 @@
       }
     }
 
+    // 4.5. Simulación y renderizado de la pelotita interactiva estilo pets
+    if (toyBall && toyBall.active) {
+      toyBall.x += toyBall.vx;
+      toyBall.y += toyBall.vy;
+      toyBall.vy += 0.28; // Gravedad
+      toyBall.vx *= 0.982; // Fricción
+
+      const floorY = 24;
+      if (toyBall.y >= floorY) {
+        toyBall.y = floorY;
+        if (Math.abs(toyBall.vy) > 0.8) {
+          toyBall.vy = -toyBall.vy * 0.65;
+          toyBall.bounces++;
+          playTone(450, 'triangle', 0.04, 0, 0.05);
+        } else {
+          toyBall.vy = 0;
+        }
+      }
+
+      if (toyBall.x <= 4) {
+        toyBall.x = 4;
+        toyBall.vx = Math.abs(toyBall.vx) * 0.8;
+      } else if (toyBall.x >= V_WIDTH - 4) {
+        toyBall.x = V_WIDTH - 4;
+        toyBall.vx = -Math.abs(toyBall.vx) * 0.8;
+      }
+
+      // Dibujar pelota pixel art (4x4)
+      const bx = Math.round(toyBall.x);
+      const by = Math.round(toyBall.y);
+      ctx.fillStyle = toyBall.color || '#ff3838';
+      ctx.fillRect(bx * PIXEL_SCALE, by * PIXEL_SCALE, PIXEL_SCALE * 2, PIXEL_SCALE * 2);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(bx * PIXEL_SCALE, by * PIXEL_SCALE, PIXEL_SCALE, PIXEL_SCALE);
+
+      // Si el avatar está cerca, ¡le da una patadita a la pelota y salta!
+      const distToBall = Math.abs(avatarX - toyBall.x);
+      if (distToBall < 6 && Math.abs(20 - toyBall.y) < 10) {
+        toyBall.vx = facingDir * (2.2 + Math.random() * 1.6);
+        toyBall.vy = -2.8;
+        jumpVy = -2.6;
+        emitClickStars(avatarX, 16);
+        playTone(1046.5, 'sine', 0.1, 0, 0.08); // C6
+      } else if (!isSittingInChair && activeMood !== 'CYCLE') {
+        // El avatar corre emocionado hacia la pelota
+        facingDir = toyBall.x > avatarX ? 1 : -1;
+        avatarX += (walkSpeed * 1.35) * facingDir;
+        isWalking = true;
+        walkPauseTimer = 0;
+      }
+    }
+
     // 5. Renderizar personaje o trofeo
     if (activeMood === 'CYCLE') {
       drawTrophy(animTick);
@@ -777,16 +837,19 @@
     const isBreak = mode === 'SHORT_BREAK' || mode === 'LONG_BREAK';
     const isRunning = status === 'RUNNING';
 
-    // Ajustar insignias
-    modeBadge.className = 'mode-badge';
+    // Ajustar insignias en el HUD
+    modeBadge.className = 'hud-badge';
     if (mode === 'WORK') {
-      modeBadge.textContent = 'ENFOQUE / TRABAJO';
+      modeBadge.textContent = 'ENFOQUE';
+      if (modeIcon) modeIcon.textContent = '🍅';
     } else if (mode === 'SHORT_BREAK') {
-      modeBadge.textContent = 'DESCANSO CORTO 🕺';
+      modeBadge.textContent = 'DESCANSO';
       modeBadge.classList.add('break');
+      if (modeIcon) modeIcon.textContent = '☕';
     } else {
-      modeBadge.textContent = 'DESCANSO LARGO 🌟';
+      modeBadge.textContent = 'FIESTA';
       modeBadge.classList.add('long-break');
+      if (modeIcon) modeIcon.textContent = '🌟';
     }
 
     // Activar o desactivar efectos de fiesta y baile
@@ -802,13 +865,9 @@
     if (isRunning) {
       startPauseIcon.textContent = '⏸';
       startPauseLabel.textContent = 'Pausar';
-      btnStartPause.classList.remove('btn-primary');
-      btnStartPause.classList.add('btn-secondary');
     } else {
       startPauseIcon.textContent = '▶';
       startPauseLabel.textContent = status === 'PAUSED' ? 'Reanudar' : 'Iniciar';
-      btnStartPause.classList.add('btn-primary');
-      btnStartPause.classList.remove('btn-secondary');
     }
   }
 
@@ -893,6 +952,24 @@
     vscode.postMessage({ type: 'SKIP' });
   });
 
+  // Función para lanzar pelotita interactiva
+  function throwBall(targetX, targetY) {
+    initAudio();
+    playClick();
+    const vx = Math.max(-2.5, Math.min(2.5, (targetX - avatarX) * 0.12));
+    toyBall = {
+      x: avatarX,
+      y: 10,
+      vx: vx !== 0 ? vx : (facingDir * 2.2),
+      vy: -3.5,
+      bounces: 0,
+      active: true,
+      color: '#ff3838',
+    };
+    emitClickStars(avatarX, 12);
+    playTone(700, 'square', 0.08, 0, 0.08);
+  }
+
   // Interacción por clic sobre el escenario y el avatar
   canvas.addEventListener('click', (e) => {
     initAudio();
@@ -928,12 +1005,34 @@
       const quotes = petQuotes[currentAvatar] || petQuotes.neko;
       setDialogue(quotes[Math.floor(Math.random() * quotes.length)]);
     } else {
-      // Clic en otro punto del suelo: llamar al avatar hacia ese lugar
+      // Clic en el suelo: lanzar pelotita hacia allí para que el compañero juegue
+      throwBall(clickVx, 24);
+      setDialogue('¡Mira la pelotita! 🎾');
+    }
+  });
+
+  // Botón de Pelotita en el HUD
+  btnBall?.addEventListener('click', () => {
+    const targetX = Math.max(6, Math.min(V_WIDTH - 6, avatarX + facingDir * 25));
+    throwBall(targetX, 20);
+    setDialogue('¡Atrapa la pelotita! 🎾');
+  });
+
+  // Modal / Drawer de Ajustes
+  btnSettings?.addEventListener('click', () => {
+    playClick();
+    settingsBackdrop?.classList.add('open');
+  });
+
+  btnCloseSettings?.addEventListener('click', () => {
+    playClick();
+    settingsBackdrop?.classList.remove('open');
+  });
+
+  settingsBackdrop?.addEventListener('click', (e) => {
+    if (e.target === settingsBackdrop) {
       playClick();
-      emitClickStars(clickVx, 24);
-      facingDir = clickVx > avatarX ? 1 : -1;
-      walkPauseTimer = 0;
-      isSittingInChair = false;
+      settingsBackdrop.classList.remove('open');
     }
   });
 
@@ -944,7 +1043,7 @@
   function updateSwitchLabel() {
     const isWide = window.innerWidth >= 580;
     if (switchModeText) {
-      switchModeText.textContent = isWide ? 'Lateral' : 'Panorámico';
+      switchModeText.textContent = isWide ? 'Cambiar a Barra Lateral' : 'Cambiar a Barra Inferior';
     }
   }
   window.addEventListener('resize', updateSwitchLabel);
@@ -952,6 +1051,7 @@
 
   btnSwitchMode?.addEventListener('click', () => {
     playClick();
+    settingsBackdrop?.classList.remove('open');
     const isWide = window.innerWidth >= 580;
     if (isWide) {
       vscode.postMessage({ type: 'OPEN_SIDEBAR' });

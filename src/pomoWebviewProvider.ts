@@ -163,10 +163,45 @@ export class PomoWebviewProvider implements vscode.WebviewViewProvider {
   <title>PomoBuddy Companion</title>
 </head>
 <body>
-  <div class="pomo-container">
+  <div class="pomo-app">
     
-    <!-- Escenario Pixel Art Seamless (Libre sin jaula/caja) -->
-    <div class="stage-container" id="stage">
+    <!-- Minimal Frosted HUD Flotante (Limpio y Discreto) -->
+    <header class="hud-bar">
+      <div class="hud-pill timer-pill">
+        <span class="hud-icon" id="modeIcon">🍅</span>
+        <span class="hud-badge" id="modeBadge">POMODORO</span>
+        <span class="hud-time" id="timerDisplay">25:00</span>
+        <div class="hud-progress-wrap">
+          <div class="hud-progress-bar" id="progressBar"></div>
+        </div>
+        <span class="hud-round" id="roundTracker"><span id="currentRound">1</span>/<span id="totalRounds">4</span></span>
+      </div>
+
+      <div class="hud-pill controls-pill">
+        <button class="hud-btn hud-btn-main" id="btnStartPause" title="Iniciar o pausar">
+          <span id="startPauseIcon">▶</span>
+          <span id="startPauseLabel" class="hud-btn-text">Iniciar</span>
+        </button>
+        <button class="hud-btn" id="btnReset" title="Reiniciar ronda actual">
+          <span>↺</span>
+        </button>
+        <button class="hud-btn" id="btnSkip" title="Saltar al siguiente intervalo">
+          <span>⏭</span>
+        </button>
+      </div>
+
+      <div class="hud-pill actions-pill">
+        <button class="hud-btn hud-btn-icon" id="btnBall" title="Lanzar pelotita para jugar 🎾">
+          <span>🎾</span>
+        </button>
+        <button class="hud-btn hud-btn-icon" id="btnSettings" title="Ajustes de Avatar y Pomodoro ⚙️">
+          <span>⚙️</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Escenario Pixel Art (Toma el 100% del espacio visual disponible) -->
+    <main class="stage-container" id="stage">
       <div class="speech-bubble" id="speechBubble">
         <span id="speechText">¡Hola! Listo para enfocarnos. 💻</span>
       </div>
@@ -175,73 +210,63 @@ export class PomoWebviewProvider implements vscode.WebviewViewProvider {
       <div class="party-effects" id="partyEffects"></div>
       
       <div class="canvas-wrapper">
-        <canvas id="pixelCanvas" width="160" height="160"></canvas>
+        <canvas id="pixelCanvas" width="320" height="160"></canvas>
       </div>
 
       <div class="stage-floor"></div>
-    </div>
+    </main>
 
-    <!-- Panel de Control y Temporizador -->
-    <div class="dashboard-section">
-      <!-- Indicador de Estado y Tiempo -->
-      <div class="timer-section">
-        <div class="timer-top-row">
-          <div class="mode-badge" id="modeBadge">POMODORO</div>
-          <!-- Presets Rápidos de Tiempo -->
-          <div class="presets-row">
-            <button class="preset-pill active" id="preset25" data-work="25" data-break="5" title="Pomodoro Clásico: 25m trabajo / 5m descanso">
-              25 / 5m
-            </button>
-            <button class="preset-pill" id="preset50" data-work="50" data-break="10" title="Deep Work: 50m trabajo / 10m descanso">
-              50 / 10m
+    <!-- Modal / Drawer de Ajustes Elegante -->
+    <div class="settings-modal-backdrop" id="settingsBackdrop">
+      <div class="settings-modal" id="settingsModal">
+        <div class="settings-header">
+          <span class="settings-title">⚙️ Ajustes de PomoBuddy</span>
+          <button class="settings-close-btn" id="btnCloseSettings" title="Cerrar ajustes">✕</button>
+        </div>
+
+        <div class="settings-body">
+          <div class="settings-group">
+            <label class="settings-label">ELIGE TU COMPAÑERO</label>
+            <div class="avatar-selector">
+              <button class="avatar-btn active" data-avatar="neko" title="NekoDev (Gatito programador)">
+                <span class="avatar-emoji">🐱</span>
+                <span class="avatar-name">NekoDev</span>
+              </button>
+              <button class="avatar-btn" data-avatar="wizard" title="CodeMage (Mago 8-bit)">
+                <span class="avatar-emoji">🧙‍♂️</span>
+                <span class="avatar-name">CodeMage</span>
+              </button>
+              <button class="avatar-btn" data-avatar="robot" title="PixelBot (Robot inteligente)">
+                <span class="avatar-emoji">🤖</span>
+                <span class="avatar-name">PixelBot</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="settings-group">
+            <label class="settings-label">PRESETS DE TIEMPO</label>
+            <div class="presets-row">
+              <button class="preset-pill active" id="preset25" data-work="25" data-break="5">
+                🍅 25 / 5m (Clásico)
+              </button>
+              <button class="preset-pill" id="preset50" data-work="50" data-break="10">
+                🚀 50 / 10m (Deep Work)
+              </button>
+            </div>
+          </div>
+
+          <div class="settings-group settings-row-group">
+            <label class="toggle-container" title="Activar/desactivar sintetizador retro">
+              <input type="checkbox" id="soundToggle" checked>
+              <span class="toggle-label">🔊 Efectos de sonido 8-bit</span>
+            </label>
+          </div>
+
+          <div class="settings-group settings-row-group">
+            <button class="btn-switch-mode" id="btnSwitchMode">
+              🖥️ <span id="switchModeText">Cambiar a Barra Inferior</span>
             </button>
           </div>
-        </div>
-        <div class="timer-display" id="timerDisplay">25:00</div>
-        <div class="progress-bar-container">
-          <div class="progress-bar" id="progressBar"></div>
-        </div>
-        <div class="round-tracker" id="roundTracker">
-          Ronda <span id="currentRound">1</span> de <span id="totalRounds">4</span>
-        </div>
-      </div>
-
-      <!-- Controles Principales -->
-      <div class="controls-row">
-        <button class="btn btn-primary" id="btnStartPause" title="Iniciar o pausar">
-          <span class="btn-icon" id="startPauseIcon">▶</span>
-          <span id="startPauseLabel">Iniciar</span>
-        </button>
-        <button class="btn btn-secondary" id="btnReset" title="Reiniciar tiempo actual">
-          <span class="btn-icon">↺</span>
-        </button>
-        <button class="btn btn-secondary" id="btnSkip" title="Saltar al siguiente intervalo">
-          <span class="btn-icon">⏭</span>
-        </button>
-      </div>
-
-      <!-- Selector de Avatar y Sonido -->
-      <div class="customization-section">
-        <div class="avatar-selector">
-          <button class="avatar-btn active" data-avatar="neko" title="NekoDev (Gatito)">
-            🐱 <span>Neko</span>
-          </button>
-          <button class="avatar-btn" data-avatar="wizard" title="CodeMage (Mago 8-bit)">
-            🧙‍♂️ <span>Mago</span>
-          </button>
-          <button class="avatar-btn" data-avatar="robot" title="PixelBot (Robot)">
-            🤖 <span>Robot</span>
-          </button>
-        </div>
-        
-        <div class="bottom-tools-row">
-          <label class="toggle-container" title="Activar/desactivar sonidos retro">
-            <input type="checkbox" id="soundToggle" checked>
-            <span class="toggle-label">🔊 Sonido</span>
-          </label>
-          <button class="btn-switch-mode" id="btnSwitchMode" title="Alternar entre Barra Lateral y Barra Inferior Panorámica">
-            🖥️ <span id="switchModeText">Panorámico</span>
-          </button>
         </div>
       </div>
     </div>

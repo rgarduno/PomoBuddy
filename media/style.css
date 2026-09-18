@@ -1,12 +1,14 @@
 :root {
-  --bg-color: var(--vscode-sideBar-background, #1e1e2e);
+  --bg-color: transparent;
   --text-color: var(--vscode-foreground, #cdd6f4);
   --accent-color: #ff5e7e;
   --focus-color: #ff5252;
   --break-color: #00e676;
   --long-break-color: #ffd600;
   --border-color: rgba(255, 255, 255, 0.12);
-  --pixel-border: 2px solid rgba(255, 255, 255, 0.18);
+  --pixel-border: 1px solid rgba(255, 255, 255, 0.15);
+  --hud-bg: rgba(22, 22, 34, 0.78);
+  --hud-border: rgba(255, 255, 255, 0.14);
   --btn-bg: var(--vscode-button-secondaryBackground, #313244);
   --btn-fg: var(--vscode-button-secondaryForeground, #cdd6f4);
   --btn-primary-bg: var(--vscode-button-background, #ff5e7e);
@@ -15,17 +17,13 @@
 
 /* Soporte para temas Claros de VS Code */
 body.vscode-light {
-  --bg-color: var(--vscode-sideBar-background, #f8f9fa);
   --text-color: var(--vscode-foreground, #2c3e50);
-  --border-color: rgba(0, 0, 0, 0.15);
-  --pixel-border: 2px solid rgba(0, 0, 0, 0.2);
+  --border-color: rgba(0, 0, 0, 0.12);
+  --pixel-border: 1px solid rgba(0, 0, 0, 0.15);
+  --hud-bg: rgba(255, 255, 255, 0.85);
+  --hud-border: rgba(0, 0, 0, 0.12);
   --btn-bg: var(--vscode-button-secondaryBackground, #e9ecef);
   --btn-fg: var(--vscode-button-secondaryForeground, #2c3e50);
-}
-
-body.vscode-light .stage-container {
-  background: radial-gradient(circle at 50% 30%, #e2e8f0 0%, #cbd5e1 100%);
-  box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 body.vscode-light .speech-bubble {
@@ -41,7 +39,9 @@ body.vscode-light .speech-bubble::after {
 /* Soporte para Alto Contraste */
 body.vscode-high-contrast {
   --border-color: var(--vscode-contrastBorder, #ffffff);
-  --pixel-border: 2px solid var(--vscode-contrastBorder, #ffffff);
+  --pixel-border: 1px solid var(--vscode-contrastBorder, #ffffff);
+  --hud-bg: #000000;
+  --hud-border: var(--vscode-contrastBorder, #ffffff);
 }
 
 * {
@@ -51,177 +51,236 @@ body.vscode-high-contrast {
   user-select: none;
 }
 
-body {
-  background-color: var(--bg-color);
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--vscode-sideBar-background, transparent);
   color: var(--text-color);
-  font-family: 'Consolas', 'Courier New', monospace, sans-serif;
-  padding: 12px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  overflow-x: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
-.pomo-container {
-  width: 100%;
-  max-width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.dashboard-section {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-/* Modo Panorámico Horizontal (cuando se coloca en el Panel Inferior) */
-@media (min-width: 580px) {
-  body {
-    padding: 4px 14px;
-    height: 100vh;
-    overflow: hidden;
-  }
-  .pomo-container {
-    height: 100%;
-    display: flex;
-    flex-direction: column-reverse;
-    justify-content: flex-end;
-    gap: 6px;
-  }
-  .dashboard-section {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    padding: 4px 12px;
-    gap: 14px;
-    flex-wrap: nowrap;
-    min-height: 42px;
-  }
-  .stage-container {
-    width: 100% !important;
-    flex: 1;
-    min-height: 110px;
-    max-height: calc(100vh - 56px);
-    height: auto !important;
-  }
-  .timer-section {
-    border: none;
-    background: transparent;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    text-align: left;
-    min-width: 250px;
-  }
-  .timer-top-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 0;
-  }
-  .timer-display {
-    font-size: 22px;
-    margin: 0 4px;
-  }
-  .progress-bar-container {
-    width: 80px;
-    margin: 0;
-  }
-  .round-tracker {
-    font-size: 10px;
-    margin: 0;
-    white-space: nowrap;
-  }
-  .controls-row {
-    gap: 6px;
-    margin: 0;
-    width: auto;
-  }
-  .controls-row .btn {
-    padding: 5px 10px;
-    font-size: 11px;
-  }
-  .customization-section {
-    border: none;
-    background: transparent;
-    padding: 0;
-    flex-direction: row;
-    align-items: center;
-    gap: 10px;
-    width: auto;
-  }
-  .avatar-selector {
-    width: auto;
-    gap: 4px;
-  }
-  .avatar-btn {
-    flex-direction: row;
-    padding: 4px 8px;
-    font-size: 11px;
-    gap: 4px;
-  }
-  .bottom-tools-row {
-    border-top: none;
-    padding-top: 0;
-    gap: 8px;
-  }
-}
-
-/* Escenario Pixel Art - Seamless, sin caja ni marco rígido */
-.stage-container {
+.pomo-app {
   position: relative;
   width: 100%;
-  height: 170px;
-  background: transparent;
-  border: none;
-  border-radius: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
+  height: 100%;
   overflow: hidden;
-  box-shadow: none;
-  transition: background 0.4s ease;
 }
 
-/* Modo baile / fiesta en el descanso */
+/* =========================================================
+   1. MINIMAL FROSTED HUD (Flotante en la parte superior)
+   ========================================================= */
+.hud-bar {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 30;
+  pointer-events: none;
+  gap: 6px;
+}
+
+.hud-pill {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  background: var(--hud-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--hud-border);
+  border-radius: 20px;
+  padding: 3px 8px;
+  gap: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  transition: all 0.2s ease;
+}
+
+/* Píldora del Temporizador */
+.timer-pill {
+  gap: 7px;
+}
+
+.hud-icon {
+  font-size: 13px;
+  line-height: 1;
+}
+
+.hud-badge {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  padding: 2px 6px;
+  border-radius: 10px;
+  background: var(--focus-color);
+  color: #fff;
+  text-transform: uppercase;
+}
+
+.hud-badge.break {
+  background: var(--break-color);
+  color: #111;
+}
+
+.hud-badge.long-break {
+  background: var(--long-break-color);
+  color: #111;
+}
+
+.hud-time {
+  font-size: 14px;
+  font-weight: 800;
+  font-family: 'Consolas', 'Courier New', monospace;
+  min-width: 42px;
+  text-align: center;
+  color: var(--text-color);
+}
+
+.hud-progress-wrap {
+  width: 44px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+body.vscode-light .hud-progress-wrap {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.hud-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: var(--focus-color);
+  transition: width 0.3s linear, background-color 0.4s ease;
+}
+
+.hud-round {
+  font-size: 10px;
+  opacity: 0.75;
+  font-family: monospace;
+  white-space: nowrap;
+}
+
+/* Píldora de Controles */
+.controls-pill {
+  gap: 3px;
+}
+
+.hud-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-color);
+  cursor: pointer;
+  padding: 3px 6px;
+  border-radius: 14px;
+  font-size: 12px;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.15s ease;
+}
+
+.hud-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: scale(1.06);
+}
+
+.hud-btn:active {
+  transform: scale(0.95);
+}
+
+.hud-btn-main {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 3px 9px;
+  font-weight: 600;
+}
+
+.hud-btn-main:hover {
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-fg);
+}
+
+.hud-btn-text {
+  font-size: 11px;
+}
+
+/* Píldora de Acciones */
+.actions-pill {
+  gap: 2px;
+}
+
+.hud-btn-icon {
+  font-size: 13px;
+  padding: 3px 6px;
+}
+
+/* Adaptación responsive para cuando el sidebar es muy estrecho */
+@media (max-width: 380px) {
+  .hud-btn-text {
+    display: none;
+  }
+  .hud-progress-wrap {
+    display: none;
+  }
+  .hud-round {
+    display: none;
+  }
+  .hud-pill {
+    padding: 3px 6px;
+    gap: 4px;
+  }
+}
+
+/* =========================================================
+   2. ESCENARIO PIXEL ART (100% libre, sin caja ni marco)
+   ========================================================= */
+.stage-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* Resplandor ambiental de fiesta durante descansos */
 .stage-container.dancing {
-  background: radial-gradient(ellipse at 50% 100%, rgba(255, 0, 128, 0.12) 0%, rgba(0, 229, 255, 0.05) 50%, transparent 80%);
+  background: radial-gradient(ellipse at 50% 100%, rgba(255, 0, 128, 0.15) 0%, rgba(0, 229, 255, 0.08) 45%, transparent 75%);
   animation: discoGlow 1.4s infinite alternate;
 }
 
 @keyframes discoGlow {
-  0% { filter: drop-shadow(0 0 8px rgba(255, 0, 128, 0.4)); }
-  50% { filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.4)); }
-  100% { filter: drop-shadow(0 0 8px rgba(255, 214, 0, 0.4)); }
+  0% { filter: drop-shadow(0 0 10px rgba(255, 0, 128, 0.35)); }
+  50% { filter: drop-shadow(0 0 10px rgba(0, 229, 255, 0.35)); }
+  100% { filter: drop-shadow(0 0 10px rgba(255, 214, 0, 0.35)); }
 }
 
-/* Bocadillo de diálogo */
+/* Bocadillo de diálogo dinámico */
 .speech-bubble {
   position: absolute;
-  top: 10px;
+  bottom: 118px;
   left: 50%;
   transform: translateX(-50%);
   background: #ffffff;
   color: #11111b;
-  padding: 6px 12px;
+  padding: 5px 11px;
   border-radius: 6px;
   font-size: 11px;
   font-weight: bold;
   text-align: center;
-  max-width: 85%;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.35);
+  max-width: 88%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
   pointer-events: none;
-  z-index: 10;
+  z-index: 25;
   transition: transform 0.2s ease, left 0.1s linear;
   line-height: 1.3;
   white-space: nowrap;
@@ -240,39 +299,46 @@ body {
   width: 0;
 }
 
-/* Canvas del muñeco en pixel art */
+/* Canvas del compañero */
 .canvas-wrapper {
-  position: relative;
-  z-index: 5;
+  position: absolute;
+  bottom: 11px;
+  left: 0;
   width: 100%;
+  height: 160px;
   display: flex;
   justify-content: center;
   align-items: flex-end;
+  z-index: 10;
 }
 
 #pixelCanvas {
   display: block;
   image-rendering: pixelated;
   image-rendering: crisp-edges;
-  filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.4));
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.45));
   cursor: pointer;
 }
 
+/* Suelo retro continuo de extremo a extremo */
 .stage-floor {
+  position: absolute;
+  bottom: 0;
+  left: 0;
   width: 100%;
-  height: 14px;
+  height: 12px;
   background: repeating-linear-gradient(
     90deg,
-    #3b3c54,
-    #3b3c54 10px,
-    #2c2d40 10px,
-    #2c2d40 20px
+    var(--vscode-sideBarSectionHeader-border, rgba(255, 255, 255, 0.1)),
+    var(--vscode-sideBarSectionHeader-border, rgba(255, 255, 255, 0.1)) 12px,
+    transparent 12px,
+    transparent 24px
   );
-  border-top: 2px solid #585b70;
-  z-index: 2;
+  border-top: 2px solid var(--vscode-editorGroupHeader-tabsBorder, rgba(255, 255, 255, 0.2));
+  z-index: 5;
 }
 
-/* Confeti flotante en descanso */
+/* Confeti festivo */
 .party-effects {
   position: absolute;
   top: 0;
@@ -280,7 +346,7 @@ body {
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 4;
+  z-index: 8;
 }
 
 .confetti-piece {
@@ -292,182 +358,106 @@ body {
 
 @keyframes fall {
   0% { transform: translateY(-10px) rotate(0deg); opacity: 1; }
-  100% { transform: translateY(180px) rotate(360deg); opacity: 0; }
+  100% { transform: translateY(220px) rotate(360deg); opacity: 0; }
 }
 
-/* Sección del temporizador */
-.timer-section {
-  text-align: center;
-  background: rgba(255, 255, 255, 0.03);
-  border: var(--pixel-border);
-  border-radius: 8px;
-  padding: 10px;
-}
-
-.mode-badge {
-  display: inline-block;
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 1.5px;
-  padding: 3px 8px;
-  border-radius: 4px;
-  margin-bottom: 4px;
-  background-color: var(--focus-color);
-  color: #fff;
-  text-transform: uppercase;
-}
-
-.mode-badge.break {
-  background-color: var(--break-color);
-  color: #111;
-}
-
-.mode-badge.long-break {
-  background-color: var(--long-break-color);
-  color: #111;
-}
-
-.timer-display {
-  font-size: 38px;
-  font-weight: 900;
-  letter-spacing: 2px;
-  font-variant-numeric: tabular-nums;
-  margin: 4px 0;
-  color: var(--text-color);
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.15);
-}
-
-.progress-bar-container {
+/* =========================================================
+   3. MODAL / DRAWER DE AJUSTES (Desplegable y limpio)
+   ========================================================= */
+.settings-modal-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: 6px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 3px;
-  overflow: hidden;
-  margin: 6px 0;
-}
-
-.progress-bar {
   height: 100%;
-  width: 0%;
-  background: var(--focus-color);
-  transition: width 0.3s linear, background-color 0.4s ease;
-}
-
-.round-tracker {
-  font-size: 11px;
-  opacity: 0.8;
-  margin-bottom: 6px;
-}
-
-/* Presets rápidos de tiempo */
-.presets-row {
-  display: flex;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  z-index: 60;
+  display: none;
+  align-items: center;
   justify-content: center;
-  gap: 6px;
-  margin-top: 4px;
+  padding: 14px;
 }
 
-.preset-pill {
-  background: rgba(255, 255, 255, 0.06);
+.settings-modal-backdrop.open {
+  display: flex;
+}
+
+.settings-modal {
+  width: 100%;
+  max-width: 360px;
+  background: var(--vscode-editor-background, #1e1e2e);
   color: var(--text-color);
   border: 1px solid var(--border-color);
   border-radius: 12px;
-  padding: 3px 10px;
-  font-family: inherit;
-  font-size: 10px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  opacity: 0.75;
-}
-
-.preset-pill:hover {
-  opacity: 1;
-  background: rgba(255, 255, 255, 0.12);
-}
-
-.preset-pill.active {
-  opacity: 1;
-  background: rgba(255, 94, 126, 0.2);
-  border-color: var(--accent-color);
-  color: #fff;
-  box-shadow: 0 0 6px rgba(255, 94, 126, 0.3);
-}
-
-/* Animación de Celebración de Ciclo Completo (Ronda 4) */
-.stage-container.celebration {
-  background: radial-gradient(circle at 50% 30%, #4a3800 0%, #1a1400 100%);
-  animation: goldenGlow 1s infinite alternate;
-}
-
-@keyframes goldenGlow {
-  0% { box-shadow: inset 0 0 25px #ffd600aa, 0 0 16px #ffd60088; }
-  100% { box-shadow: inset 0 0 35px #ff9100cc, 0 0 24px #ff9100aa; }
-}
-
-/* Controles de botones */
-.controls-row {
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  width: 100%;
-}
-
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 8px 14px;
-  border-radius: 6px;
-  font-family: inherit;
-  font-size: 12px;
-  font-weight: 700;
-  cursor: pointer;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  transition: transform 0.1s ease, filter 0.2s ease;
-}
-
-.btn:active {
-  transform: scale(0.96);
-}
-
-.btn-primary {
-  flex: 2;
-  background: var(--btn-primary-bg);
-  color: var(--btn-primary-fg);
-  border-color: rgba(255, 255, 255, 0.3);
-}
-
-.btn-secondary {
-  flex: 1;
-  background: var(--btn-bg);
-  color: var(--btn-fg);
-}
-
-.btn:hover {
-  filter: brightness(1.15);
-}
-
-/* Sección de personalización de avatares */
-.customization-section {
-  width: 100%;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 10px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65);
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 14px;
+  animation: modalPop 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.section-title {
-  font-size: 9px;
-  letter-spacing: 1px;
+@keyframes modalPop {
+  0% { transform: scale(0.92); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.settings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 8px;
+}
+
+.settings-title {
+  font-size: 12px;
   font-weight: 800;
-  opacity: 0.6;
+  letter-spacing: 0.5px;
 }
 
+.settings-close-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-color);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+}
+
+.settings-close-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.settings-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.settings-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.settings-row-group {
+  padding-top: 4px;
+  border-top: 1px solid var(--border-color);
+}
+
+.settings-label {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  opacity: 0.7;
+}
+
+/* Selector de Avatares en Ajustes */
 .avatar-selector {
   display: flex;
   gap: 6px;
@@ -478,45 +468,77 @@ body {
   flex: 1;
   background: rgba(255, 255, 255, 0.05);
   color: var(--text-color);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 6px;
-  padding: 6px 4px;
-  font-family: inherit;
-  font-size: 11px;
-  font-weight: 600;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 8px 4px;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 3px;
+  gap: 4px;
   transition: all 0.2s ease;
+  font-family: inherit;
 }
 
 .avatar-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-1px);
 }
 
 .avatar-btn.active {
   background: rgba(255, 94, 126, 0.18);
-  border-color: #ff5e7e;
-  box-shadow: 0 0 8px rgba(255, 94, 126, 0.3);
+  border-color: var(--accent-color);
+  box-shadow: 0 0 10px rgba(255, 94, 126, 0.35);
 }
 
-.audio-toggle-row {
+.avatar-emoji {
+  font-size: 18px;
+}
+
+.avatar-name {
+  font-size: 10px;
+  font-weight: 600;
+}
+
+/* Presets en Ajustes */
+.presets-row {
   display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  padding-top: 4px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  gap: 6px;
 }
 
+.preset-pill {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 6px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.15s ease;
+  font-family: inherit;
+}
+
+.preset-pill:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.preset-pill.active {
+  background: rgba(255, 94, 126, 0.2);
+  border-color: var(--accent-color);
+  font-weight: 700;
+}
+
+/* Toggle de Sonido */
 .toggle-container {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   font-size: 11px;
   cursor: pointer;
-  opacity: 0.85;
+  padding: 4px 0;
 }
 
 .toggle-container input {
@@ -524,37 +546,26 @@ body {
   accent-color: var(--accent-color);
 }
 
-.timer-top-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 4px;
-}
-
-.bottom-tools-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 4px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-}
-
+/* Botón Cambiar Modo (Lateral / Panorámico) */
 .btn-switch-mode {
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.08);
   color: var(--text-color);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 4px;
-  padding: 3px 8px;
-  font-size: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 11px;
+  font-weight: 600;
   cursor: pointer;
   font-family: inherit;
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
-  gap: 4px;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
 }
 
 .btn-switch-mode:hover {
-  background: rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.15);
   border-color: var(--accent-color);
 }
