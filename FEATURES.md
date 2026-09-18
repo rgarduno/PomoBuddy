@@ -10,8 +10,10 @@ Este documento es la **fuente de la verdad** del proyecto. Se actualizará const
 | :--- | :---: | :---: | :---: |
 | **Temporizador Pomodoro Clásico** | ✅ Incluido (25m / 5m / 15m) | ✅ Incluido | 🟢 Completado (v0.1.0) |
 | **Panel Lateral Dedicado (Sidebar)** | ✅ Escenario pixel art con controles | ✅ Escenario pixel art con controles | 🟢 Completado (v0.1.0) |
-| **Panel Inferior Horizontal (Bottom Panel)** | ✅ Avatar recorre toda la barra | ✅ Vista panorámica | 🟢 Completado (v0.1.0) |
-| **Físicas de Caminata & Orientación** | ✅ Camina y patrulla el suelo | ✅ Bailes y trucos ampliados | 🟢 Completado (v0.1.0) |
+| **Panel Inferior Horizontal (Bottom Panel)** | ✅ Avatar recorre toda la barra (100% ancho) | ✅ Vista panorámica ampliada | 🟢 Completado (v0.1.0) |
+| **Escenario Libre Sin Jaula (Seamless)** | ✅ Integrado transparente sin caja/marco | ✅ Fondos de escenario temáticos | 🟢 Completado (v0.1.0) |
+| **Físicas de Caminata & Orientación** | ✅ Camina y patrulla el suelo de lado a lado | ✅ Bailes y trucos ampliados | 🟢 Completado (v0.1.0) |
+| **Llamar al Avatar con un Clic** | ✅ Camina hacia donde hagas clic en el suelo | ✅ Interacciones avanzadas | 🟢 Completado (v0.1.0) |
 | **Sillita de Descanso Retro** | ✅ Sillita pixel art para descansos | ✅ Sillitas/muebles temáticos | 🟢 Completado (v0.1.0) |
 | **Interacción Tamagotchi (Petting)** | ✅ Clic para salto acrobático + estrellas | ✅ Más caricias e interacciones | 🟢 Completado (v0.1.0) |
 | **Contador en Barra de Estado** | ✅ `🍅 24:50 [1/4]` interactivo | ✅ Interactivo con personalizaciones | 🟢 Completado (v0.1.0) |
@@ -21,6 +23,7 @@ Este documento es la **fuente de la verdad** del proyecto. Se actualizará const
 | **Reacción Básica a Errores / Linter** | ✅ Avatar preocupado ante líneas rojas | ✅ Reacciones personalizadas / Modos | 🟢 Completado (v0.1.0) |
 | **Reacción al Guardar Código (Cmd+S)** | ✅ Gesto rápido de pulgar arriba 👍 | ✅ Animación especial configurable | 🟢 Completado (v0.1.0) |
 | **Catálogo Base de Avatares** | ✅ 3 personajes (NekoDev, CodeMage, Robot) | ✅ Todos los base + catálogo VIP | 🟢 Completado (v0.1.0) |
+| **Mascota Flotante de Escritorio (Desktop Overlay)** | ❌ No disponible | 💎 **Exclusivo Pro** (Camina físicamente sobre el código) | ⚪ Planificado (Fase 4) |
 | **Subida de Avatar Propio** | ❌ No disponible | 💎 **Exclusivo Pro** (GIF/PNG o Spritesheet) | ⚪ Planificado (Fase 4) |
 | **Personalidades Roast / Sarcástico** | ❌ No disponible | 💎 **Exclusivo Pro** (Frases picantes ante bugs) | ⚪ Planificado (Fase 4) |
 | **Modo Extintor / Pánico en Errores** | ❌ No disponible | 💎 **Exclusivo Pro** (Apaga fuegos en pantalla) | ⚪ Planificado (Fase 4) |

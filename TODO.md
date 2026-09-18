@@ -51,6 +51,7 @@ Este archivo registra el avance en tiempo real del proyecto. Las tareas se irán
   - [ ] Pack Synthwave / Cyberpunk.
   - [ ] Pack Arcade 16-bit.
 - [ ] **Modos de Visualización Flexibles:**
+  - [ ] **Mascota Flotante de Escritorio (Desktop Overlay):** Mini ventana transparente Always-On-Top que camina libremente por encima de cualquier ventana y de tu código.
   - [ ] Modo pestaña completa del editor (Full Editor View para segundo monitor).
   - [ ] Modo mini-avatar caminando en la barra de estado.
 - [ ] **Métricas y Estadísticas de Productividad:**

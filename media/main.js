@@ -677,6 +677,11 @@
         isWalking = true;
         avatarX += walkSpeed * facingDir;
 
+        // En pantallas anchas (panel inferior), pausas orgánicas y naturales
+        if (V_WIDTH > 70 && walkPauseTimer === 0 && Math.random() < 0.003) {
+          walkPauseTimer = 30 + Math.floor(Math.random() * 40);
+        }
+
         const minX = 6;
         const maxX = V_WIDTH - 6;
         if (avatarX <= minX) {
@@ -888,33 +893,71 @@
     vscode.postMessage({ type: 'SKIP' });
   });
 
-  // Interacción por clic sobre el avatar en el escenario
-  canvas.addEventListener('click', () => {
+  // Interacción por clic sobre el escenario y el avatar
+  canvas.addEventListener('click', (e) => {
     initAudio();
-    playClick();
-    jumpVy = -3.8;
-    emitClickStars(avatarX, 16 + jumpY);
-    playSaveChime();
+    const rect = canvas.getBoundingClientRect();
+    const clickVx = (e.clientX - rect.left) / PIXEL_SCALE;
 
-    const petQuotes = {
-      neko: [
-        '¡Purr! ¡Me hiciste cosquillitas! 🐱❤️',
-        '¡Miau! ¡Qué buen salto! ✨',
-        '¡A seguir cazando bugs con todo! 🐾',
-      ],
-      wizard: [
-        '¡Por las barbas de Merlín! ✨',
-        '¡Levitación arcana activada! 🔮',
-        '¡Salto mágico de concentración! 🧙‍♂️',
-      ],
-      robot: [
-        'CIRCUITO DE FELICIDAD: 100% CARGADO ⚡',
-        'SALTO_VERTICAL.EXE EJECUTADO CON ÉXITO 🤖',
-        '¡BEEP BOOP! ❤️',
-      ],
-    };
-    const quotes = petQuotes[currentAvatar] || petQuotes.neko;
-    setDialogue(quotes[Math.floor(Math.random() * quotes.length)]);
+    // Detectar si el clic fue cerca del avatar
+    const isClickOnAvatar = Math.abs(clickVx - avatarX) < 12;
+
+    if (isClickOnAvatar) {
+      playClick();
+      jumpVy = -3.8;
+      emitClickStars(avatarX, 16 + jumpY);
+      playSaveChime();
+
+      const petQuotes = {
+        neko: [
+          '¡Purr! ¡Me hiciste cosquillitas! 🐱❤️',
+          '¡Miau! ¡Qué buen salto! ✨',
+          '¡A seguir cazando bugs con todo! 🐾',
+        ],
+        wizard: [
+          '¡Por las barbas de Merlín! ✨',
+          '¡Levitación arcana activada! 🔮',
+          '¡Salto mágico de concentración! 🧙‍♂️',
+        ],
+        robot: [
+          'CIRCUITO DE FELICIDAD: 100% CARGADO ⚡',
+          'SALTO_VERTICAL.EXE EJECUTADO CON ÉXITO 🤖',
+          '¡BEEP BOOP! ❤️',
+        ],
+      };
+      const quotes = petQuotes[currentAvatar] || petQuotes.neko;
+      setDialogue(quotes[Math.floor(Math.random() * quotes.length)]);
+    } else {
+      // Clic en otro punto del suelo: llamar al avatar hacia ese lugar
+      playClick();
+      emitClickStars(clickVx, 24);
+      facingDir = clickVx > avatarX ? 1 : -1;
+      walkPauseTimer = 0;
+      isSittingInChair = false;
+    }
+  });
+
+  // Botón para alternar entre Barra Lateral y Barra Inferior Panorámica
+  const btnSwitchMode = document.getElementById('btnSwitchMode');
+  const switchModeText = document.getElementById('switchModeText');
+
+  function updateSwitchLabel() {
+    const isWide = window.innerWidth >= 580;
+    if (switchModeText) {
+      switchModeText.textContent = isWide ? 'Lateral' : 'Panorámico';
+    }
+  }
+  window.addEventListener('resize', updateSwitchLabel);
+  setTimeout(updateSwitchLabel, 80);
+
+  btnSwitchMode?.addEventListener('click', () => {
+    playClick();
+    const isWide = window.innerWidth >= 580;
+    if (isWide) {
+      vscode.postMessage({ type: 'OPEN_SIDEBAR' });
+    } else {
+      vscode.postMessage({ type: 'OPEN_BOTTOM_PANEL' });
+    }
   });
 
   // Presets Rápidos de Tiempo (25m / 50m)

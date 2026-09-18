@@ -96,10 +96,31 @@
       },
       {
         "command": "pomobuddy.openCompanion",
-        "title": "Abrir Compañero Pixel",
-        "category": "PomoBuddy"
+        "title": "Abrir Compañero en Barra Lateral",
+        "category": "PomoBuddy",
+        "icon": "$(layout-sidebar-left)"
+      },
+      {
+        "command": "pomobuddy.openBottomPanel",
+        "title": "Abrir Compañero en Barra Inferior (Panorámico)",
+        "category": "PomoBuddy",
+        "icon": "$(layout-panel)"
       }
     ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "pomobuddy.openBottomPanel",
+          "when": "view == pomobuddy.companionView",
+          "group": "navigation"
+        },
+        {
+          "command": "pomobuddy.openCompanion",
+          "when": "view == pomobuddy.bottomView",
+          "group": "navigation"
+        }
+      ]
+    },
     "configuration": {
       "title": "PomoBuddy",
       "properties": {

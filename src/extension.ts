@@ -75,6 +75,9 @@ export function activate(context: vscode.ExtensionContext) {
     }),
     vscode.commands.registerCommand('pomobuddy.openCompanion', () => {
       vscode.commands.executeCommand('pomobuddy.companionView.focus');
+    }),
+    vscode.commands.registerCommand('pomobuddy.openBottomPanel', () => {
+      vscode.commands.executeCommand('pomobuddy.bottomView.focus');
     })
   );
 

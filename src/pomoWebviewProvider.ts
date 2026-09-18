@@ -65,6 +65,12 @@ export class PomoWebviewProvider implements vscode.WebviewViewProvider {
           this.sendConfig(this.timerManager.getConfig());
           this.sendStateChange(this.timerManager.getSnapshot());
           break;
+        case 'OPEN_BOTTOM_PANEL':
+          vscode.commands.executeCommand('pomobuddy.bottomView.focus');
+          break;
+        case 'OPEN_SIDEBAR':
+          vscode.commands.executeCommand('pomobuddy.companionView.focus');
+          break;
         case 'WEBVIEW_READY':
           this.postMessage({
             type: 'CONFIG_UPDATED',
@@ -159,7 +165,7 @@ export class PomoWebviewProvider implements vscode.WebviewViewProvider {
 <body>
   <div class="pomo-container">
     
-    <!-- Escenario Pixel Art -->
+    <!-- Escenario Pixel Art Seamless (Libre sin jaula/caja) -->
     <div class="stage-container" id="stage">
       <div class="speech-bubble" id="speechBubble">
         <span id="speechText">¡Hola! Listo para enfocarnos. 💻</span>
@@ -175,61 +181,68 @@ export class PomoWebviewProvider implements vscode.WebviewViewProvider {
       <div class="stage-floor"></div>
     </div>
 
-    <!-- Indicador de Estado y Tiempo -->
-    <div class="timer-section">
-      <div class="mode-badge" id="modeBadge">POMODORO</div>
-      <div class="timer-display" id="timerDisplay">25:00</div>
-      <div class="progress-bar-container">
-        <div class="progress-bar" id="progressBar"></div>
+    <!-- Panel de Control y Temporizador -->
+    <div class="dashboard-section">
+      <!-- Indicador de Estado y Tiempo -->
+      <div class="timer-section">
+        <div class="timer-top-row">
+          <div class="mode-badge" id="modeBadge">POMODORO</div>
+          <!-- Presets Rápidos de Tiempo -->
+          <div class="presets-row">
+            <button class="preset-pill active" id="preset25" data-work="25" data-break="5" title="Pomodoro Clásico: 25m trabajo / 5m descanso">
+              25 / 5m
+            </button>
+            <button class="preset-pill" id="preset50" data-work="50" data-break="10" title="Deep Work: 50m trabajo / 10m descanso">
+              50 / 10m
+            </button>
+          </div>
+        </div>
+        <div class="timer-display" id="timerDisplay">25:00</div>
+        <div class="progress-bar-container">
+          <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <div class="round-tracker" id="roundTracker">
+          Ronda <span id="currentRound">1</span> de <span id="totalRounds">4</span>
+        </div>
       </div>
-      <div class="round-tracker" id="roundTracker">
-        Ronda <span id="currentRound">1</span> de <span id="totalRounds">4</span>
-      </div>
-      <!-- Presets Rápidos de Tiempo -->
-      <div class="presets-row">
-        <button class="preset-pill active" id="preset25" data-work="25" data-break="5" title="Pomodoro Clásico: 25m trabajo / 5m descanso">
-          25 / 5m
-        </button>
-        <button class="preset-pill" id="preset50" data-work="50" data-break="10" title="Deep Work: 50m trabajo / 10m descanso">
-          50 / 10m
-        </button>
-      </div>
-    </div>
 
-    <!-- Controles Principales -->
-    <div class="controls-row">
-      <button class="btn btn-primary" id="btnStartPause" title="Iniciar o pausar">
-        <span class="btn-icon" id="startPauseIcon">▶</span>
-        <span id="startPauseLabel">Iniciar</span>
-      </button>
-      <button class="btn btn-secondary" id="btnReset" title="Reiniciar tiempo actual">
-        <span class="btn-icon">↺</span>
-      </button>
-      <button class="btn btn-secondary" id="btnSkip" title="Saltar al siguiente intervalo">
-        <span class="btn-icon">⏭</span>
-      </button>
-    </div>
-
-    <!-- Selector de Avatar y Sonido -->
-    <div class="customization-section">
-      <div class="section-title">TU COMPAÑERO</div>
-      <div class="avatar-selector">
-        <button class="avatar-btn active" data-avatar="neko" title="NekoDev (Gatito)">
-          🐱 <span>Neko</span>
+      <!-- Controles Principales -->
+      <div class="controls-row">
+        <button class="btn btn-primary" id="btnStartPause" title="Iniciar o pausar">
+          <span class="btn-icon" id="startPauseIcon">▶</span>
+          <span id="startPauseLabel">Iniciar</span>
         </button>
-        <button class="avatar-btn" data-avatar="wizard" title="CodeMage (Mago 8-bit)">
-          🧙‍♂️ <span>Mago</span>
+        <button class="btn btn-secondary" id="btnReset" title="Reiniciar tiempo actual">
+          <span class="btn-icon">↺</span>
         </button>
-        <button class="avatar-btn" data-avatar="robot" title="PixelBot (Robot)">
-          🤖 <span>Robot</span>
+        <button class="btn btn-secondary" id="btnSkip" title="Saltar al siguiente intervalo">
+          <span class="btn-icon">⏭</span>
         </button>
       </div>
-      
-      <div class="audio-toggle-row">
-        <label class="toggle-container" title="Activar/desactivar sonidos retro">
-          <input type="checkbox" id="soundToggle" checked>
-          <span class="toggle-label">🔊 Sonidos Retro 8-bit</span>
-        </label>
+
+      <!-- Selector de Avatar y Sonido -->
+      <div class="customization-section">
+        <div class="avatar-selector">
+          <button class="avatar-btn active" data-avatar="neko" title="NekoDev (Gatito)">
+            🐱 <span>Neko</span>
+          </button>
+          <button class="avatar-btn" data-avatar="wizard" title="CodeMage (Mago 8-bit)">
+            🧙‍♂️ <span>Mago</span>
+          </button>
+          <button class="avatar-btn" data-avatar="robot" title="PixelBot (Robot)">
+            🤖 <span>Robot</span>
+          </button>
+        </div>
+        
+        <div class="bottom-tools-row">
+          <label class="toggle-container" title="Activar/desactivar sonidos retro">
+            <input type="checkbox" id="soundToggle" checked>
+            <span class="toggle-label">🔊 Sonido</span>
+          </label>
+          <button class="btn-switch-mode" id="btnSwitchMode" title="Alternar entre Barra Lateral y Barra Inferior Panorámica">
+            🖥️ <span id="switchModeText">Panorámico</span>
+          </button>
+        </div>
       </div>
     </div>
 
