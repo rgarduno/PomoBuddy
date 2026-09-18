@@ -11,8 +11,9 @@ import {
 import { TimerManager } from './timerManager';
 
 export class PomoWebviewProvider implements vscode.WebviewViewProvider {
-  public static readonly viewType = 'pomobuddy.companionView';
-  private view?: vscode.WebviewView;
+  public static readonly sidebarViewType = 'pomobuddy.companionView';
+  public static readonly bottomViewType = 'pomobuddy.bottomView';
+  private views: Set<vscode.WebviewView> = new Set();
 
   constructor(
     private readonly extensionUri: vscode.Uri,
@@ -24,7 +25,10 @@ export class PomoWebviewProvider implements vscode.WebviewViewProvider {
     _context: vscode.WebviewViewResolveContext,
     _token: vscode.CancellationToken
   ) {
-    this.view = webviewView;
+    this.views.add(webviewView);
+    webviewView.onDidDispose(() => {
+      this.views.delete(webviewView);
+    });
 
     webviewView.webview.options = {
       enableScripts: true,
@@ -128,8 +132,8 @@ export class PomoWebviewProvider implements vscode.WebviewViewProvider {
   }
 
   private postMessage(message: ExtensionToWebviewMessage) {
-    if (this.view) {
-      this.view.webview.postMessage(message);
+    for (const view of this.views) {
+      view.webview.postMessage(message);
     }
   }
 
@@ -150,7 +154,7 @@ export class PomoWebviewProvider implements vscode.WebviewViewProvider {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource} 'unsafe-inline'; script-src 'nonce-${nonce}'; img-src ${webview.cspSource} https: data:;">
   <link rel="stylesheet" href="${styleUri}">
-  <title>PomoPixel Companion</title>
+  <title>PomoBuddy Companion</title>
 </head>
 <body>
   <div class="pomo-container">

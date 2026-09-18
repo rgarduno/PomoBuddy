@@ -213,49 +213,130 @@
   }
 
   // ==========================================
-  // 2. MOTOR DE RENDERIZADO PIXEL ART
+  // 2. MOTOR DE RENDERIZADO Y FÍSICAS DE MOVIMIENTO
   // ==========================================
-  // Configuramos el Canvas con resolución virtual de 32x32 píxeles
-  const V_WIDTH = 32;
+  const PIXEL_SCALE = 5;
   const V_HEIGHT = 32;
-  const PIXEL_SCALE = 5; // 32 * 5 = 160px
+  let V_WIDTH = 32;
 
-  // Función para pintar un pixel en la cuadrícula virtual
+  function resizeCanvas() {
+    const stageWidth = stage.clientWidth || 280;
+    V_WIDTH = Math.max(32, Math.floor(stageWidth / PIXEL_SCALE));
+    canvas.width = V_WIDTH * PIXEL_SCALE;
+    canvas.height = V_HEIGHT * PIXEL_SCALE;
+  }
+  window.addEventListener('resize', resizeCanvas);
+  setTimeout(resizeCanvas, 50);
+
+  // Variables de posición y movimiento
+  let avatarX = 16;
+  let facingDir = 1; // 1 = derecha, -1 = izquierda
+  let walkSpeed = 0.22;
+  let isWalking = false;
+  let walkPauseTimer = 0;
+  let isSittingInChair = false;
+  let jumpY = 0;
+  let jumpVy = 0;
+  let currentAvatarOriginX = 16;
+  let clickParticles = [];
+
+  // Función para pintar un pixel con soporte de volteo horizontal (espejo)
   function p(vx, vy, color) {
     if (!color || color === '.') return;
+    let actualX = vx;
+    if (facingDir === -1) {
+      actualX = Math.round(currentAvatarOriginX - (vx - currentAvatarOriginX));
+    }
     ctx.fillStyle = color;
-    ctx.fillRect(vx * PIXEL_SCALE, vy * PIXEL_SCALE, PIXEL_SCALE, PIXEL_SCALE);
+    ctx.fillRect(actualX * PIXEL_SCALE, vy * PIXEL_SCALE, PIXEL_SCALE, PIXEL_SCALE);
+  }
+
+  // --- PARTÍCULAS INTERACTIVAS (CORAZONES Y ESTRELLAS AL HACER CLIC) ---
+  function emitClickStars(vx, vy) {
+    for (let i = 0; i < 6; i++) {
+      clickParticles.push({
+        x: vx + (Math.random() * 8 - 4),
+        y: vy - 2,
+        vy: -0.6 - Math.random() * 0.6,
+        vx: (Math.random() - 0.5) * 1.2,
+        life: 25 + Math.floor(Math.random() * 10),
+        color: ['#ff007f', '#ffd700', '#00e5ff', '#ffffff', '#ff5e7e'][i % 5],
+      });
+    }
+  }
+
+  function updateAndDrawParticles() {
+    for (let i = clickParticles.length - 1; i >= 0; i--) {
+      const part = clickParticles[i];
+      part.x += part.vx;
+      part.y += part.vy;
+      part.life--;
+      ctx.fillStyle = part.color;
+      ctx.fillRect(
+        Math.round(part.x) * PIXEL_SCALE,
+        Math.round(part.y) * PIXEL_SCALE,
+        PIXEL_SCALE,
+        PIXEL_SCALE
+      );
+      if (part.life <= 0) {
+        clickParticles.splice(i, 1);
+      }
+    }
+  }
+
+  // --- SILLA PIXEL ART DE DESCANSO ---
+  function drawChair(cx, cy) {
+    const WOOD = '#8d6e63';
+    const WOOD_DARK = '#5d4037';
+    const CUSHION = '#ff5e7e';
+    const CUSHION_LIGHT = '#ff80ab';
+
+    // Respaldo de la sillita
+    for (let y = -10; y <= -2; y++) {
+      ctx.fillStyle = WOOD_DARK;
+      ctx.fillRect((cx - 3) * PIXEL_SCALE, (cy + y) * PIXEL_SCALE, PIXEL_SCALE, PIXEL_SCALE);
+      ctx.fillStyle = WOOD;
+      ctx.fillRect((cx - 2) * PIXEL_SCALE, (cy + y) * PIXEL_SCALE, PIXEL_SCALE, PIXEL_SCALE);
+    }
+    // Asiento mullido
+    for (let x = -3; x <= 3; x++) {
+      ctx.fillStyle = CUSHION_LIGHT;
+      ctx.fillRect((cx + x) * PIXEL_SCALE, (cy - 1) * PIXEL_SCALE, PIXEL_SCALE, PIXEL_SCALE);
+      ctx.fillStyle = CUSHION;
+      ctx.fillRect((cx + x) * PIXEL_SCALE, cy * PIXEL_SCALE, PIXEL_SCALE, PIXEL_SCALE);
+    }
+    // Patas de la sillita
+    ctx.fillStyle = WOOD_DARK;
+    ctx.fillRect((cx - 3) * PIXEL_SCALE, (cy + 1) * PIXEL_SCALE, PIXEL_SCALE, PIXEL_SCALE * 4);
+    ctx.fillStyle = WOOD;
+    ctx.fillRect((cx + 3) * PIXEL_SCALE, (cy + 1) * PIXEL_SCALE, PIXEL_SCALE, PIXEL_SCALE * 4);
   }
 
   // --- TROFEO DE CELEBRACIÓN DE CICLO (RONDA 4/4) ---
   function drawTrophy(step) {
-    const xOffset = 16;
+    const xOffset = Math.round(V_WIDTH / 2);
     const yOffset = Math.round(14 + Math.sin(step * 0.2) * 2);
     const GOLD = '#f1c40f';
     const HIGHLIGHT = '#fff176';
     const DARK_GOLD = '#d4ac0d';
     const BASE = '#7f8c8d';
 
-    // Copa dorada
     for (let x = -4; x <= 4; x++) p(xOffset + x, yOffset - 4, GOLD);
     for (let x = -3; x <= 3; x++) p(xOffset + x, yOffset - 3, HIGHLIGHT);
     for (let x = -3; x <= 3; x++) p(xOffset + x, yOffset - 2, GOLD);
     for (let x = -2; x <= 2; x++) p(xOffset + x, yOffset - 1, DARK_GOLD);
     for (let x = -1; x <= 1; x++) p(xOffset + x, yOffset, GOLD);
 
-    // Asas de la copa
     p(xOffset - 5, yOffset - 3, GOLD);
     p(xOffset - 5, yOffset - 2, GOLD);
     p(xOffset + 5, yOffset - 3, GOLD);
     p(xOffset + 5, yOffset - 2, GOLD);
 
-    // Tallo y Base
     p(xOffset, yOffset + 1, GOLD);
     p(xOffset, yOffset + 2, GOLD);
     for (let x = -3; x <= 3; x++) p(xOffset + x, yOffset + 3, BASE);
     for (let x = -4; x <= 4; x++) p(xOffset + x, yOffset + 4, '#2c3e50');
 
-    // Destellos mágicos de victoria
     if (step % 6 < 3) {
       p(xOffset - 6, yOffset - 5, '#ffffff');
       p(xOffset + 6, yOffset - 5, '#ffffff');
@@ -264,22 +345,21 @@
   }
 
   // --- AVATAR 1: NEKODEV (GATITO DEV) ---
-  function drawNeko(step, mood) {
+  function drawNeko(step, mood, walking, sitting) {
     const isDancing = mood === 'DANCE';
     const isWorking = mood === 'WORK';
     const isError = mood === 'ERROR';
 
-    // Desplazamientos de animación
-    let bob = Math.floor(Math.sin(step * 0.15) * 1.5);
-    let danceOffset = isDancing ? Math.sin(step * 0.3) * 3 : 0;
-    let xOffset = Math.round(16 + danceOffset);
-    let yOffset = Math.round(18 + (isDancing ? Math.abs(Math.sin(step * 0.4) * 4) * -1 : bob));
+    let bob = walking ? Math.floor(Math.sin(step * 0.3) * 1.5) : Math.floor(Math.sin(step * 0.12) * 1);
+    let danceOffset = isDancing ? Math.sin(step * 0.35) * 3 : 0;
+    let xOffset = Math.round(avatarX + danceOffset);
+    let yOffset = Math.round(18 + jumpY + (sitting ? 1 : bob));
+    currentAvatarOriginX = xOffset;
 
-    const FUR = '#ffb347'; // Naranja gato
+    const FUR = '#ffb347';
     const WHITE = '#ffffff';
     const PINK = '#ff80ab';
     const DARK = '#2d3436';
-    const SHADOW = '#e67e22';
 
     // Orejas
     p(xOffset - 4, yOffset - 8, FUR);
@@ -297,29 +377,24 @@
     }
     // Hocico blanco
     p(xOffset - 1, yOffset - 2, WHITE);
-    p(xOffset, yOffset - 2, PINK); // Naricita
+    p(xOffset, yOffset - 2, PINK);
     p(xOffset + 1, yOffset - 2, WHITE);
 
     // Ojos según el estado
     if (isError) {
-      // Ojos en espiral / cruz por error
       p(xOffset - 3, yOffset - 4, DARK);
       p(xOffset - 2, yOffset - 5, DARK);
       p(xOffset + 2, yOffset - 4, DARK);
       p(xOffset + 3, yOffset - 5, DARK);
-      // Gota de sudor
       p(xOffset + 6, yOffset - 6 + (step % 4), '#00d2d3');
     } else if (isDancing) {
-      // GAFAS DE SOL DE FIESTA / BAILE 😎
-      for (let g = -4; g <= 4; g++) {
-        p(xOffset + g, yOffset - 4, '#111111');
-      }
+      // GAFAS DE SOL DE FIESTA 😎
+      for (let g = -4; g <= 4; g++) p(xOffset + g, yOffset - 4, '#111111');
       p(xOffset - 3, yOffset - 3, '#111111');
-      p(xOffset - 2, yOffset - 3, '#00e5ff'); // Destello en las gafas
+      p(xOffset - 2, yOffset - 3, '#00e5ff');
       p(xOffset + 2, yOffset - 3, '#111111');
       p(xOffset + 3, yOffset - 3, '#00e5ff');
     } else {
-      // Ojos normales parpadeantes
       const isBlinking = step % 60 < 4;
       if (isBlinking) {
         p(xOffset - 3, yOffset - 4, DARK);
@@ -346,19 +421,20 @@
       p(xOffset, yOffset + y, WHITE);
     }
 
-    // Cola moviéndose
+    // Cola con movimiento
     const tailWag = Math.sin(step * (isDancing ? 0.4 : 0.15)) * 2;
     p(xOffset - 4, yOffset + 3, FUR);
     p(xOffset - 5 + Math.round(tailWag), yOffset + 2, FUR);
     p(xOffset - 6 + Math.round(tailWag), yOffset + 1, FUR);
 
-    // Patitas
-    p(xOffset - 3, yOffset + 6, WHITE);
-    p(xOffset - 2, yOffset + 6, WHITE);
-    p(xOffset + 2, yOffset + 6, WHITE);
-    p(xOffset + 3, yOffset + 6, WHITE);
+    // Patitas con ciclo de caminata alternada
+    const stepBob = (walking && Math.sin(step * 0.3) > 0) ? 1 : 0;
+    p(xOffset - 3, yOffset + 6 - stepBob, WHITE);
+    p(xOffset - 2, yOffset + 6 - stepBob, WHITE);
+    p(xOffset + 2, yOffset + 6 + stepBob, WHITE);
+    p(xOffset + 3, yOffset + 6 + stepBob, WHITE);
 
-    // Si está bailando: ¡Brazos arriba celebrando!
+    // Si está bailando: ¡Brazos arriba!
     if (isDancing) {
       const armWave = Math.sin(step * 0.3) > 0;
       if (armWave) {
@@ -374,40 +450,37 @@
       }
     }
 
-    // Si está trabajando: ¡Mini laptop tecleando!
-    if (isWorking) {
-      // Laptop
+    // Si está sentado en la silla: ¡Tacita de café humeante en las patas!
+    if (sitting) {
+      p(xOffset + 1, yOffset + 2, '#ffffff');
+      p(xOffset + 2, yOffset + 2, '#ffffff');
+      p(xOffset + 1, yOffset + 1, '#795548');
+      if (step % 8 < 4) p(xOffset + 1, yOffset - 1, 'rgba(255,255,255,0.7)');
+    } else if (isWorking) {
+      // Laptop tecleando
       p(xOffset - 4, yOffset + 4, '#576574');
       p(xOffset - 3, yOffset + 4, '#c8d6e5');
       p(xOffset - 2, yOffset + 4, '#c8d6e5');
       p(xOffset - 1, yOffset + 4, '#576574');
-      p(xOffset - 4, yOffset + 3, '#00d2d3'); // Pantalla azul brillante
+      p(xOffset - 4, yOffset + 3, '#00d2d3');
       p(xOffset - 3, yOffset + 3, '#00d2d3');
-      // Patas tecleando rápido
       const keyStep = step % 4 < 2;
       p(xOffset - 3, yOffset + (keyStep ? 4 : 5), WHITE);
       p(xOffset - 1, yOffset + (keyStep ? 5 : 4), WHITE);
-
-      // Tacita de café al lado con humo
-      p(xOffset + 4, yOffset + 5, '#ffffff');
-      p(xOffset + 5, yOffset + 5, '#ffffff');
-      p(xOffset + 4, yOffset + 4, '#795548'); // café
-      if (step % 8 < 4) {
-        p(xOffset + 4, yOffset + 2, 'rgba(255,255,255,0.7)'); // humo
-      }
     }
   }
 
   // --- AVATAR 2: CODEMAGE (MAGO 8-BIT) ---
-  function drawWizard(step, mood) {
+  function drawWizard(step, mood, walking, sitting) {
     const isDancing = mood === 'DANCE';
     const isWorking = mood === 'WORK';
     const isError = mood === 'ERROR';
 
-    let bob = Math.floor(Math.sin(step * 0.15) * 1.5);
-    let danceOffset = isDancing ? Math.sin(step * 0.3) * 3 : 0;
-    let xOffset = Math.round(16 + danceOffset);
-    let yOffset = Math.round(17 + (isDancing ? Math.abs(Math.sin(step * 0.4) * 4) * -1 : bob));
+    let bob = walking ? Math.floor(Math.sin(step * 0.3) * 1.5) : Math.floor(Math.sin(step * 0.12) * 1);
+    let danceOffset = isDancing ? Math.sin(step * 0.35) * 3 : 0;
+    let xOffset = Math.round(avatarX + danceOffset);
+    let yOffset = Math.round(17 + jumpY + (sitting ? 1 : bob));
+    currentAvatarOriginX = xOffset;
 
     const ROBE = '#6c5ce7';
     const HAT = '#4834d4';
@@ -415,14 +488,14 @@
     const BEARD = '#dfe6e9';
     const SKIN = '#ffbe76';
 
-    // Gorro puntiagudo de mago
-    p(xOffset, yOffset - 11, GOLD); // Estrella en la punta
+    // Gorro puntiagudo
+    p(xOffset, yOffset - 11, GOLD);
     p(xOffset, yOffset - 10, HAT);
     p(xOffset - 1, yOffset - 9, HAT);
     p(xOffset, yOffset - 9, HAT);
     p(xOffset + 1, yOffset - 9, HAT);
     for (let x = -3; x <= 3; x++) p(xOffset + x, yOffset - 8, HAT);
-    for (let x = -4; x <= 4; x++) p(xOffset + x, yOffset - 7, GOLD); // Ala dorada
+    for (let x = -4; x <= 4; x++) p(xOffset + x, yOffset - 7, GOLD);
 
     // Cara
     for (let x = -2; x <= 2; x++) {
@@ -441,7 +514,7 @@
       p(xOffset + 1, yOffset - 6, '#130f40');
     }
 
-    // Gran barba blanca
+    // Barba
     for (let x = -3; x <= 3; x++) p(xOffset + x, yOffset - 4, BEARD);
     for (let x = -2; x <= 2; x++) p(xOffset + x, yOffset - 3, BEARD);
     p(xOffset, yOffset - 2, BEARD);
@@ -453,21 +526,19 @@
       }
     }
 
-    // Báculo mágico con cristal reluciente
+    // Pies alternando al caminar
+    const stepBob = (walking && Math.sin(step * 0.3) > 0) ? 1 : 0;
+    p(xOffset - 2, yOffset + 7 - stepBob, '#2c3e50');
+    p(xOffset + 2, yOffset + 7 + stepBob, '#2c3e50');
+
+    // Báculo mágico con cristal
     const staffGlow = isDancing || isWorking;
     const crystalColor = staffGlow
       ? (step % 6 < 3 ? '#00e5ff' : '#ff007f')
       : '#00cec9';
     p(xOffset + 5, yOffset - 4, crystalColor);
-    p(xOffset + 5, yOffset - 3, '#795548');
-    p(xOffset + 5, yOffset - 2, '#795548');
-    p(xOffset + 5, yOffset - 1, '#795548');
-    p(xOffset + 5, yOffset, '#795548');
-    p(xOffset + 5, yOffset + 1, '#795548');
-    p(xOffset + 5, yOffset + 2, '#795548');
-    p(xOffset + 5, yOffset + 3, '#795548');
+    for (let sy = -3; sy <= 3; sy++) p(xOffset + 5, yOffset + sy, '#795548');
 
-    // Chispas mágicas al bailar o trabajar
     if (staffGlow) {
       const sparkX = xOffset + 5 + Math.sin(step * 0.4) * 3;
       const sparkY = yOffset - 6 + Math.cos(step * 0.4) * 2;
@@ -476,15 +547,16 @@
   }
 
   // --- AVATAR 3: PIXELBOT (ROBOT 8-BIT) ---
-  function drawRobot(step, mood) {
+  function drawRobot(step, mood, walking, sitting) {
     const isDancing = mood === 'DANCE';
     const isWorking = mood === 'WORK';
     const isError = mood === 'ERROR';
 
-    let bob = Math.floor(Math.sin(step * 0.15) * 1.5);
-    let danceOffset = isDancing ? Math.sin(step * 0.3) * 3 : 0;
-    let xOffset = Math.round(16 + danceOffset);
-    let yOffset = Math.round(18 + (isDancing ? Math.abs(Math.sin(step * 0.4) * 4) * -1 : bob));
+    let bob = walking ? Math.floor(Math.sin(step * 0.3) * 1.5) : Math.floor(Math.sin(step * 0.12) * 1);
+    let danceOffset = isDancing ? Math.sin(step * 0.35) * 3 : 0;
+    let xOffset = Math.round(avatarX + danceOffset);
+    let yOffset = Math.round(18 + jumpY + (sitting ? 1 : bob));
+    currentAvatarOriginX = xOffset;
 
     const METAL = '#b2bec3';
     const DARK_METAL = '#636e72';
@@ -493,22 +565,17 @@
     const RED_NEON = '#ff7675';
     const GOLD = '#ffeaa7';
 
-    // Antena con bombillo parpadeante
+    // Antena
     p(xOffset, yOffset - 8, isError ? RED_NEON : (step % 20 < 10 ? BLUE_NEON : GOLD));
     p(xOffset, yOffset - 7, DARK_METAL);
 
-    // Cabeza cuadrada
+    // Cabeza
     for (let y = -6; y <= -1; y++) {
-      for (let x = -4; x <= 4; x++) {
-        p(xOffset + x, yOffset + y, METAL);
-      }
+      for (let x = -4; x <= 4; x++) p(xOffset + x, yOffset + y, METAL);
     }
-
-    // Pantalla de ojos
+    // Pantalla
     for (let y = -5; y <= -2; y++) {
-      for (let x = -3; x <= 3; x++) {
-        p(xOffset + x, yOffset + y, SCREEN);
-      }
+      for (let x = -3; x <= 3; x++) p(xOffset + x, yOffset + y, SCREEN);
     }
 
     // Ojos LED
@@ -518,7 +585,6 @@
       p(xOffset + 2, yOffset - 4, RED_NEON);
       p(xOffset + 2, yOffset - 3, RED_NEON);
     } else if (isDancing) {
-      // Ojos en corazón o luces disco
       const eyeColor = step % 8 < 4 ? '#ff007f' : '#00e5ff';
       p(xOffset - 2, yOffset - 4, eyeColor);
       p(xOffset - 1, yOffset - 4, eyeColor);
@@ -531,59 +597,139 @@
       p(xOffset + 2, yOffset - 3, BLUE_NEON);
     }
 
-    // Cuello
+    // Cuello y Torso
     p(xOffset, yOffset, DARK_METAL);
-
-    // Torso / Cuerpo
     for (let y = 1; y <= 6; y++) {
-      for (let x = -4; x <= 4; x++) {
-        p(xOffset + x, yOffset + y, METAL);
-      }
+      for (let x = -4; x <= 4; x++) p(xOffset + x, yOffset + y, METAL);
     }
 
-    // Medidor de energía en el pecho
+    // Medidor de energía
     p(xOffset - 2, yOffset + 3, isWorking ? RED_NEON : BLUE_NEON);
     p(xOffset, yOffset + 3, isWorking ? GOLD : BLUE_NEON);
     p(xOffset + 2, yOffset + 3, isWorking ? '#55efc4' : BLUE_NEON);
 
-    // Orugas o pies metálicos
-    p(xOffset - 3, yOffset + 7, DARK_METAL);
-    p(xOffset - 2, yOffset + 7, DARK_METAL);
-    p(xOffset + 2, yOffset + 7, DARK_METAL);
-    p(xOffset + 3, yOffset + 7, DARK_METAL);
+    // Pies con ciclo de pasos
+    const stepBob = (walking && Math.sin(step * 0.3) > 0) ? 1 : 0;
+    p(xOffset - 3, yOffset + 7 - stepBob, DARK_METAL);
+    p(xOffset - 2, yOffset + 7 - stepBob, DARK_METAL);
+    p(xOffset + 2, yOffset + 7 + stepBob, DARK_METAL);
+    p(xOffset + 3, yOffset + 7 + stepBob, DARK_METAL);
   }
 
   // Bucle principal de renderizado gráfico
+  // Bucle principal de renderizado gráfico y simulación física
   function renderLoop() {
     animTick++;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Determinar estado actual de animación del personaje
-    let activeMood = currentMood;
-    if (activeMood === 'IDLE') {
-      if (timerState.status === 'RUNNING') {
-        activeMood = timerState.mode === 'WORK' ? 'WORK' : 'DANCE';
+    // 1. Actualizar físicas de salto
+    if (jumpY < 0 || jumpVy !== 0) {
+      jumpY += jumpVy;
+      jumpVy += 0.38; // Gravedad
+      if (jumpY >= 0) {
+        jumpY = 0;
+        jumpVy = 0;
       }
     }
 
-    // Si es celebración de ciclo completo, dibujar el trofeo dorado
+    // 2. Determinar estado de la sesión
+    const isBreakTime = timerState.mode === 'SHORT_BREAK' || timerState.mode === 'LONG_BREAK';
+    const chairPos = Math.round(V_WIDTH / 2);
+
+    let activeMood = currentMood;
+    if (activeMood === 'IDLE') {
+      if (timerState.status === 'RUNNING') {
+        activeMood = isBreakTime ? 'DANCE' : 'WORK';
+      }
+    }
+
+    // 3. Simulación de movimiento
+    if (isBreakTime && timerState.status === 'RUNNING') {
+      // En descanso: alterna entre relajarse sentado en su sillita y pararse a bailar
+      const cycle = animTick % 700;
+      if (cycle < 420) {
+        // Modo Sentarse en la silla
+        if (Math.abs(avatarX - chairPos) > 0.6) {
+          isSittingInChair = false;
+          facingDir = avatarX < chairPos ? 1 : -1;
+          avatarX += walkSpeed * facingDir;
+          isWalking = true;
+        } else {
+          avatarX = chairPos;
+          isWalking = false;
+          isSittingInChair = true;
+          facingDir = 1;
+        }
+      } else {
+        // Modo levantarse a bailar y desplazarse con estilo
+        isSittingInChair = false;
+        isWalking = true;
+        avatarX += Math.sin(animTick * 0.07) * 0.45;
+        facingDir = Math.sin(animTick * 0.07) >= 0 ? 1 : -1;
+      }
+    } else {
+      // Modo trabajo o pausa: patrullaje tranquilo de lado a lado
+      isSittingInChair = false;
+      if (walkPauseTimer > 0) {
+        walkPauseTimer--;
+        isWalking = false;
+      } else {
+        isWalking = true;
+        avatarX += walkSpeed * facingDir;
+
+        const minX = 6;
+        const maxX = V_WIDTH - 6;
+        if (avatarX <= minX) {
+          avatarX = minX;
+          facingDir = 1;
+          walkPauseTimer = 35 + Math.floor(Math.random() * 50);
+        } else if (avatarX >= maxX) {
+          avatarX = maxX;
+          facingDir = -1;
+          walkPauseTimer = 35 + Math.floor(Math.random() * 50);
+        }
+      }
+    }
+
+    // 4. Dibujar escenario adicional: Sillita en descansos
+    if (isBreakTime) {
+      drawChair(chairPos, 22);
+      // Globitos de sueño en descanso largo
+      if (timerState.mode === 'LONG_BREAK' && isSittingInChair) {
+        const zStep = animTick % 60;
+        const zX = chairPos + 3 + Math.sin(zStep * 0.12) * 2;
+        const zY = 13 - Math.floor(zStep * 0.14);
+        ctx.fillStyle = '#00e5ff';
+        ctx.fillRect(Math.round(zX) * PIXEL_SCALE, Math.round(zY) * PIXEL_SCALE, PIXEL_SCALE, PIXEL_SCALE);
+      }
+    }
+
+    // 5. Renderizar personaje o trofeo
     if (activeMood === 'CYCLE') {
       drawTrophy(animTick);
     } else {
-      // Renderizar según el avatar seleccionado
       switch (currentAvatar) {
         case 'wizard':
-          drawWizard(animTick, activeMood);
+          drawWizard(animTick, activeMood, isWalking, isSittingInChair);
           break;
         case 'robot':
-          drawRobot(animTick, activeMood);
+          drawRobot(animTick, activeMood, isWalking, isSittingInChair);
           break;
         case 'neko':
         default:
-          drawNeko(animTick, activeMood);
+          drawNeko(animTick, activeMood, isWalking, isSittingInChair);
           break;
       }
     }
+
+    // 6. Dibujar partículas de interacción
+    updateAndDrawParticles();
+
+    // 7. El bocadillo de diálogo sigue suavemente la posición horizontal del avatar
+    const avatarPx = Math.round(avatarX * PIXEL_SCALE);
+    const stageWidth = stage.clientWidth || 280;
+    const clampedPx = Math.max(75, Math.min(stageWidth - 75, avatarPx));
+    speechBubble.style.left = `${clampedPx}px`;
 
     animationFrameId = requestAnimationFrame(renderLoop);
   }
@@ -737,6 +883,35 @@
   btnSkip.addEventListener('click', () => {
     playClick();
     vscode.postMessage({ type: 'SKIP' });
+  });
+
+  // Interacción por clic sobre el avatar en el escenario
+  canvas.addEventListener('click', () => {
+    initAudio();
+    playClick();
+    jumpVy = -3.8;
+    emitClickStars(avatarX, 16 + jumpY);
+    playSaveChime();
+
+    const petQuotes = {
+      neko: [
+        '¡Purr! ¡Me hiciste cosquillitas! 🐱❤️',
+        '¡Miau! ¡Qué buen salto! ✨',
+        '¡A seguir cazando bugs con todo! 🐾',
+      ],
+      wizard: [
+        '¡Por las barbas de Merlín! ✨',
+        '¡Levitación arcana activada! 🔮',
+        '¡Salto mágico de concentración! 🧙‍♂️',
+      ],
+      robot: [
+        'CIRCUITO DE FELICIDAD: 100% CARGADO ⚡',
+        'SALTO_VERTICAL.EXE EJECUTADO CON ÉXITO 🤖',
+        '¡BEEP BOOP! ❤️',
+      ],
+    };
+    const quotes = petQuotes[currentAvatar] || petQuotes.neko;
+    setDialogue(quotes[Math.floor(Math.random() * quotes.length)]);
   });
 
   // Presets Rápidos de Tiempo (25m / 50m)

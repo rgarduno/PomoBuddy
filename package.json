@@ -38,6 +38,13 @@
           "title": "PomoBuddy",
           "icon": "media/icon.svg"
         }
+      ],
+      "panel": [
+        {
+          "id": "pomobuddy-panel",
+          "title": "PomoBuddy",
+          "icon": "media/icon.svg"
+        }
       ]
     },
     "views": {
@@ -46,6 +53,13 @@
           "type": "webview",
           "id": "pomobuddy.companionView",
           "name": "Compañero"
+        }
+      ],
+      "pomobuddy-panel": [
+        {
+          "type": "webview",
+          "id": "pomobuddy.bottomView",
+          "name": "Compañero (Panel Inferior)"
         }
       ]
     },

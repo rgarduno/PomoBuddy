@@ -12,10 +12,14 @@ export function activate(context: vscode.ExtensionContext) {
   const ideEventsListener = new IdeEventsListener();
   const webviewProvider = new PomoWebviewProvider(context.extensionUri, timerManager);
 
-  // Registrar Webview Provider para la barra lateral
+  // Registrar Webview Provider para la barra lateral y el panel inferior
   context.subscriptions.push(
     vscode.window.registerWebviewViewProvider(
-      PomoWebviewProvider.viewType,
+      PomoWebviewProvider.sidebarViewType,
+      webviewProvider
+    ),
+    vscode.window.registerWebviewViewProvider(
+      PomoWebviewProvider.bottomViewType,
       webviewProvider
     )
   );
