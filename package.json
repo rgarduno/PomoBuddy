@@ -1,0 +1,133 @@
+{
+  "name": "pomopixel",
+  "displayName": "PomoPixel: Pomodoro Pixel Art Companion",
+  "description": "Tu compañero de concentración en pixel art para VS Code y Antigravity. Temporizador Pomodoro, animaciones de baile en descansos y reacciones a tu código.",
+  "version": "0.1.0",
+  "publisher": "rgarduno",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rgarduno/pomopixel"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other",
+    "Productivity"
+  ],
+  "keywords": [
+    "pomodoro",
+    "pixel art",
+    "companion",
+    "focus",
+    "timer",
+    "retro",
+    "dance"
+  ],
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "pomopixel-sidebar",
+          "title": "PomoPixel",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "pomopixel-sidebar": [
+        {
+          "type": "webview",
+          "id": "pomopixel.companionView",
+          "name": "PomoPixel Companion"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "pomopixel.start",
+        "title": "Iniciar Pomodoro",
+        "category": "PomoPixel",
+        "icon": "$(play)"
+      },
+      {
+        "command": "pomopixel.pause",
+        "title": "Pausar Pomodoro",
+        "category": "PomoPixel",
+        "icon": "$(debug-pause)"
+      },
+      {
+        "command": "pomopixel.reset",
+        "title": "Reiniciar Pomodoro",
+        "category": "PomoPixel",
+        "icon": "$(debug-restart)"
+      },
+      {
+        "command": "pomopixel.skip",
+        "title": "Saltar al siguiente intervalo",
+        "category": "PomoPixel",
+        "icon": "$(debug-step-over)"
+      },
+      {
+        "command": "pomopixel.openCompanion",
+        "title": "Abrir Compañero Pixel",
+        "category": "PomoPixel"
+      }
+    ],
+    "configuration": {
+      "title": "PomoPixel",
+      "properties": {
+        "pomopixel.workDuration": {
+          "type": "number",
+          "default": 25,
+          "description": "Duración de la sesión de trabajo/enfoque (en minutos)"
+        },
+        "pomopixel.shortBreakDuration": {
+          "type": "number",
+          "default": 5,
+          "description": "Duración del descanso corto (en minutos)"
+        },
+        "pomopixel.longBreakDuration": {
+          "type": "number",
+          "default": 15,
+          "description": "Duración del descanso largo (en minutos)"
+        },
+        "pomopixel.roundsBeforeLongBreak": {
+          "type": "number",
+          "default": 4,
+          "description": "Número de rondas de trabajo antes de un descanso largo"
+        },
+        "pomopixel.soundEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Activar efectos de sonido retro 8-bit sintetizados"
+        },
+        "pomopixel.avatar": {
+          "type": "string",
+          "enum": ["neko", "wizard", "robot"],
+          "default": "neko",
+          "description": "Avatar activo en pixel art"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run build",
+    "build": "node esbuild.js --production",
+    "watch": "node esbuild.js --watch",
+    "compile": "tsc -p ./",
+    "package": "npm run build && vsce package --no-dependencies"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^2.24.0",
+    "esbuild": "^0.20.0",
+    "typescript": "^5.3.3"
+  }
+}

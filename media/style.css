@@ -1,0 +1,336 @@
+:root {
+  --bg-color: var(--vscode-sideBar-background, #1e1e2e);
+  --text-color: var(--vscode-foreground, #cdd6f4);
+  --accent-color: #ff5e7e;
+  --focus-color: #ff5252;
+  --break-color: #00e676;
+  --long-break-color: #ffd600;
+  --border-color: rgba(255, 255, 255, 0.12);
+  --pixel-border: 2px solid rgba(255, 255, 255, 0.18);
+  --btn-bg: var(--vscode-button-secondaryBackground, #313244);
+  --btn-fg: var(--vscode-button-secondaryForeground, #cdd6f4);
+  --btn-primary-bg: var(--vscode-button-background, #ff5e7e);
+  --btn-primary-fg: var(--vscode-button-foreground, #ffffff);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: 'Consolas', 'Courier New', monospace, sans-serif;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-x: hidden;
+}
+
+.pomo-container {
+  width: 100%;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Escenario Pixel Art */
+.stage-container {
+  position: relative;
+  width: 100%;
+  height: 190px;
+  background: radial-gradient(circle at 50% 30%, #2a2b3d 0%, #161622 100%);
+  border: var(--pixel-border);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  overflow: hidden;
+  box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.5), 0 4px 12px rgba(0,0,0,0.3);
+  transition: background 0.5s ease;
+}
+
+/* Modo baile / fiesta en el descanso */
+.stage-container.dancing {
+  background: radial-gradient(circle at 50% 30%, #341547 0%, #15092a 100%);
+  animation: discoGlow 1.2s infinite alternate;
+}
+
+@keyframes discoGlow {
+  0% { box-shadow: inset 0 0 20px #ff007f88, 0 0 12px #ff007f66; }
+  50% { box-shadow: inset 0 0 20px #00e5ff88, 0 0 12px #00e5ff66; }
+  100% { box-shadow: inset 0 0 20px #ffd60088, 0 0 12px #ffd60066; }
+}
+
+/* Bocadillo de diálogo */
+.speech-bubble {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ffffff;
+  color: #11111b;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: bold;
+  text-align: center;
+  max-width: 90%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+  z-index: 10;
+  transition: all 0.25s ease;
+  line-height: 1.3;
+}
+
+.speech-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px 6px 0;
+  border-style: solid;
+  border-color: #ffffff transparent transparent transparent;
+  display: block;
+  width: 0;
+}
+
+/* Canvas del muñeco en pixel art */
+.canvas-wrapper {
+  position: relative;
+  z-index: 5;
+  margin-bottom: 8px;
+}
+
+#pixelCanvas {
+  display: block;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.4));
+}
+
+.stage-floor {
+  width: 100%;
+  height: 14px;
+  background: repeating-linear-gradient(
+    90deg,
+    #3b3c54,
+    #3b3c54 10px,
+    #2c2d40 10px,
+    #2c2d40 20px
+  );
+  border-top: 2px solid #585b70;
+  z-index: 2;
+}
+
+/* Confeti flotante en descanso */
+.party-effects {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.confetti-piece {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  animation: fall 1.5s linear infinite;
+}
+
+@keyframes fall {
+  0% { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(180px) rotate(360deg); opacity: 0; }
+}
+
+/* Sección del temporizador */
+.timer-section {
+  text-align: center;
+  background: rgba(255, 255, 255, 0.03);
+  border: var(--pixel-border);
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.mode-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  margin-bottom: 4px;
+  background-color: var(--focus-color);
+  color: #fff;
+  text-transform: uppercase;
+}
+
+.mode-badge.break {
+  background-color: var(--break-color);
+  color: #111;
+}
+
+.mode-badge.long-break {
+  background-color: var(--long-break-color);
+  color: #111;
+}
+
+.timer-display {
+  font-size: 38px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  font-variant-numeric: tabular-nums;
+  margin: 4px 0;
+  color: var(--text-color);
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.15);
+}
+
+.progress-bar-container {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+  margin: 6px 0;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  background: var(--focus-color);
+  transition: width 0.3s linear, background-color 0.4s ease;
+}
+
+.round-tracker {
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+/* Controles de botones */
+.controls-row {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  width: 100%;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transition: transform 0.1s ease, filter 0.2s ease;
+}
+
+.btn:active {
+  transform: scale(0.96);
+}
+
+.btn-primary {
+  flex: 2;
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-fg);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.btn-secondary {
+  flex: 1;
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+}
+
+.btn:hover {
+  filter: brightness(1.15);
+}
+
+/* Sección de personalización de avatares */
+.customization-section {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.section-title {
+  font-size: 9px;
+  letter-spacing: 1px;
+  font-weight: 800;
+  opacity: 0.6;
+}
+
+.avatar-selector {
+  display: flex;
+  gap: 6px;
+  width: 100%;
+}
+
+.avatar-btn {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-color);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  padding: 6px 4px;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  transition: all 0.2s ease;
+}
+
+.avatar-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.avatar-btn.active {
+  background: rgba(255, 94, 126, 0.18);
+  border-color: #ff5e7e;
+  box-shadow: 0 0 8px rgba(255, 94, 126, 0.3);
+}
+
+.audio-toggle-row {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding-top: 4px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.toggle-container {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  cursor: pointer;
+  opacity: 0.85;
+}
+
+.toggle-container input {
+  cursor: pointer;
+  accent-color: var(--accent-color);
+}

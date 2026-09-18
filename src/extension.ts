@@ -1,0 +1,92 @@
+import * as vscode from 'vscode';
+import { TimerManager } from './timerManager';
+import { StatusBarManager } from './statusBarManager';
+import { IdeEventsListener } from './ideEvents';
+import { PomoWebviewProvider } from './pomoWebviewProvider';
+import { AvatarId, PomodoroConfig } from './types';
+
+export function activate(context: vscode.ExtensionContext) {
+  const config = getExtensionConfig();
+  const timerManager = new TimerManager(config, context.globalState);
+  const statusBarManager = new StatusBarManager();
+  const ideEventsListener = new IdeEventsListener();
+  const webviewProvider = new PomoWebviewProvider(context.extensionUri, timerManager);
+
+  // Registrar Webview Provider para la barra lateral
+  context.subscriptions.push(
+    vscode.window.registerWebviewViewProvider(
+      PomoWebviewProvider.viewType,
+      webviewProvider
+    )
+  );
+
+  // Conectar eventos del temporizador con la barra de estado y el webview
+  timerManager.onTick = (snapshot) => {
+    statusBarManager.update(snapshot);
+    webviewProvider.sendTick(snapshot);
+  };
+
+  timerManager.onStateChange = (snapshot) => {
+    statusBarManager.update(snapshot);
+    webviewProvider.sendStateChange(snapshot);
+  };
+
+  timerManager.onRoundFinished = (mode, round) => {
+    webviewProvider.sendRoundFinished(mode, round);
+  };
+
+  // Conectar reacciones del editor (linter/guardado) con el webview
+  ideEventsListener.onReaction = (reaction, message) => {
+    webviewProvider.sendIdeReaction(reaction, message);
+  };
+
+  // Registrar comandos de la paleta y atajos
+  context.subscriptions.push(
+    vscode.commands.registerCommand('pomopixel.start', () => {
+      timerManager.start();
+    }),
+    vscode.commands.registerCommand('pomopixel.pause', () => {
+      timerManager.pause();
+    }),
+    vscode.commands.registerCommand('pomopixel.reset', () => {
+      timerManager.reset();
+    }),
+    vscode.commands.registerCommand('pomopixel.skip', () => {
+      timerManager.skip();
+    }),
+    vscode.commands.registerCommand('pomopixel.openCompanion', () => {
+      vscode.commands.executeCommand('pomopixel.companionView.focus');
+    })
+  );
+
+  // Escuchar cambios en la configuración del usuario
+  context.subscriptions.push(
+    vscode.workspace.onDidChangeConfiguration((e) => {
+      if (e.affectsConfiguration('pomopixel')) {
+        const updatedConfig = getExtensionConfig();
+        timerManager.updateConfig(updatedConfig);
+        webviewProvider.sendConfig(updatedConfig);
+      }
+    })
+  );
+
+  // Registrar elementos descartables
+  context.subscriptions.push(timerManager, statusBarManager, ideEventsListener);
+
+  // Actualizar estado inicial en la barra
+  statusBarManager.update(timerManager.getSnapshot());
+}
+
+function getExtensionConfig(): PomodoroConfig {
+  const wsConfig = vscode.workspace.getConfiguration('pomopixel');
+  return {
+    workDuration: wsConfig.get<number>('workDuration', 25),
+    shortBreakDuration: wsConfig.get<number>('shortBreakDuration', 5),
+    longBreakDuration: wsConfig.get<number>('longBreakDuration', 15),
+    roundsBeforeLongBreak: wsConfig.get<number>('roundsBeforeLongBreak', 4),
+    soundEnabled: wsConfig.get<boolean>('soundEnabled', true),
+    avatar: wsConfig.get<AvatarId>('avatar', 'neko'),
+  };
+}
+
+export function deactivate() {}
