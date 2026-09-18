@@ -15,12 +15,35 @@ export class TimerManager {
   public onTick: ((snapshot: TimerSnapshot) => void) | null = null;
   public onStateChange: ((snapshot: TimerSnapshot) => void) | null = null;
   public onRoundFinished: ((mode: TimerMode, round: number) => void) | null = null;
+  public onCycleCompleted: ((totalRounds: number) => void) | null = null;
 
   constructor(config: PomodoroConfig, globalState?: vscode.Memento) {
     this.config = config;
     this.globalState = globalState;
     this.remainingSeconds = this.config.workDuration * 60;
     this.restorePersistedState();
+  }
+
+  public setPreset(workDuration: number, breakDuration: number) {
+    this.config.workDuration = workDuration;
+    this.config.shortBreakDuration = breakDuration;
+
+    // Actualizar configuración en VS Code
+    const wsConfig = vscode.workspace.getConfiguration('pomobuddy');
+    wsConfig.update('workDuration', workDuration, vscode.ConfigurationTarget.Global);
+    wsConfig.update('shortBreakDuration', breakDuration, vscode.ConfigurationTarget.Global);
+
+    if (this.status === 'IDLE') {
+      this.remainingSeconds = this.getTotalSecondsForCurrentMode();
+      this.notifyTick();
+      this.notifyStateChange();
+    } else if (this.status === 'RUNNING') {
+      // Re-sincronizar tiempo restante con el nuevo preset
+      this.remainingSeconds = Math.min(this.remainingSeconds, workDuration * 60);
+      this.targetEndTime = Date.now() + this.remainingSeconds * 1000;
+      this.persistState();
+      this.notifyTick();
+    }
   }
 
   private restorePersistedState() {
@@ -171,6 +194,12 @@ export class TimerManager {
 
     if (completedMode === 'WORK') {
       this.completedRounds++;
+      // ¿Se completó el ciclo completo de 4 rondas?
+      if (completedRound >= this.config.roundsBeforeLongBreak) {
+        if (this.onCycleCompleted) {
+          this.onCycleCompleted(this.config.roundsBeforeLongBreak);
+        }
+      }
     }
 
     if (this.onRoundFinished) {

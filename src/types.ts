@@ -30,7 +30,8 @@ export type ExtensionToWebviewMessage =
   | { type: 'STATE_CHANGE'; payload: TimerSnapshot }
   | { type: 'IDE_REACTION'; payload: { reaction: IdeReactionType; message?: string } }
   | { type: 'CONFIG_UPDATED'; payload: PomodoroConfig }
-  | { type: 'ROUND_FINISHED'; payload: { mode: TimerMode; round: number } };
+  | { type: 'ROUND_FINISHED'; payload: { mode: TimerMode; round: number } }
+  | { type: 'CYCLE_COMPLETED'; payload: { totalRounds: number } };
 
 export type WebviewToExtensionMessage =
   | { type: 'START' }
@@ -39,4 +40,5 @@ export type WebviewToExtensionMessage =
   | { type: 'SKIP' }
   | { type: 'CHANGE_AVATAR'; payload: AvatarId }
   | { type: 'TOGGLE_SOUND'; payload: boolean }
+  | { type: 'SET_PRESET'; payload: { workDuration: number; breakDuration: number } }
   | { type: 'WEBVIEW_READY' };

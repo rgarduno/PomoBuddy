@@ -16,11 +16,12 @@ Este archivo registra el avance en tiempo real del proyecto. Las tareas se irán
 
 ---
 
-## 🟡 Fase 2: Experiencia de Usuario y Ajustes del Temporizador (Capa Gratuita)
-- [ ] **Ajuste rápido de tiempos desde el panel:** Botones rápidos para cambiar a Pomodoro de 25m o 50m sin tener que ir a `settings.json`.
-- [ ] **Celebración de Fin de Ciclo (Ronda 4/4):** Animación y fanfarria especial al completar las 4 rondas de trabajo antes del descanso largo.
-- [ ] **Ampliación del banco de frases:** Más frases motivacionales y divertidas para cada personaje.
-- [ ] **Acción de Notificación "+5 min extra":** Conexión directa desde la notificación emergente al temporizador del webview.
+## 🟡 Fase 2: Experiencia de Usuario y Ajustes del Temporizador (Completada)
+- [x] **Ajuste rápido de tiempos desde el panel:** Botones interactivos de cambio rápido `25 / 5m` (Clásico) y `50 / 10m` (Deep Work).
+- [x] **Celebración de Fin de Ciclo (Ronda 4/4):** Trofeo pixel art animado, escenario dorado y fanfarria triunfal 8-bit al completar 4 pomodoros antes del descanso largo.
+- [x] **Ampliación del banco de frases con personalidad propia:** Diálogos únicos y contextuales para **NekoDev** 🐱, **CodeMage** 🧙‍♂️ y **PixelBot** 🤖.
+- [x] **Título de pestaña pulido:** Título simplificado a `PomoBuddy: Compañero` para evitar repeticiones en la barra lateral.
+- [x] **Acción de Notificación "+5 min extra":** Conexión directa desde la notificación emergente al temporizador activo.
 
 ---
 

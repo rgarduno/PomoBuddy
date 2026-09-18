@@ -36,25 +36,75 @@
 
   let animationFrameId = null;
   let animTick = 0;
-  let currentMood = 'IDLE'; // 'IDLE', 'WORK', 'DANCE', 'ERROR', 'SAVED'
+  let currentMood = 'IDLE'; // 'IDLE', 'WORK', 'DANCE', 'ERROR', 'SAVED', 'CYCLE'
   let moodTimeout = null;
 
-  // Frases de diálogo aleatorias
-  const workQuotes = [
-    '¡A picar código! Modo foco activado 💻',
-    'Concéntrate, estás programando magia ✨',
-    'Un bug a la vez, tú puedes 🚀',
-    'Escribe código limpio y elegante ☕',
-    '¡Avanzando a toda máquina! 🔥',
-  ];
+  // Frases de diálogo personalizadas por cada personaje
+  const quotesByAvatar = {
+    neko: {
+      work: [
+        '¡Miau! Hora de picar código 💻',
+        'Tecleando con mis patitas a 300 WPM 🐾',
+        'Un cafecito con leche y a seguir ☕',
+        'Cazando bugs como si fueran ratoncitos 🐭',
+        'Ronroneando con código limpio y elegante ✨',
+      ],
+      dance: [
+        '¡Miau! ¡A mover la colita y bailar! 🕺',
+        '¡Descanso merecido! ¿Hora de una sardina? 🐟',
+        '¡Fiesta gatuna! Ronroneos al máximo 🎉',
+        'Estira la espalda como un buen gato 🐱',
+      ],
+      error: '¡Fssss! ¿Quién dejó este error aquí? 😾',
+      fixed: '¡Miau! Código limpio y sin bichos ✨',
+      saved: '¡Miau! Guardado seguro en disco 👍',
+    },
+    wizard: {
+      work: [
+        '¡Abracadabra! Que compile sin warnings ✨',
+        'Invocando sabiduría ancestral de StackOverflow 📜',
+        'Conjuro de enfoque: ¡máxima concentración! 🔮',
+        'Poción de cafeína consumida con éxito ☕',
+        'Un bug a la vez, el código es pura magia 🧙‍♂️',
+      ],
+      dance: [
+        '¡Maná recargado! A bailar con el báculo 🕺',
+        '¡Hechizo de fiesta y luces activado! 🎉',
+        'Pausa mágica para estirar la túnica 🧘‍♂️',
+        '¡Victoria arcana! Disfruta tu descanso ✨',
+      ],
+      error: '¡Por Merlín! Una perturbación en el código 😵‍💫',
+      fixed: '¡Hechizo ejecutado con éxito! Código purificado ✨',
+      saved: '¡Grimorio actualizado! Archivo guardado 👍',
+    },
+    robot: {
+      work: [
+        'OPTIMIZANDO CICLOS DE CPU... 🤖',
+        '01000110 01001111 01000011 01010101 01010011 (FOCUS)',
+        'PROCESANDO DATOS A MÁXIMA VELOCIDAD ⚡',
+        'ESTADO DEL SISTEMA: 100% EFICIENTE 🔋',
+        'ELIMINANDO GLITCHES DEL SISTEMA 💻',
+      ],
+      dance: [
+        'PROTOCOLO DE BAILE ACTIVADO: DANCE.EXE 🕺',
+        'REFRIGERACIÓN LÍQUIDA EN CURSO... FIESTA 🎉',
+        'LUCES DISCO EN BUCLE INFINITO 🪩',
+        'MODO DIVERSIÓN: FRECUENCIA MÁXIMA 🤖',
+      ],
+      error: 'ALERTA CRÍTICA: EXCEPCIÓN DETECTADA EN LÍNEA ACTIVA 🚨',
+      fixed: 'BUG RESUELTO: COMPILACIÓN EXITOSA [OK] ✨',
+      saved: 'DATOS ALMACENADOS EN DISCO DURO [OK] 👍',
+    },
+  };
 
-  const danceQuotes = [
-    '¡Tiempo cumplido! ¡A bailar! 🕺',
-    '¡Despega los ojos de la pantalla! 🎉',
-    '¡Estira la espalda y baila! 💃',
-    '¡Excelente bloque de trabajo! 🪩',
-    '¡Toma agüita y festeja! 🥤',
-  ];
+  function getRandomQuote(category) {
+    const charQuotes = quotesByAvatar[currentAvatar] || quotesByAvatar.neko;
+    const list = charQuotes[category];
+    if (Array.isArray(list)) {
+      return list[Math.floor(Math.random() * list.length)];
+    }
+    return list || '¡Avanzando con todo!';
+  }
 
   // ==========================================
   // 1. SINTETIZADOR DE AUDIO RETRO 8-BIT
@@ -127,6 +177,22 @@
     playTone(1046.50, 'square', 0.4, 0.9);      // C6 final
   }
 
+  function playCycleVictorySound() {
+    initAudio();
+    // Melodía triunfal épica de fanfarria 8-bit al completar las 4 rondas
+    const notes = [
+      { f: 523.25, d: 0.14, t: 0 },    // C5
+      { f: 523.25, d: 0.14, t: 0.14 }, // C5
+      { f: 523.25, d: 0.14, t: 0.28 }, // C5
+      { f: 659.25, d: 0.35, t: 0.42 }, // E5
+      { f: 587.33, d: 0.15, t: 0.77 }, // D5
+      { f: 659.25, d: 0.2, t: 0.92 },  // E5
+      { f: 783.99, d: 0.4, t: 1.12 },  // G5
+      { f: 1046.5, d: 0.75, t: 1.55 }, // C6 largo triunfal
+    ];
+    notes.forEach((n) => playTone(n.f, 'square', n.d, n.t, 0.12));
+  }
+
   function playErrorBlip() {
     initAudio();
     // Glitch de alarma descendente
@@ -159,6 +225,42 @@
     if (!color || color === '.') return;
     ctx.fillStyle = color;
     ctx.fillRect(vx * PIXEL_SCALE, vy * PIXEL_SCALE, PIXEL_SCALE, PIXEL_SCALE);
+  }
+
+  // --- TROFEO DE CELEBRACIÓN DE CICLO (RONDA 4/4) ---
+  function drawTrophy(step) {
+    const xOffset = 16;
+    const yOffset = Math.round(14 + Math.sin(step * 0.2) * 2);
+    const GOLD = '#f1c40f';
+    const HIGHLIGHT = '#fff176';
+    const DARK_GOLD = '#d4ac0d';
+    const BASE = '#7f8c8d';
+
+    // Copa dorada
+    for (let x = -4; x <= 4; x++) p(xOffset + x, yOffset - 4, GOLD);
+    for (let x = -3; x <= 3; x++) p(xOffset + x, yOffset - 3, HIGHLIGHT);
+    for (let x = -3; x <= 3; x++) p(xOffset + x, yOffset - 2, GOLD);
+    for (let x = -2; x <= 2; x++) p(xOffset + x, yOffset - 1, DARK_GOLD);
+    for (let x = -1; x <= 1; x++) p(xOffset + x, yOffset, GOLD);
+
+    // Asas de la copa
+    p(xOffset - 5, yOffset - 3, GOLD);
+    p(xOffset - 5, yOffset - 2, GOLD);
+    p(xOffset + 5, yOffset - 3, GOLD);
+    p(xOffset + 5, yOffset - 2, GOLD);
+
+    // Tallo y Base
+    p(xOffset, yOffset + 1, GOLD);
+    p(xOffset, yOffset + 2, GOLD);
+    for (let x = -3; x <= 3; x++) p(xOffset + x, yOffset + 3, BASE);
+    for (let x = -4; x <= 4; x++) p(xOffset + x, yOffset + 4, '#2c3e50');
+
+    // Destellos mágicos de victoria
+    if (step % 6 < 3) {
+      p(xOffset - 6, yOffset - 5, '#ffffff');
+      p(xOffset + 6, yOffset - 5, '#ffffff');
+      p(xOffset, yOffset - 7, '#ffd700');
+    }
   }
 
   // --- AVATAR 1: NEKODEV (GATITO DEV) ---
@@ -464,18 +566,23 @@
       }
     }
 
-    // Renderizar según el avatar seleccionado
-    switch (currentAvatar) {
-      case 'wizard':
-        drawWizard(animTick, activeMood);
-        break;
-      case 'robot':
-        drawRobot(animTick, activeMood);
-        break;
-      case 'neko':
-      default:
-        drawNeko(animTick, activeMood);
-        break;
+    // Si es celebración de ciclo completo, dibujar el trofeo dorado
+    if (activeMood === 'CYCLE') {
+      drawTrophy(animTick);
+    } else {
+      // Renderizar según el avatar seleccionado
+      switch (currentAvatar) {
+        case 'wizard':
+          drawWizard(animTick, activeMood);
+          break;
+        case 'robot':
+          drawRobot(animTick, activeMood);
+          break;
+        case 'neko':
+        default:
+          drawNeko(animTick, activeMood);
+          break;
+      }
     }
 
     animationFrameId = requestAnimationFrame(renderLoop);
@@ -500,12 +607,13 @@
 
     moodTimeout = setTimeout(() => {
       currentMood = 'IDLE';
-      // Restaurar diálogo de contexto
+      stage.classList.remove('celebration');
+      // Restaurar diálogo de contexto con la personalidad del avatar actual
       if (timerState.status === 'RUNNING') {
         if (timerState.mode === 'WORK') {
-          setDialogue(workQuotes[Math.floor(Math.random() * workQuotes.length)]);
+          setDialogue(getRandomQuote('work'));
         } else {
-          setDialogue(danceQuotes[Math.floor(Math.random() * danceQuotes.length)]);
+          setDialogue(getRandomQuote('dance'));
         }
       }
     }, durationMs);
@@ -607,15 +715,15 @@
     playClick();
     if (timerState.status === 'RUNNING') {
       vscode.postMessage({ type: 'PAUSE' });
-      setDialogue('Temporizador pausado. Tomate un segundo.');
+      setDialogue('Temporizador pausado. Tómate un segundo.');
     } else {
       vscode.postMessage({ type: 'START' });
       if (timerState.mode === 'WORK') {
         playWorkStartSound();
-        setDialogue(workQuotes[Math.floor(Math.random() * workQuotes.length)]);
+        setDialogue(getRandomQuote('work'));
       } else {
         playBreakDanceSound();
-        setDialogue(danceQuotes[Math.floor(Math.random() * danceQuotes.length)]);
+        setDialogue(getRandomQuote('dance'));
       }
     }
   });
@@ -631,6 +739,32 @@
     vscode.postMessage({ type: 'SKIP' });
   });
 
+  // Presets Rápidos de Tiempo (25m / 50m)
+  const preset25 = document.getElementById('preset25');
+  const preset50 = document.getElementById('preset50');
+
+  preset25?.addEventListener('click', () => {
+    playClick();
+    preset25.classList.add('active');
+    preset50?.classList.remove('active');
+    vscode.postMessage({
+      type: 'SET_PRESET',
+      payload: { workDuration: 25, breakDuration: 5 },
+    });
+    setDialogue('Modo Clásico activado: 25m enfoque / 5m descanso 🍅');
+  });
+
+  preset50?.addEventListener('click', () => {
+    playClick();
+    preset50.classList.add('active');
+    preset25?.classList.remove('active');
+    vscode.postMessage({
+      type: 'SET_PRESET',
+      payload: { workDuration: 50, breakDuration: 10 },
+    });
+    setDialogue('Modo Deep Work activado: 50m enfoque / 10m descanso 🚀');
+  });
+
   avatarButtons.forEach((btn) => {
     btn.addEventListener('click', () => {
       playClick();
@@ -640,7 +774,13 @@
         avatarButtons.forEach((b) => b.classList.remove('active'));
         btn.classList.add('active');
         vscode.postMessage({ type: 'CHANGE_AVATAR', payload: newAvatar });
-        setDialogue(`¡Hola! Ahora soy tu compañero ${newAvatar} 🚀`);
+        const nameLabel =
+          newAvatar === 'neko'
+            ? 'NekoDev 🐱'
+            : newAvatar === 'wizard'
+            ? 'CodeMage 🧙‍♂️'
+            : 'PixelBot 🤖';
+        setDialogue(`¡Hola! Ahora soy tu compañero ${nameLabel}! Listo para programar.`);
       }
     });
   });
@@ -671,24 +811,48 @@
       case 'ROUND_FINISHED':
         if (message.payload.mode === 'WORK') {
           playBreakDanceSound();
-          triggerTemporaryMood('DANCE', '¡TRABAJO TERMINADO! ¡A BAILAR! 🕺🎉', 5000);
+          triggerTemporaryMood('DANCE', getRandomQuote('dance'), 5000);
         } else {
           playWorkStartSound();
-          triggerTemporaryMood('WORK', '¡Descanso terminado! ¡A concentrarse! ⚡', 4000);
+          triggerTemporaryMood('WORK', getRandomQuote('work'), 4000);
         }
+        break;
+
+      case 'CYCLE_COMPLETED':
+        // ¡Celebración épica de ciclo completo con trofeo y fanfarria triunfal!
+        playCycleVictorySound();
+        stage.classList.add('celebration');
+        triggerTemporaryMood(
+          'CYCLE',
+          '🏆 ¡CICLO COMPLETO! ¡Eres una máquina de productividad! Disfruta tu descanso largo 🌟',
+          8000
+        );
+        generateConfetti();
         break;
 
       case 'IDE_REACTION':
         const reaction = message.payload.reaction;
         if (reaction === 'ERROR') {
           playErrorBlip();
-          triggerTemporaryMood('ERROR', message.payload.message || '¡Hay un error en tu código! 😵‍💫', 4000);
+          triggerTemporaryMood(
+            'ERROR',
+            message.payload.message || getRandomQuote('error'),
+            4000
+          );
         } else if (reaction === 'FIXED') {
           playSaveChime();
-          triggerTemporaryMood('SAVED', message.payload.message || '¡Bugs resueltos! ✨', 3000);
+          triggerTemporaryMood(
+            'SAVED',
+            message.payload.message || getRandomQuote('fixed'),
+            3000
+          );
         } else if (reaction === 'SAVED') {
           playSaveChime();
-          triggerTemporaryMood('SAVED', message.payload.message || '¡Guardado con éxito! 👍', 2000);
+          triggerTemporaryMood(
+            'SAVED',
+            message.payload.message || getRandomQuote('saved'),
+            2000
+          );
         }
         break;
 
@@ -704,6 +868,15 @@
             b.classList.remove('active');
           }
         });
+
+        // Actualizar botón de preset activo
+        if (cfg.workDuration === 50) {
+          preset50?.classList.add('active');
+          preset25?.classList.remove('active');
+        } else {
+          preset25?.classList.add('active');
+          preset50?.classList.remove('active');
+        }
         break;
     }
   });

@@ -45,7 +45,7 @@
         {
           "type": "webview",
           "id": "pomobuddy.companionView",
-          "name": "PomoBuddy Companion"
+          "name": "Compañero"
         }
       ]
     },

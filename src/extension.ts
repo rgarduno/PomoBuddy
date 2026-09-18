@@ -35,6 +35,10 @@ export function activate(context: vscode.ExtensionContext) {
     webviewProvider.sendRoundFinished(mode, round);
   };
 
+  timerManager.onCycleCompleted = (totalRounds) => {
+    webviewProvider.sendCycleCompleted(totalRounds);
+  };
+
   // Conectar reacciones del editor (linter/guardado) con el webview
   ideEventsListener.onReaction = (reaction, message) => {
     webviewProvider.sendIdeReaction(reaction, message);

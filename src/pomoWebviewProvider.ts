@@ -53,6 +53,14 @@ export class PomoWebviewProvider implements vscode.WebviewViewProvider {
         case 'TOGGLE_SOUND':
           this.handleSoundToggle(message.payload);
           break;
+        case 'SET_PRESET':
+          this.timerManager.setPreset(
+            message.payload.workDuration,
+            message.payload.breakDuration
+          );
+          this.sendConfig(this.timerManager.getConfig());
+          this.sendStateChange(this.timerManager.getSnapshot());
+          break;
         case 'WEBVIEW_READY':
           this.postMessage({
             type: 'CONFIG_UPDATED',
@@ -86,6 +94,13 @@ export class PomoWebviewProvider implements vscode.WebviewViewProvider {
     this.postMessage({
       type: 'ROUND_FINISHED',
       payload: { mode, round },
+    });
+  }
+
+  public sendCycleCompleted(totalRounds: number) {
+    this.postMessage({
+      type: 'CYCLE_COMPLETED',
+      payload: { totalRounds },
     });
   }
 
@@ -165,6 +180,15 @@ export class PomoWebviewProvider implements vscode.WebviewViewProvider {
       </div>
       <div class="round-tracker" id="roundTracker">
         Ronda <span id="currentRound">1</span> de <span id="totalRounds">4</span>
+      </div>
+      <!-- Presets Rápidos de Tiempo -->
+      <div class="presets-row">
+        <button class="preset-pill active" id="preset25" data-work="25" data-break="5" title="Pomodoro Clásico: 25m trabajo / 5m descanso">
+          25 / 5m
+        </button>
+        <button class="preset-pill" id="preset50" data-work="50" data-break="10" title="Deep Work: 50m trabajo / 10m descanso">
+          50 / 10m
+        </button>
       </div>
     </div>
 
