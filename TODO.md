@@ -22,6 +22,10 @@ Este archivo registra el avance en tiempo real del proyecto. Las tareas se irán
 - [x] **Ampliación del banco de frases con personalidad propia:** Diálogos únicos y contextuales para **NekoDev** 🐱, **CodeMage** 🧙‍♂️ y **PixelBot** 🤖.
 - [x] **Título de pestaña pulido:** Título simplificado a `PomoBuddy: Compañero` para evitar repeticiones en la barra lateral.
 - [x] **Acción de Notificación "+5 min extra":** Conexión directa desde la notificación emergente al temporizador activo.
+- [x] **Físicas de Movimiento & Caminata:** El avatar camina de izquierda a derecha por el suelo, se voltea al llegar a los bordes y alterna patitas/pasos.
+- [x] **La Sillita de Descanso:** En tiempo de descanso, el avatar camina a su sillita pixel art retro, se sienta y se relaja con su café o siesta con burbujas de Zzz.
+- [x] **Soporte para el Panel Inferior (Bottom Panel):** Contenedor registrado en la barra inferior (junto a Terminal/Output) con diseño responsivo horizontal para que el avatar camine por todo el ancho de la pantalla.
+- [x] **Interacción por Clic (Tamagotchi Petting):** Al hacer clic sobre el escenario, el avatar pega un salto acrobático con destellos/estrellas y dice una frase cariñosa.
 
 ---
 
