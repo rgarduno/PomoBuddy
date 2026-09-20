@@ -31,14 +31,34 @@ export class PomoWebviewProvider implements vscode.WebviewViewProvider {
       this.views.delete(webviewView);
     });
 
+    webviewView.onDidChangeVisibility(async () => {
+      if (webviewView.visible) {
+        if (webviewView.viewType === PomoWebviewProvider.sidebarViewType) {
+          const bottomView = Array.from(this.views).find(
+            (v) => v.viewType === PomoWebviewProvider.bottomViewType && v.visible
+          );
+          if (bottomView) {
+            await vscode.commands.executeCommand('workbench.action.closePanel');
+          }
+        } else if (webviewView.viewType === PomoWebviewProvider.bottomViewType) {
+          const sidebarView = Array.from(this.views).find(
+            (v) => v.viewType === PomoWebviewProvider.sidebarViewType && v.visible
+          );
+          if (sidebarView) {
+            await vscode.commands.executeCommand('workbench.action.closeSidebar');
+          }
+        }
+      }
+    });
+
     webviewView.webview.options = {
       enableScripts: true,
       localResourceRoots: [vscode.Uri.joinPath(this.extensionUri, 'media')],
     };
 
-    webviewView.webview.html = this.getHtmlForWebview(webviewView.webview);
+    webviewView.webview.html = this.getHtmlForWebview(webviewView.webview, webviewView.viewType);
 
-    webviewView.webview.onDidReceiveMessage((message: WebviewToExtensionMessage) => {
+    webviewView.webview.onDidReceiveMessage(async (message: WebviewToExtensionMessage) => {
       switch (message.type) {
         case 'START':
           this.timerManager.start();
@@ -70,10 +90,12 @@ export class PomoWebviewProvider implements vscode.WebviewViewProvider {
           this.sendStateChange(this.timerManager.getSnapshot());
           break;
         case 'OPEN_BOTTOM_PANEL':
-          vscode.commands.executeCommand('pomobuddy.bottomView.focus');
+          await vscode.commands.executeCommand('workbench.action.closeSidebar');
+          await vscode.commands.executeCommand('pomobuddy.bottomView.focus');
           break;
         case 'OPEN_SIDEBAR':
-          vscode.commands.executeCommand('pomobuddy.companionView.focus');
+          await vscode.commands.executeCommand('workbench.action.closePanel');
+          await vscode.commands.executeCommand('pomobuddy.companionView.focus');
           break;
         case 'WEBVIEW_READY':
           this.postMessage({
@@ -155,7 +177,7 @@ export class PomoWebviewProvider implements vscode.WebviewViewProvider {
     }
   }
 
-  private getHtmlForWebview(webview: vscode.Webview): string {
+  private getHtmlForWebview(webview: vscode.Webview, viewType?: string): string {
     const scriptUri = webview.asWebviewUri(
       vscode.Uri.joinPath(this.extensionUri, 'media', 'main.js')
     );
@@ -164,6 +186,7 @@ export class PomoWebviewProvider implements vscode.WebviewViewProvider {
     );
 
     const nonce = getNonce();
+    const viewMode = viewType === PomoWebviewProvider.bottomViewType ? 'bottom' : 'sidebar';
 
     return `<!DOCTYPE html>
 <html lang="es">
@@ -174,7 +197,7 @@ export class PomoWebviewProvider implements vscode.WebviewViewProvider {
   <link rel="stylesheet" href="${styleUri}">
   <title>PomoBuddy Companion</title>
 </head>
-<body>
+<body data-view="${viewMode}">
   <div class="pomo-app">
     
     <!-- Minimal Frosted HUD Flotante (Limpio y Discreto) -->

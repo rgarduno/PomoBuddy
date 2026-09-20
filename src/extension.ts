@@ -73,11 +73,13 @@ export function activate(context: vscode.ExtensionContext) {
       const msg = updated ? '🔊 PomoBuddy: Sonidos activados' : '🔇 PomoBuddy: Modo silencioso activado';
       vscode.window.setStatusBarMessage(msg, 3000);
     }),
-    vscode.commands.registerCommand('pomobuddy.openCompanion', () => {
-      vscode.commands.executeCommand('pomobuddy.companionView.focus');
+    vscode.commands.registerCommand('pomobuddy.openCompanion', async () => {
+      await vscode.commands.executeCommand('workbench.action.closePanel');
+      await vscode.commands.executeCommand('pomobuddy.companionView.focus');
     }),
-    vscode.commands.registerCommand('pomobuddy.openBottomPanel', () => {
-      vscode.commands.executeCommand('pomobuddy.bottomView.focus');
+    vscode.commands.registerCommand('pomobuddy.openBottomPanel', async () => {
+      await vscode.commands.executeCommand('workbench.action.closeSidebar');
+      await vscode.commands.executeCommand('pomobuddy.bottomView.focus');
     })
   );
 

@@ -1397,24 +1397,19 @@
   // Botón para alternar entre Barra Lateral y Barra Inferior Panorámica
   const btnSwitchMode = document.getElementById('btnSwitchMode');
   const switchModeText = document.getElementById('switchModeText');
+  const isSidebar = document.body.getAttribute('data-view') === 'sidebar';
 
-  function updateSwitchLabel() {
-    const isWide = window.innerWidth >= 580;
-    if (switchModeText) {
-      switchModeText.textContent = isWide ? 'Cambiar a Barra Lateral' : 'Cambiar a Barra Inferior';
-    }
+  if (switchModeText) {
+    switchModeText.textContent = isSidebar ? 'Cambiar a Barra Inferior' : 'Cambiar a Barra Lateral';
   }
-  window.addEventListener('resize', updateSwitchLabel);
-  setTimeout(updateSwitchLabel, 80);
 
   btnSwitchMode?.addEventListener('click', () => {
     playClick();
     settingsBackdrop?.classList.remove('open');
-    const isWide = window.innerWidth >= 580;
-    if (isWide) {
-      vscode.postMessage({ type: 'OPEN_SIDEBAR' });
-    } else {
+    if (isSidebar) {
       vscode.postMessage({ type: 'OPEN_BOTTOM_PANEL' });
+    } else {
+      vscode.postMessage({ type: 'OPEN_SIDEBAR' });
     }
   });
 
