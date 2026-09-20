@@ -1,64 +1,80 @@
 # 🍅 PomoBuddy
 
-> **Tu compañero de concentración en pixel art para Visual Studio Code y Antigravity.**  
-> Temporizador Pomodoro con personajes animados en pixel art que te acompañan mientras programas, reaccionan a tus errores en tiempo real y **¡se ponen a bailar en tus descansos!** 🕺✨
+> **Tu compañero de productividad y concentración en pixel art para Visual Studio Code.**  
+> Temporizador Pomodoro interactivo con físicas en tiempo real, escenarios animados con clima procedural, animaciones festivas en descansos y reacciones a diagnósticos de tu código.
 
 ---
 
 ## 🌟 Características Principales
 
-* 🐱 **Compañeros en Pixel Art:** Elige entre **NekoDev** (Gatito dev), **CodeMage** (Mago 8-bit) o **PixelBot** (Robot).
-* 💃 **Animaciones de Baile en Descansos:** Cuando suena la campana de descanso, tu avatar saca gafas de sol, activa las luces disco y baila con confeti para motivarte a despegarte de la pantalla.
-* 😵‍💫 **Reacción a Errores en Vivo:** Si cometes un error de sintaxis o linter en tu archivo activo, tu avatar se preocupa o se marea. ¡Al arreglarlo, celebra el código limpio!
-* 💾 **Reacción al Guardar (`Cmd+S`):** Gesto de aprobación inmediato cada vez que guardas tus cambios.
-* 🔊 **Audio Sintetizado Retro 8-bit:** Fanfarrias de descanso y pitidos de arcade usando la Web Audio API nativa (sin archivos pesados, funciona sin internet).
-* 🔇 **Comando Rápido de Silencio:** Atajo y comando para silenciar al instante en llamadas o reuniones (`PomoBuddy: Silenciar / Activar Sonidos`).
-* 🍅 **Temporizador Pomodoro Completo:** 
-  * Tiempos de trabajo, descansos cortos y descansos largos.
-  * Contador de rondas y ciclos.
-  * Controles completos: Iniciar, Pausar, Reiniciar y Saltar.
-* 📊 **Barra de Estado Discreta:** Indicador en tiempo real `🍅 24:59 (1/4)` en la barra inferior con acceso rápido a un clic.
+* 🐾 **Compañeros en Pixel Art con Personalidad:**  
+  Elige entre **NekoDev** (Gatito desarrollador), **CodeMage** (Mago 8-bit) o **PixelBot** (Robot de alta eficiencia), cada uno con animaciones y banco de frases contextuales únicas.
+* 🌄 **5 Escenarios Temáticos con Clima Animado:**
+  * ❄️ **Invierno:** Montañas púrpuras, pinos nevados y ventisca suave de copos de nieve.
+  * 🌲 **Bosque:** Colinas esmeralda, árboles frondosos y luciérnagas doradas titilantes.
+  * 🌆 **Cyberpunk:** Skyline neón, lluvia digital diagonal y reflejos en asfalto húmedo.
+  * ☕ **Café Lo-Fi:** Ventana al atardecer, guirnalda de luces, librería y motas de polvo dorado suspendidas en la luz.
+  * ⬛ **Minimal:** Escenario transparente integrado limpiamente con tu tema activo de VS Code.
+* 🎾 **Físicas Interactivas & Juego:**  
+  Lanza una pelotita con gravedad y fricción (`🎾` o clic en el suelo). Tu avatar corre hacia ella, la patea en el aire, salta y celebra.
+* 🖥️ **Diseño Dual Inteligente (Barra Lateral + Panel Inferior Panorámico):**  
+  Disfruta de una vista compacta en la barra lateral o una experiencia panorámica en la barra inferior (junto a la Terminal) donde el compañero camina por todo el ancho de tu pantalla. Cambia entre ambos paneles con un solo clic y cierre automático del panel opuesto.
+* ⏱️ **Minimal Frosted HUD Flotante:**  
+  Barra superior en cristal translúcido (*frosted glass*) que nunca colisiona, adaptándose fluidamente a cualquier ancho de ventana.
+* 😵‍💫 **Reacción a Diagnósticos en Tiempo Real:**  
+  Si el linter o compilador detecta errores en tu archivo activo, tu avatar reacciona con preocupación. Al resolverlos o guardar (`Cmd+S` / `Ctrl+S`), celebra con un pulgar arriba.
+* 🔊 **Audio Sintetizado Retro 8-bit:**  
+  Efectos de sonido arcade generados proceduralmente con la Web Audio API nativa (**0 KB de archivos MP3/WAV externos**, 100% offline y sin latencia).
+* 🛡️ **Motor de Tiempo Resiliente:**  
+  Cálculo basado en deltas contra marcas de tiempo del reloj del sistema (`Date.now()`), garantizando precisión absoluta incluso cuando la laptop entra en modo reposo (*Sleep Mode*).
 
 ---
 
-## 📦 Instalación Rápida (Archivo `.vsix`)
+## 🏛️ Arquitectura y Stack Técnico
 
-Puedes empaquetar e instalar la extensión en tu entorno local en 1 minuto:
+PomoBuddy fue diseñado siguiendo patrones de arquitectura limpia, desacoplamiento y mínimo consumo de recursos del sistema:
 
-### 1. Compilar y empaquetar
+* **Lenguaje & Entorno:** TypeScript estricto, compilado con `esbuild` para tiempos de carga instantáneos.
+* **Motor Gráfico (Frontend):** Canvas 2D nativo con escalado entero de píxeles (`image-rendering: pixelated`), bucle de animación a 60 FPS y renderizado procedural.
+* **Comunicación Bi-direccional:** Protocolo de mensajería tipado entre la API de Extensiones de VS Code (Node.js runtime) y los contextos de Webview.
+* **Persistencia:** Almacenamiento seguro de estado en `vscode.Memento` (`globalState`) y configuración workspace en `vscode.workspace.getConfiguration`.
+* **Peso Total del Paquete:** Menor a **60 KB** (sin dependencias pesadas en tiempo de ejecución).
+
+---
+
+## 📦 Instalación y Desarrollo Local
+
+### Prerrequisitos
+* **Node.js** (v18 o superior)
+* **VS Code** (v1.85.0 o superior)
+
+### Compilación y Empaquetado
 ```bash
-# Instalar dependencias
+# 1. Clonar el repositorio
+git clone https://github.com/rgarduno/PomoBuddy.git
+cd PomoBuddy
+
+# 2. Instalar dependencias de desarrollo
 npm install
 
-# Compilar y generar el paquete .vsix
+# 3. Compilar TypeScript y empaquetar en archivo .vsix
 npm run package
 ```
-Esto creará un archivo `pomobuddy-0.1.0.vsix` en la raíz del proyecto.
+Esto generará el instalable listo para producción: `pomobuddy-0.1.0.vsix`.
 
-### 2. Instalar en VS Code o Antigravity
-* **Opción A (Desde el editor):**
-  1. Abre la pestaña de **Extensiones** (`Cmd+Shift+X`).
-  2. Haz clic en el menú de tres puntos (`...`) en la esquina superior de la pestaña.
-  3. Selecciona **Install from VSIX...** y elige el archivo `pomobuddy-0.1.0.vsix`.
-* **Opción B (Desde la terminal):**
+### Instalar la Extensión en VS Code
+* **Desde la interfaz:**  
+  Abre la pestaña de Extensiones (`Cmd+Shift+X` / `Ctrl+Shift+X`) -> Menú de tres puntos (`...`) -> **Install from VSIX...** -> Selecciona `pomobuddy-0.1.0.vsix`.
+* **Desde la terminal:**
   ```bash
   code --install-extension pomobuddy-0.1.0.vsix
   ```
 
 ---
 
-## 🚀 Uso
-
-1. Haz clic en el icono del **Tomatito Pixel** en la barra de actividad izquierda (`PomoBuddy`).
-2. Selecciona tu avatar favorito (**Neko**, **Mago**, **Robot**).
-3. Pulsa **Iniciar ▶** para comenzar tu sesión de enfoque.
-4. ¡Cuando termine el bloque de trabajo, relájate y disfruta del baile de tu compañero!
-
----
-
 ## ⚙️ Configuración Personalizada
 
-Puedes modificar la duración de los intervalos en tu `settings.json` o desde la configuración de VS Code / Antigravity:
+Puedes personalizar PomoBuddy desde la interfaz de Ajustes (`⚙️`) o directamente en tu `settings.json`:
 
 ```json
 {
@@ -67,20 +83,35 @@ Puedes modificar la duración de los intervalos en tu `settings.json` o desde la
   "pomobuddy.longBreakDuration": 15,
   "pomobuddy.roundsBeforeLongBreak": 4,
   "pomobuddy.soundEnabled": true,
-  "pomobuddy.avatar": "neko"
+  "pomobuddy.avatar": "neko",
+  "pomobuddy.background": "winter"
 }
 ```
 
 ---
 
-## 🗺️ Hoja de Ruta (Free vs. Pro)
+## ⌨️ Atajos y Comandos Disponibles
 
-Consulta nuestro documento [FEATURES.md](./FEATURES.md) para ver la matriz completa de características actuales y las funcionalidades premium planificadas (subida de avatar propio, modo roast sarcástico, packs de sonidos y estadísticas avanzadas).
+| Comando | Acción |
+| :--- | :--- |
+| `pomobuddy.start` | Iniciar o reanudar el temporizador |
+| `pomobuddy.pause` | Pausar la sesión activa |
+| `pomobuddy.reset` | Reiniciar el intervalo actual |
+| `pomobuddy.skip` | Saltar al siguiente bloque (Trabajo / Descanso) |
+| `pomobuddy.toggleMute` | Silenciar o activar efectos de sonido retro |
+| `pomobuddy.openCompanion` | Abrir y enfocar PomoBuddy en la barra lateral |
+| `pomobuddy.openBottomPanel` | Abrir y enfocar PomoBuddy en la barra inferior |
 
 ---
 
-## 🤝 Contribuir y Licencia
+## 🗺️ Hoja de Ruta (Roadmap)
 
-¡Las contribuciones son bienvenidas! Siéntete libre de abrir un *Issue* o enviar un *Pull Request* para proponer nuevos personajes en pixel art o mejoras en las animaciones.
+Consulta [FEATURES.md](./FEATURES.md) para conocer el desglose detallado de características implementadas y la evolución hacia la capa premium (soporte para sprites personalizados, métricas avanzadas y modo overlay de escritorio).
 
-Distribuido bajo la Licencia MIT. Consulta [LICENSE](./LICENSE) para más información.
+---
+
+## 🤝 Contribución y Licencia
+
+¡Las contribuciones y sugerencias son bienvenidas! Siéntete libre de abrir un *Issue* o enviar un *Pull Request* para proponer nuevos personajes, accesorios o fondos.
+
+Distribuido bajo la **Licencia MIT**. Consulta [LICENSE](./LICENSE) para más información.

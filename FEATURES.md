@@ -44,7 +44,7 @@ Este documento es la **fuente de la verdad** del proyecto. Se actualizará const
    - Acciones: Iniciar, Pausar, Reiniciar, Saltar al siguiente intervalo.
 
 2. **Mini-Escenario Pixel Art:**
-   - Panel nativo integrado en el Activity Bar de VS Code / Antigravity.
+   - Panel nativo integrado en el Activity Bar de Visual Studio Code.
    - Gráficos renderizados en pixel art con escalado nítido (`pixelated`).
    - Bocadillos de diálogo con frases motivacionales dinámicas.
 
@@ -60,7 +60,7 @@ Este documento es la **fuente de la verdad** del proyecto. Se actualizará const
    - Fanfarria de descanso y pitidos de inicio creados con Web Audio API (0 peso en MB, funciona sin conexión).
 
 6. **Empaquetado `.vsix` Open Source:**
-   - Descarga directa e instalación con 1 clic en VS Code y Antigravity.
+   - Descarga directa e instalación con 1 clic en Visual Studio Code.
 
 ---
 

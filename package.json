@@ -1,13 +1,13 @@
 {
   "name": "pomobuddy",
   "displayName": "PomoBuddy: Pomodoro Pixel Art Companion",
-  "description": "Tu compañero de concentración en pixel art para VS Code y Antigravity. Temporizador Pomodoro, animaciones de baile en descansos y reacciones a tu código.",
+  "description": "Tu compañero de concentración en pixel art para VS Code. Temporizador Pomodoro con físicas interactivas, fondos animados, descansos festivos y reacciones en tiempo real a tu código.",
   "version": "0.1.0",
   "publisher": "rgarduno",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/rgarduno/pomobuddy"
+    "url": "https://github.com/rgarduno/PomoBuddy"
   },
   "engines": {
     "vscode": "^1.85.0"

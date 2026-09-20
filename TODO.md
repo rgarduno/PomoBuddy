@@ -9,7 +9,7 @@ Este archivo registra el avance en tiempo real del proyecto. Las tareas se irán
 - [x] **Persistencia de sesión:** Guardado automático en `context.globalState` para no perder la ronda al recargar el editor (`Cmd+R` / `Reload Window`).
 - [x] **Filtrado de archivos pesados y vendors:** Ignorar `node_modules`, `dist/`, `.git/`, `.min.js` y archivos `lock`.
 - [x] **Debounce de tipeo (1.2s):** Evitar falsas alarmas de linter mientras el usuario está escribiendo código activamente.
-- [x] **Comando rápido de Silencio (Mute Toggle):** Comando `PomoPixel: Silenciar / Activar Sonidos` (`pomopixel.toggleMute`) para silenciar rápidamente en llamadas de Zoom/Meet.
+- [x] **Comando rápido de Silencio (Mute Toggle):** Comando `PomoBuddy: Silenciar / Activar Sonidos` (`pomobuddy.toggleMute`) para silenciar rápidamente en llamadas de Zoom/Meet.
 - [x] **Límite de tamaño de archivo (> 500 KB):** Proteger el linter para ignorar archivos gigantes (> 10k líneas o > 500 KB).
 - [x] **Soporte de Temas VS Code (Light, Dark, High Contrast):** Adaptación visual del escenario y textos para temas claros (`.vscode-light`) y alto contraste (`.vscode-high-contrast`).
 - [x] **Manejo resiliente de AudioContext:** Desbloqueo proactivo ante cualquier primer gesto en el panel y manejo seguro de promesas suspendidas.
@@ -59,4 +59,4 @@ Este archivo registra el avance en tiempo real del proyecto. Las tareas se irán
 
 ---
 
-*Archivo de seguimiento activo - Actualizado automáticamente tras cada implementación.*
+*Archivo de seguimiento y roadmap técnico del proyecto.*
