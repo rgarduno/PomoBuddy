@@ -235,9 +235,7 @@ body.vscode-light .hud-progress-wrap {
   }
 }
 
-/* =========================================================
-   2. ESCENARIO PIXEL ART (100% libre, sin caja ni marco)
-   ========================================================= */
+/* Escenario Pixel Art (100% libre, sin caja ni marco) */
 .stage-container {
   position: absolute;
   top: 0;
@@ -250,6 +248,15 @@ body.vscode-light .hud-progress-wrap {
   align-items: center;
   overflow: hidden;
   z-index: 1;
+}
+
+/* En la barra lateral alta, mantener el escenario a una altura cómoda bajo el HUD */
+@media (max-width: 500px) and (min-height: 320px) {
+  .stage-container {
+    height: 220px;
+    top: 44px;
+    bottom: auto;
+  }
 }
 
 /* Resplandor ambiental de fiesta durante descansos */
