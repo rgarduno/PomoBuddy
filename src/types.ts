@@ -4,6 +4,8 @@ export type TimerStatus = 'IDLE' | 'RUNNING' | 'PAUSED' | 'COMPLETED';
 
 export type AvatarId = 'neko' | 'wizard' | 'robot';
 
+export type BackgroundTheme = 'winter' | 'forest' | 'cyberpunk' | 'lofi' | 'minimal';
+
 export interface PomodoroConfig {
   workDuration: number;        // in minutes
   shortBreakDuration: number;   // in minutes
@@ -11,6 +13,7 @@ export interface PomodoroConfig {
   roundsBeforeLongBreak: number;
   soundEnabled: boolean;
   avatar: AvatarId;
+  background: BackgroundTheme;
 }
 
 export interface TimerSnapshot {
@@ -39,6 +42,9 @@ export type WebviewToExtensionMessage =
   | { type: 'RESET' }
   | { type: 'SKIP' }
   | { type: 'CHANGE_AVATAR'; payload: AvatarId }
+  | { type: 'CHANGE_BACKGROUND'; payload: BackgroundTheme }
   | { type: 'TOGGLE_SOUND'; payload: boolean }
   | { type: 'SET_PRESET'; payload: { workDuration: number; breakDuration: number } }
+  | { type: 'OPEN_BOTTOM_PANEL' }
+  | { type: 'OPEN_SIDEBAR' }
   | { type: 'WEBVIEW_READY' };

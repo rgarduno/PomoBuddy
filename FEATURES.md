@@ -12,6 +12,7 @@ Este documento es la **fuente de la verdad** del proyecto. Se actualizará const
 | **Panel Lateral Dedicado (Sidebar)** | ✅ Escenario pixel art con controles | ✅ Escenario pixel art con controles | 🟢 Completado (v0.1.0) |
 | **Panel Inferior Horizontal (Bottom Panel)** | ✅ Avatar recorre toda la barra (100% ancho) | ✅ Vista panorámica ampliada | 🟢 Completado (v0.1.0) |
 | **Escenario Libre Sin Jaula (Seamless)** | ✅ Integrado transparente sin caja/marco | ✅ Fondos de escenario temáticos | 🟢 Completado (v0.1.0) |
+| **Fondos Temáticos de Escenario (Pixel Art)** | ✅ 5 fondos: Invierno, Bosque, Cyberpunk, Lo-Fi, Minimal con partículas de clima | ✅ Fondos temáticos animados ampliados | 🟢 Completado (v0.1.0) |
 | **Físicas de Caminata & Orientación** | ✅ Camina y patrulla el suelo de lado a lado | ✅ Bailes y trucos ampliados | 🟢 Completado (v0.1.0) |
 | **Llamar al Avatar con un Clic** | ✅ Camina hacia donde hagas clic en el suelo | ✅ Interacciones avanzadas | 🟢 Completado (v0.1.0) |
 | **Sillita de Descanso Retro** | ✅ Sillita pixel art para descansos | ✅ Sillitas/muebles temáticos | 🟢 Completado (v0.1.0) |

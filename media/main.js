@@ -26,13 +26,16 @@
   const settingsBackdrop = document.getElementById('settingsBackdrop');
   const soundToggle = document.getElementById('soundToggle');
   const avatarButtons = document.querySelectorAll('.avatar-btn');
+  const themeButtons = document.querySelectorAll('.theme-btn');
 
   // Pelotita interactiva estilo pets
   let toyBall = null;
 
   // Estado local
   let currentAvatar = 'neko';
+  let currentBackground = 'winter';
   let soundEnabled = true;
+  let weatherParticles = [];
   let timerState = {
     mode: 'WORK',
     status: 'IDLE',
@@ -232,9 +235,360 @@
     V_WIDTH = Math.max(32, Math.floor(stageWidth / PIXEL_SCALE));
     canvas.width = V_WIDTH * PIXEL_SCALE;
     canvas.height = V_HEIGHT * PIXEL_SCALE;
+    if (weatherParticles.length === 0) {
+      initWeatherParticles();
+    }
   }
   window.addEventListener('resize', resizeCanvas);
   setTimeout(resizeCanvas, 50);
+
+  // Helper para pintar un pixel de fondo/escenario (sin efecto espejo)
+  function bgPixel(vx, vy, color) {
+    if (!color || color === '.' || vx < 0 || vx >= V_WIDTH || vy < 0 || vy >= V_HEIGHT) return;
+    ctx.fillStyle = color;
+    ctx.fillRect(vx * PIXEL_SCALE, vy * PIXEL_SCALE, PIXEL_SCALE, PIXEL_SCALE);
+  }
+
+  // Helper para pintar un bloque rectangular de fondo/escenario
+  function bgRect(vx, vy, w, h, color) {
+    if (!color || color === '.') return;
+    const startX = Math.max(0, vx);
+    const endX = Math.min(V_WIDTH, vx + w);
+    const startY = Math.max(0, vy);
+    const endY = Math.min(V_HEIGHT, vy + h);
+    if (endX <= startX || endY <= startY) return;
+    ctx.fillStyle = color;
+    ctx.fillRect(
+      startX * PIXEL_SCALE,
+      startY * PIXEL_SCALE,
+      (endX - startX) * PIXEL_SCALE,
+      (endY - startY) * PIXEL_SCALE
+    );
+  }
+
+  // --- SISTEMA DE PARTÍCULAS METEOROLÓGICAS (NIEVE, HOJAS, LLUVIA DIGITAL, POLVO CÁLIDO) ---
+  function initWeatherParticles() {
+    weatherParticles = [];
+    const count = 42;
+    for (let i = 0; i < count; i++) {
+      weatherParticles.push({
+        x: Math.random() * (V_WIDTH || 64),
+        y: Math.random() * 25,
+        speed: 0.12 + Math.random() * 0.28,
+        driftSeed: Math.random() * 100,
+        size: Math.random() > 0.8 ? 2 : 1,
+        colorVariant: Math.random(),
+      });
+    }
+  }
+
+  function updateAndDrawWeatherParticles(theme, tick) {
+    if (theme === 'minimal') return;
+
+    for (let i = 0; i < weatherParticles.length; i++) {
+      const pt = weatherParticles[i];
+
+      if (theme === 'winter') {
+        // Copos de nieve flotando y oscilando suavemente
+        pt.y += pt.speed;
+        pt.x += Math.sin(tick * 0.03 + pt.driftSeed) * 0.22;
+        if (pt.y >= 25) {
+          pt.y = -1;
+          pt.x = Math.random() * V_WIDTH;
+        }
+        if (pt.x < 0) pt.x = V_WIDTH - 1;
+        if (pt.x >= V_WIDTH) pt.x = 0;
+
+        const px = Math.round(pt.x);
+        const py = Math.round(pt.y);
+        if (pt.size === 2) {
+          bgRect(px, py, 2, 2, '#ffffff');
+        } else {
+          bgPixel(px, py, pt.colorVariant > 0.35 ? '#ffffff' : '#cbd5e1');
+        }
+      } else if (theme === 'forest') {
+        // Hojas verdes y luciérnagas titilantes
+        pt.y += pt.speed * 0.55;
+        pt.x += Math.sin(tick * 0.04 + pt.driftSeed) * 0.35 + 0.1;
+        if (pt.y >= 25) {
+          pt.y = -1;
+          pt.x = Math.random() * V_WIDTH;
+        }
+        if (pt.x < 0) pt.x = V_WIDTH - 1;
+        if (pt.x >= V_WIDTH) pt.x = 0;
+
+        const px = Math.round(pt.x);
+        const py = Math.round(pt.y);
+        if (pt.colorVariant > 0.55) {
+          const glow = Math.sin(tick * 0.08 + pt.driftSeed);
+          if (glow > -0.2) {
+            bgPixel(px, py, glow > 0.5 ? '#fef08a' : '#86efac');
+          }
+        } else {
+          bgPixel(px, py, '#48bb78');
+        }
+      } else if (theme === 'cyberpunk') {
+        // Lluvia digital diagonal y destellos neón
+        pt.y += pt.speed * 1.6;
+        pt.x -= 0.28;
+        if (pt.y >= 25) {
+          pt.y = -1;
+          pt.x = Math.random() * V_WIDTH;
+        }
+        if (pt.x < 0) pt.x = V_WIDTH - 1;
+
+        const px = Math.round(pt.x);
+        const py = Math.round(pt.y);
+        const neonColor = pt.colorVariant > 0.5 ? '#00f5d4' : '#f72585';
+        bgPixel(px, py, neonColor);
+      } else if (theme === 'lofi') {
+        // Motas de polvo dorado suspendidas en la luz cálida
+        pt.y -= 0.03 + Math.sin(tick * 0.02 + pt.driftSeed) * 0.05;
+        pt.x += Math.cos(tick * 0.02 + pt.driftSeed) * 0.12;
+        if (pt.y < 3) {
+          pt.y = 24;
+          pt.x = Math.random() * V_WIDTH;
+        }
+        if (pt.x < 0) pt.x = V_WIDTH - 1;
+        if (pt.x >= V_WIDTH) pt.x = 0;
+
+        const px = Math.round(pt.x);
+        const py = Math.round(pt.y);
+        const alphaGlow = Math.sin(tick * 0.06 + pt.driftSeed);
+        if (alphaGlow > -0.2) {
+          bgPixel(px, py, alphaGlow > 0.4 ? '#fef08a' : '#fbd38d');
+        }
+      }
+    }
+  }
+
+  // --- RENDERIZADO DEL FONDO Y TERRENO PIXEL ART ---
+  function drawBackground(theme, tick) {
+    if (theme === 'minimal') {
+      // Suelo sutil minimalista
+      for (let x = 0; x < V_WIDTH; x += 2) {
+        bgPixel(x, 25, 'rgba(255, 255, 255, 0.18)');
+      }
+      return;
+    }
+
+    if (theme === 'winter') {
+      // 1. Estrellas titilantes en el cielo profundo
+      for (let x = 4; x < V_WIDTH; x += 16) {
+        const starY = 2 + ((x * 7) % 8);
+        const twinkle = (tick + x * 4) % 60 < 30;
+        bgPixel(x, starY, twinkle ? '#ffffff' : '#94a3b8');
+      }
+
+      // 2. Montañas púrpuras lejanas con picos nevados (cada 28px)
+      for (let peakX = 14; peakX < V_WIDTH + 28; peakX += 28) {
+        const peakY = 8;
+        for (let dx = -14; dx <= 14; dx++) {
+          const vx = peakX + dx;
+          if (vx < 0 || vx >= V_WIDTH) continue;
+          const my = peakY + Math.floor(Math.abs(dx) * 1.15);
+          for (let y = my; y < 25; y++) {
+            if (y <= peakY + 3) {
+              bgPixel(vx, y, '#ffffff'); // Nieve en la cima
+            } else if (y === peakY + 4) {
+              bgPixel(vx, y, '#cbd5e1'); // Sombra de nieve
+            } else {
+              bgPixel(vx, y, dx > 0 ? '#2c2748' : '#3d3663'); // Cresta y sombra
+            }
+          }
+        }
+      }
+
+      // 3. Pinos nevados en plano medio (cada 16px)
+      for (let px = 6; px < V_WIDTH + 16; px += 16) {
+        // Tronco
+        bgPixel(px, 23, '#3d2817');
+        bgPixel(px, 24, '#3d2817');
+
+        // Nivel inferior del pino
+        for (let x = -3; x <= 3; x++) bgPixel(px + x, 22, '#14291f');
+        bgPixel(px - 3, 21, '#ffffff');
+        bgPixel(px - 2, 21, '#ffffff');
+        bgPixel(px + 2, 21, '#ffffff');
+        bgPixel(px + 3, 21, '#ffffff');
+
+        // Nivel medio
+        for (let x = -2; x <= 2; x++) bgPixel(px + x, 20, '#1a382b');
+        bgPixel(px - 2, 19, '#ffffff');
+        bgPixel(px + 2, 19, '#ffffff');
+
+        // Cima del pino nevado
+        bgPixel(px, 17, '#ffffff');
+        bgPixel(px - 1, 18, '#ffffff');
+        bgPixel(px, 18, '#ffffff');
+        bgPixel(px + 1, 18, '#ffffff');
+      }
+
+      // 4. Manto de suelo nevado (y = 25 a 31)
+      bgRect(0, 25, V_WIDTH, 1, '#ffffff'); // Nieve blanca radiante
+      bgRect(0, 26, V_WIDTH, 1, '#cbd5e1'); // Capa intermedia azulada
+      bgRect(0, 27, V_WIDTH, 1, '#334155'); // Escarcha helada
+      bgRect(0, 28, V_WIDTH, 4, '#1e293b'); // Roca profunda fría
+      return;
+    }
+
+    if (theme === 'forest') {
+      // 1. Luna suave y serena
+      const moonX = Math.min(V_WIDTH - 6, 70);
+      bgRect(moonX, 3, 3, 3, '#fef08a');
+
+      // 2. Colinas ondulantes en tonos esmeralda
+      for (let x = 0; x < V_WIDTH; x++) {
+        const hill1Y = 15 + Math.floor(Math.sin(x * 0.08) * 3);
+        bgRect(x, hill1Y, 1, 25 - hill1Y, '#19432f');
+        const hill2Y = 18 + Math.floor(Math.sin(x * 0.12 + 1.2) * 2.5);
+        bgRect(x, hill2Y, 1, 25 - hill2Y, '#22573d');
+      }
+
+      // 3. Árboles frondosos (cada 18px)
+      for (let tx = 8; tx < V_WIDTH + 18; tx += 18) {
+        // Tronco
+        bgRect(tx, 22, 1, 3, '#5c3d28');
+
+        // Copa del árbol
+        for (let cy = 15; cy <= 21; cy++) {
+          const r = cy <= 18 ? cy - 14 : 21 - cy + 1;
+          for (let cx = -r; cx <= r; cx++) {
+            bgPixel(tx + cx, cy, (cx === -r || cy === 15) ? '#48bb78' : '#276749');
+          }
+        }
+      }
+
+      // 4. Suelo de hierba fresca con florecitas (y = 25 a 31)
+      bgRect(0, 25, V_WIDTH, 1, '#38a169'); // Hierba viva
+      for (let x = 0; x < V_WIDTH; x++) {
+        if (x % 3 === 0) bgPixel(x, 24, '#48bb78'); // Brotes de hierba
+        if (x % 11 === 2) bgPixel(x, 24, '#ecc94b'); // Flores amarillas
+        if (x % 17 === 5) bgPixel(x, 24, '#ed64a6'); // Flores rosas
+      }
+      bgRect(0, 26, V_WIDTH, 1, '#22543d'); // Raíces oscuras
+      bgRect(0, 27, V_WIDTH, 1, '#4a3020'); // Tierra fértil
+      bgRect(0, 28, V_WIDTH, 4, '#2d1d13'); // Tierra profunda
+      return;
+    }
+
+    if (theme === 'cyberpunk') {
+      // 1. Rascacielos skyline con ventanas neón
+      const bWidths = [8, 10, 7, 9, 11, 8];
+      let curX = 0;
+      let bIdx = 0;
+      while (curX < V_WIDTH) {
+        const bw = bWidths[bIdx % bWidths.length];
+        const bHeight = 11 + ((bIdx * 3) % 7);
+        const topY = 24 - bHeight;
+        const bColor = bIdx % 2 === 0 ? '#121326' : '#191a35';
+
+        // Cuerpo del edificio
+        bgRect(curX, topY, bw - 1, bHeight, bColor);
+
+        // Antena en la azotea con luz parpadeante roja
+        const antX = curX + Math.floor(bw / 2);
+        bgPixel(antX, topY - 1, '#333552');
+        bgPixel(antX, topY - 2, '#333552');
+        bgPixel(antX, topY - 3, tick % 40 < 20 ? '#ff0055' : '#440018');
+
+        // Ventanas neón (cian, magenta, amarillo)
+        for (let wy = topY + 2; wy < 23; wy += 2) {
+          for (let wx = curX + 1; wx < curX + bw - 2; wx += 2) {
+            const s = (wx * 11 + wy * 7 + bIdx * 3);
+            if (s % 3 === 0) bgPixel(wx, wy, '#00f5d4');
+            else if (s % 5 === 0) bgPixel(wx, wy, '#f72585');
+            else if (s % 7 === 0) bgPixel(wx, wy, '#fee440');
+          }
+        }
+
+        curX += bw;
+        bIdx++;
+      }
+
+      // 2. Línea láser horizonte magenta neón
+      bgRect(0, 24, V_WIDTH, 1, '#f72585');
+
+      // 3. Suelo de asfalto mojado con reflejos neón (y = 25 a 31)
+      bgRect(0, 25, V_WIDTH, 1, '#00f5d4'); // Bordillo cian neón
+      bgRect(0, 26, V_WIDTH, 6, '#0d0f17'); // Asfalto húmedo
+      // Reflejos luminosos en el pavimento
+      for (let x = 0; x < V_WIDTH; x += 6) {
+        bgPixel(x, 27, '#f72585');
+        bgPixel(x + 1, 27, '#f72585');
+        bgPixel(x + 3, 29, '#00f5d4');
+        bgPixel(x + 4, 29, '#00f5d4');
+      }
+      return;
+    }
+
+    if (theme === 'lofi') {
+      // 1. Ventana al atardecer en el centro
+      const winW = 16;
+      const winX = Math.round(V_WIDTH / 2) - 8;
+      // Atardecer exterior
+      bgRect(winX, 5, winW, 19, '#4a1d34');
+      bgRect(winX + 1, 6, winW - 2, 4, '#80344c');
+      bgRect(winX + 1, 10, winW - 2, 5, '#b04a55');
+      bgRect(winX + 1, 15, winW - 2, 8, '#e07a5f');
+      // Nube cálida en la ventana
+      bgRect(winX + 3, 11, 7, 2, '#ffd1b3');
+      // Marco de madera de la ventana
+      bgRect(winX, 5, winW, 1, '#381605');
+      bgRect(winX, 23, winW, 1, '#381605');
+      bgRect(winX, 5, 1, 19, '#381605');
+      bgRect(winX + winW - 1, 5, 1, 19, '#381605');
+      bgRect(winX + Math.floor(winW / 2), 5, 1, 19, '#381605'); // Cruceta vertical
+      bgRect(winX, 14, winW, 1, '#381605'); // Cruceta horizontal
+
+      // 2. Luces colgantes en la parte superior (guirnalda)
+      for (let x = 2; x < V_WIDTH - 2; x += 8) {
+        const wireY = 2 + (x % 16 === 8 ? 1 : 0);
+        bgPixel(x, wireY, '#4a2810');
+        bgPixel(x, wireY + 1, (tick + x) % 50 < 25 ? '#fef08a' : '#fbd38d');
+      }
+
+      // 3. Librería en el lateral izquierdo
+      if (V_WIDTH > 36) {
+        bgRect(2, 12, 6, 13, '#542710');
+        bgRect(3, 13, 4, 3, '#3182ce');
+        bgPixel(4, 13, '#ef4444');
+        bgRect(3, 17, 4, 3, '#10b981');
+        bgPixel(5, 17, '#f59e0b');
+        bgRect(3, 21, 4, 3, '#e53e3e');
+      }
+
+      // 4. Plantita suculenta en el lateral derecho
+      if (V_WIDTH > 44) {
+        const plX = V_WIDTH - 6;
+        bgRect(plX, 22, 4, 3, '#b45309');
+        bgPixel(plX - 1, 21, '#10b981');
+        bgPixel(plX, 20, '#10b981');
+        bgPixel(plX + 1, 19, '#34d399');
+        bgPixel(plX + 2, 20, '#10b981');
+        bgPixel(plX + 3, 21, '#10b981');
+      }
+
+      // 5. Suelo de parquet de madera cálido (y = 25 a 31)
+      bgRect(0, 25, V_WIDTH, 3, '#9c6644');
+      bgRect(0, 28, V_WIDTH, 1, '#542e15');
+      bgRect(0, 29, V_WIDTH, 3, '#854d27');
+      for (let x = 0; x < V_WIDTH; x += 10) {
+        bgPixel(x, 25, '#542e15');
+        bgPixel(x, 26, '#542e15');
+        bgPixel(x + 5, 29, '#542e15');
+        bgPixel(x + 5, 30, '#542e15');
+      }
+      return;
+    }
+  }
+
+  function applyBackgroundTheme(theme) {
+    currentBackground = theme || 'winter';
+    if (stage) {
+      stage.setAttribute('data-theme', currentBackground);
+    }
+  }
 
   // Variables de posición y movimiento
   let avatarX = 16;
@@ -629,6 +983,10 @@
   function renderLoop() {
     animTick++;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // 0. Renderizar fondo temático pixel art y partículas climáticas
+    drawBackground(currentBackground, animTick);
+    updateAndDrawWeatherParticles(currentBackground, animTick);
 
     // 1. Actualizar físicas de salto
     if (jumpY < 0 || jumpVy !== 0) {
@@ -1106,6 +1464,28 @@
     });
   });
 
+  themeButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      playClick();
+      const newTheme = btn.getAttribute('data-theme');
+      if (newTheme) {
+        currentBackground = newTheme;
+        themeButtons.forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        applyBackgroundTheme(currentBackground);
+        vscode.postMessage({ type: 'CHANGE_BACKGROUND', payload: newTheme });
+        const themeNames = {
+          winter: 'Invierno nevado ❄️',
+          forest: 'Bosque natural 🌲',
+          cyberpunk: 'Cyberpunk Neón 🌆',
+          lofi: 'Café Lo-Fi ☕',
+          minimal: 'Minimalista ⬛',
+        };
+        setDialogue(`Fondo cambiado: ${themeNames[newTheme] || newTheme}!`);
+      }
+    });
+  });
+
   soundToggle.addEventListener('change', (e) => {
     soundEnabled = e.target.checked;
     if (soundEnabled) {
@@ -1190,6 +1570,19 @@
           }
         });
 
+        // Actualizar fondo temático
+        if (cfg.background) {
+          currentBackground = cfg.background;
+          applyBackgroundTheme(currentBackground);
+          themeButtons.forEach((b) => {
+            if (b.getAttribute('data-theme') === currentBackground) {
+              b.classList.add('active');
+            } else {
+              b.classList.remove('active');
+            }
+          });
+        }
+
         // Actualizar botón de preset activo
         if (cfg.workDuration === 50) {
           preset50?.classList.add('active');
@@ -1201,6 +1594,10 @@
         break;
     }
   });
+
+  // Inicializar estado del fondo y partículas
+  applyBackgroundTheme(currentBackground);
+  initWeatherParticles();
 
   // Iniciar bucle de animación y avisar a la extensión
   renderLoop();

@@ -265,6 +265,27 @@ body.vscode-light .hud-progress-wrap {
   animation: discoGlow 1.4s infinite alternate;
 }
 
+/* Fondos temáticos de escenario pixel art */
+.stage-container[data-theme="winter"] {
+  background: linear-gradient(180deg, #101326 0%, #191c36 45%, #262d4a 100%);
+}
+
+.stage-container[data-theme="forest"] {
+  background: linear-gradient(180deg, #0d2118 0%, #163829 45%, #1e4d38 100%);
+}
+
+.stage-container[data-theme="cyberpunk"] {
+  background: linear-gradient(180deg, #090014 0%, #16052f 45%, #270c4a 100%);
+}
+
+.stage-container[data-theme="lofi"] {
+  background: linear-gradient(180deg, #2b1b3d 0%, #572a47 45%, #8f4553 85%, #b8675c 100%);
+}
+
+.stage-container[data-theme="minimal"] {
+  background: transparent;
+}
+
 @keyframes discoGlow {
   0% { filter: drop-shadow(0 0 10px rgba(255, 0, 128, 0.35)); }
   50% { filter: drop-shadow(0 0 10px rgba(0, 229, 255, 0.35)); }
@@ -309,7 +330,7 @@ body.vscode-light .hud-progress-wrap {
 /* Canvas del compañero */
 .canvas-wrapper {
   position: absolute;
-  bottom: 11px;
+  bottom: 0;
   left: 0;
   width: 100%;
   height: 160px;
@@ -327,7 +348,7 @@ body.vscode-light .hud-progress-wrap {
   cursor: pointer;
 }
 
-/* Suelo retro continuo de extremo a extremo */
+/* Suelo retro continuo para modo minimal */
 .stage-floor {
   position: absolute;
   bottom: 0;
@@ -343,6 +364,10 @@ body.vscode-light .hud-progress-wrap {
   );
   border-top: 2px solid var(--vscode-editorGroupHeader-tabsBorder, rgba(255, 255, 255, 0.2));
   z-index: 5;
+}
+
+.stage-container:not([data-theme="minimal"]) .stage-floor {
+  display: none;
 }
 
 /* Confeti festivo */
@@ -505,6 +530,57 @@ body.vscode-light .hud-progress-wrap {
 .avatar-name {
   font-size: 10px;
   font-weight: 600;
+}
+
+/* Selector de Fondos Temáticos en Ajustes */
+.theme-selector {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 5px;
+  width: 100%;
+}
+
+@media (max-width: 360px) {
+  .theme-selector {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.theme-btn {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 6px 2px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.theme-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-1px);
+}
+
+.theme-btn.active {
+  background: rgba(0, 229, 255, 0.18);
+  border-color: #00e5ff;
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.35);
+}
+
+.theme-emoji {
+  font-size: 15px;
+}
+
+.theme-name {
+  font-size: 9px;
+  font-weight: 600;
+  text-align: center;
+  white-space: nowrap;
 }
 
 /* Presets en Ajustes */

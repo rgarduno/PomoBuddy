@@ -3,7 +3,7 @@ import { TimerManager } from './timerManager';
 import { StatusBarManager } from './statusBarManager';
 import { IdeEventsListener } from './ideEvents';
 import { PomoWebviewProvider } from './pomoWebviewProvider';
-import { AvatarId, PomodoroConfig } from './types';
+import { AvatarId, BackgroundTheme, PomodoroConfig } from './types';
 
 export function activate(context: vscode.ExtensionContext) {
   const config = getExtensionConfig();
@@ -108,6 +108,7 @@ function getExtensionConfig(): PomodoroConfig {
     roundsBeforeLongBreak: wsConfig.get<number>('roundsBeforeLongBreak', 4),
     soundEnabled: wsConfig.get<boolean>('soundEnabled', true),
     avatar: wsConfig.get<AvatarId>('avatar', 'neko'),
+    background: wsConfig.get<BackgroundTheme>('background', 'winter'),
   };
 }
 

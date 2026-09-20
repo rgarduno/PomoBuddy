@@ -14,7 +14,7 @@ export class IdeEventsListener {
   }
 
   private registerDiagnosticsListener() {
-    const diagSub = vscode.languages.onDidChangeDiagnostics((event) => {
+    const diagSub = vscode.languages.onDidChangeDiagnostics(() => {
       if (this.debounceTimeout) {
         clearTimeout(this.debounceTimeout);
       }

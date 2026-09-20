@@ -154,6 +154,12 @@
           "enum": ["neko", "wizard", "robot"],
           "default": "neko",
           "description": "Avatar activo en pixel art"
+        },
+        "pomobuddy.background": {
+          "type": "string",
+          "enum": ["winter", "forest", "cyberpunk", "lofi", "minimal"],
+          "default": "winter",
+          "description": "Fondo pixel art de escenario (winter, forest, cyberpunk, lofi, minimal)"
         }
       }
     }

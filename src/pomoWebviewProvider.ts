@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import {
   AvatarId,
+  BackgroundTheme,
   ExtensionToWebviewMessage,
   IdeReactionType,
   PomodoroConfig,
@@ -53,6 +54,9 @@ export class PomoWebviewProvider implements vscode.WebviewViewProvider {
           break;
         case 'CHANGE_AVATAR':
           this.handleAvatarChange(message.payload);
+          break;
+        case 'CHANGE_BACKGROUND':
+          this.handleBackgroundChange(message.payload);
           break;
         case 'TOGGLE_SOUND':
           this.handleSoundToggle(message.payload);
@@ -125,6 +129,14 @@ export class PomoWebviewProvider implements vscode.WebviewViewProvider {
     const config = vscode.workspace.getConfiguration('pomobuddy');
     config.update('avatar', avatar, vscode.ConfigurationTarget.Global);
     const updated = { ...this.timerManager.getConfig(), avatar };
+    this.timerManager.updateConfig(updated);
+    this.sendConfig(updated);
+  }
+
+  private handleBackgroundChange(background: BackgroundTheme) {
+    const config = vscode.workspace.getConfiguration('pomobuddy');
+    config.update('background', background, vscode.ConfigurationTarget.Global);
+    const updated = { ...this.timerManager.getConfig(), background };
     this.timerManager.updateConfig(updated);
     this.sendConfig(updated);
   }
@@ -239,6 +251,32 @@ export class PomoWebviewProvider implements vscode.WebviewViewProvider {
               <button class="avatar-btn" data-avatar="robot" title="PixelBot (Robot inteligente)">
                 <span class="avatar-emoji">🤖</span>
                 <span class="avatar-name">PixelBot</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="settings-group">
+            <label class="settings-label">FONDO DE ESCENARIO</label>
+            <div class="theme-selector">
+              <button class="theme-btn active" data-theme="winter" title="Invierno nevado (Estilo vscode-pets)">
+                <span class="theme-emoji">❄️</span>
+                <span class="theme-name">Invierno</span>
+              </button>
+              <button class="theme-btn" data-theme="forest" title="Bosque verde natural">
+                <span class="theme-emoji">🌲</span>
+                <span class="theme-name">Bosque</span>
+              </button>
+              <button class="theme-btn" data-theme="cyberpunk" title="Ciudad nocturna cyberpunk neón">
+                <span class="theme-emoji">🌆</span>
+                <span class="theme-name">Cyberpunk</span>
+              </button>
+              <button class="theme-btn" data-theme="lofi" title="Habitación y café Lo-Fi">
+                <span class="theme-emoji">☕</span>
+                <span class="theme-name">Lo-Fi</span>
+              </button>
+              <button class="theme-btn" data-theme="minimal" title="Fondo transparente minimalista de VS Code">
+                <span class="theme-emoji">⬛</span>
+                <span class="theme-name">Minimal</span>
               </button>
             </div>
           </div>
