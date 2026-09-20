@@ -275,6 +275,18 @@ export class PomoWebviewProvider implements vscode.WebviewViewProvider {
                 <span class="avatar-emoji">🤖</span>
                 <span class="avatar-name">PixelBot</span>
               </button>
+              <button class="avatar-btn" data-avatar="duck" title="Sir Ducky (Patito Rubber Duck Debugger)">
+                <span class="avatar-emoji">🦆</span>
+                <span class="avatar-name">Sir Ducky</span>
+              </button>
+              <button class="avatar-btn" data-avatar="capy" title="CapyDev (Capibara Zen anti-estrés)">
+                <span class="avatar-emoji">☕</span>
+                <span class="avatar-name">CapyDev</span>
+              </button>
+              <button class="avatar-btn" data-avatar="raccoon" title="Byte (Mapache Hacker astuto)">
+                <span class="avatar-emoji">🦝</span>
+                <span class="avatar-name">Byte</span>
+              </button>
             </div>
           </div>
 

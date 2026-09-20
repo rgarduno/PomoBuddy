@@ -491,9 +491,16 @@ body.vscode-light .hud-progress-wrap {
 
 /* Selector de Avatares en Ajustes */
 .avatar-selector {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 6px;
   width: 100%;
+}
+
+@media (min-width: 440px) {
+  .avatar-selector {
+    grid-template-columns: repeat(6, 1fr);
+  }
 }
 
 .avatar-btn {

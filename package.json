@@ -151,9 +151,9 @@
         },
         "pomobuddy.avatar": {
           "type": "string",
-          "enum": ["neko", "wizard", "robot"],
+          "enum": ["neko", "wizard", "robot", "duck", "capy", "raccoon"],
           "default": "neko",
-          "description": "Avatar activo en pixel art"
+          "description": "Avatar activo en pixel art (neko, wizard, robot, duck, capy, raccoon)"
         },
         "pomobuddy.background": {
           "type": "string",

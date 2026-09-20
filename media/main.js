@@ -106,6 +106,60 @@
       fixed: 'BUG RESUELTO: COMPILACIÓN EXITOSA [OK] ✨',
       saved: 'DATOS ALMACENADOS EN DISCO DURO [OK] 👍',
     },
+    duck: {
+      work: [
+        '¡Cuac! Cuéntame tu bug línea por línea 🦆',
+        'Flotando plácidamente en código limpio ✨',
+        'Explicarle al patito siempre resuelve el problema 💡',
+        '¡Cuac! Cero bugs a la vista en este lago 🌊',
+        'Menos sobrepensar, más depurar con tu patito 🐥',
+      ],
+      dance: [
+        '¡Cuac cuac! ¡Aletitas arriba y a chapotear! 🕺',
+        '¡Fiesta en el estanque! Cero errores hoy 🎉',
+        'Bailando con flotador de patito puesto 😎',
+        '¡Cuac! Hora de descansar las plumas 🦆',
+      ],
+      error: '¡Cuac! ¿Qué es este TypeError monstruoso? 😵‍💫',
+      fixed: '¡Cuac! ¡El Rubber Duck Debugging nunca falla! ✨',
+      saved: '¡Cuac! Guardado fresco en el disco 👍',
+    },
+    capy: {
+      work: [
+        'Tranquilo, un commit a la vez ☕',
+        'Modo zen activado: sin estrés ni prisas 🌿',
+        'La calma es el mejor depurador del mundo 🧘‍♂️',
+        'Fluyendo con el código como en aguas termales ♨️',
+        'Cero estrés, 100% enfoque productivo ✨',
+      ],
+      dance: [
+        'Hora de un buen baño caliente y relajación ♨️',
+        'Bailando a paso suave y elegante 🕺',
+        'Descanso sagrado: la mente clara piensa mejor ☕',
+        'Un sorbito de café y a disfrutar la vida 🍊',
+      ],
+      error: 'Respira hondo... todo bug tiene solución 🧘‍♂️',
+      fixed: 'Paz restablecida en el código ✨',
+      saved: 'Archivo guardado en armonía perfecta 👍',
+    },
+    raccoon: {
+      work: [
+        '¡Infiltrado en la base de datos! 🦝💻',
+        'Rebuscando bugs como si fueran tesoros 🍕',
+        '0% rastros, 100% código furtivo y limpio ⚡',
+        'Hackeando la matriz a la medianoche 🌙',
+        'Si compila a la primera, sospecha del sistema 🐾',
+      ],
+      dance: [
+        '¡FIESTA NOCTURNA! ¡A mover la colita anillada! 🕺',
+        '¡Robando snacks del refrigerador para festejar! 🍕',
+        'Modo party activado: ¡luces y rave! 🎉',
+        '¡Misión cumplida! Descanso bien merecido 🦝',
+      ],
+      error: '¡Alarma! ¡Una trampa en el código! 😵‍💫',
+      fixed: '¡Bug neutralizado como un profesional! ✨',
+      saved: '¡Datos asegurados en la bóveda secreta! 👍',
+    },
   };
 
   function getRandomQuote(category) {
@@ -978,6 +1032,335 @@
     p(xOffset + 3, yOffset + 7 + stepBob, DARK_METAL);
   }
 
+  // --- AVATAR 4: SIR DUCKY (EL PATITO DE GOMA DEBUGGER) 🦆 ---
+  function drawDuck(step, mood, walking, sitting) {
+    const isDancing = mood === 'DANCE';
+    const isWorking = mood === 'WORK';
+    const isError = mood === 'ERROR';
+
+    let waddle = walking ? Math.floor(Math.sin(step * 0.35) * 1.5) : Math.floor(Math.sin(step * 0.1) * 1);
+    let danceOffset = isDancing ? Math.sin(step * 0.4) * 3 : 0;
+    let xOffset = Math.round(avatarX + danceOffset);
+    let yOffset = Math.round(18 + jumpY + (sitting ? 1 : waddle));
+    currentAvatarOriginX = xOffset;
+
+    const YELLOW = '#facc15';
+    const YELLOW_DARK = '#eab308';
+    const ORANGE = '#f97316';
+    const ORANGE_DARK = '#ea580c';
+    const HAT = '#1e293b';
+    const HAT_BAND = '#ef4444';
+    const EYE = '#111827';
+    const WHITE = '#ffffff';
+
+    // Sombrerito de copa elegante
+    for (let x = -2; x <= 1; x++) {
+      p(xOffset + x, yOffset - 9, HAT);
+      p(xOffset + x, yOffset - 8, HAT);
+      p(xOffset + x, yOffset - 7, HAT_BAND);
+    }
+    for (let x = -3; x <= 2; x++) {
+      p(xOffset + x, yOffset - 6, HAT);
+    }
+
+    // Cabeza del patito
+    for (let x = -2; x <= 2; x++) {
+      for (let y = -5; y <= -2; y++) {
+        p(xOffset + x, yOffset + y, YELLOW);
+      }
+    }
+
+    // Pico naranja que sobresale adelante
+    p(xOffset + 3, yOffset - 3, ORANGE);
+    p(xOffset + 4, yOffset - 3, ORANGE);
+    p(xOffset + 3, yOffset - 2, ORANGE_DARK);
+
+    // Ojo con expresiones
+    if (isError) {
+      p(xOffset + 1, yOffset - 4, EYE);
+      p(xOffset, yOffset - 5, EYE);
+      p(xOffset + 2, yOffset - 5, EYE);
+      p(xOffset + 4, yOffset - 6 + (step % 4), '#00e5ff');
+    } else if (isDancing) {
+      // Gafas de sol de fiesta 😎
+      p(xOffset - 1, yOffset - 4, '#111111');
+      p(xOffset, yOffset - 4, '#111111');
+      p(xOffset + 1, yOffset - 4, '#111111');
+      p(xOffset + 2, yOffset - 4, '#00e5ff');
+      p(xOffset, yOffset - 3, '#111111');
+    } else {
+      const isBlinking = step % 60 < 4;
+      if (isBlinking) {
+        p(xOffset + 1, yOffset - 4, EYE);
+      } else {
+        p(xOffset + 1, yOffset - 4, EYE);
+        p(xOffset + 1, yOffset - 5, WHITE);
+      }
+    }
+
+    // Corbatín elegante rojo en el cuello
+    p(xOffset, yOffset - 1, HAT_BAND);
+    p(xOffset + 1, yOffset - 1, HAT_BAND);
+
+    // Cuerpo esponjoso del pato
+    for (let x = -3; x <= 2; x++) {
+      for (let y = 0; y <= 4; y++) {
+        p(xOffset + x, yOffset + y, YELLOW);
+      }
+    }
+    for (let x = -2; x <= 1; x++) p(xOffset + x, yOffset + 5, YELLOW_DARK);
+
+    // Colita levantada detrás
+    p(xOffset - 4, yOffset + 1, YELLOW);
+    p(xOffset - 5, yOffset, YELLOW);
+    p(xOffset - 4, yOffset, YELLOW);
+
+    // Alita
+    const wingFlap = (walking || isDancing) && (step % 6 < 3);
+    if (wingFlap) {
+      p(xOffset - 1, yOffset + 1, YELLOW_DARK);
+      p(xOffset, yOffset + 1, YELLOW_DARK);
+      p(xOffset - 2, yOffset + 2, YELLOW_DARK);
+    } else {
+      p(xOffset - 1, yOffset + 2, YELLOW_DARK);
+      p(xOffset, yOffset + 2, YELLOW_DARK);
+      p(xOffset - 1, yOffset + 3, YELLOW_DARK);
+    }
+
+    // Patitas palmeadas naranjas
+    if (sitting) {
+      p(xOffset - 1, yOffset + 6, ORANGE);
+      p(xOffset + 1, yOffset + 6, ORANGE);
+    } else if (walking) {
+      const stepPhase = Math.floor((step * 0.35) % 4);
+      if (stepPhase === 0 || stepPhase === 1) {
+        p(xOffset - 1, yOffset + 6, ORANGE);
+        p(xOffset + 1, yOffset + 5, ORANGE);
+      } else {
+        p(xOffset - 1, yOffset + 5, ORANGE);
+        p(xOffset + 1, yOffset + 6, ORANGE);
+      }
+    } else {
+      p(xOffset - 2, yOffset + 6, ORANGE);
+      p(xOffset - 1, yOffset + 6, ORANGE);
+      p(xOffset + 1, yOffset + 6, ORANGE);
+      p(xOffset + 2, yOffset + 6, ORANGE);
+    }
+  }
+
+  // --- AVATAR 5: CAPYDEV (LA CAPIBARA ZEN) ☕ ---
+  function drawCapy(step, mood, walking, sitting) {
+    const isDancing = mood === 'DANCE';
+    const isWorking = mood === 'WORK';
+    const isError = mood === 'ERROR';
+
+    let bob = walking ? Math.floor(Math.sin(step * 0.25) * 1) : Math.floor(Math.sin(step * 0.08) * 1);
+    let danceOffset = isDancing ? Math.sin(step * 0.3) * 2.5 : 0;
+    let xOffset = Math.round(avatarX + danceOffset);
+    let yOffset = Math.round(18 + jumpY + (sitting ? 1 : bob));
+    currentAvatarOriginX = xOffset;
+
+    const FUR = '#8c5a3c';
+    const FUR_DARK = '#684128';
+    const FUR_LIGHT = '#a56f4d';
+    const NOSE = '#2b170c';
+    const ORANGE = '#f97316';
+    const LEAF = '#22c55e';
+
+    // Naranjita / Mandarina en la cabeza (icónica de las capibaras zen)
+    p(xOffset - 1, yOffset - 7, ORANGE);
+    p(xOffset, yOffset - 7, ORANGE);
+    p(xOffset - 1, yOffset - 8, ORANGE);
+    p(xOffset, yOffset - 8, ORANGE);
+    p(xOffset, yOffset - 9, LEAF);
+
+    // Orejita redonda pequeña
+    p(xOffset - 4, yOffset - 6, FUR_DARK);
+    p(xOffset - 3, yOffset - 6, FUR_DARK);
+
+    // Cabeza rectangular característica de la capibara
+    for (let x = -4; x <= 4; x++) {
+      for (let y = -5; y <= -1; y++) {
+        p(xOffset + x, yOffset + y, FUR);
+      }
+    }
+    // Hocico plano delantero
+    for (let y = -4; y <= -1; y++) {
+      p(xOffset + 4, yOffset + y, FUR_DARK);
+      p(xOffset + 5, yOffset + y, FUR_DARK);
+    }
+    // Naricita negra
+    p(xOffset + 5, yOffset - 3, NOSE);
+
+    // Ojos zen entrecerrados ( - )
+    if (isError) {
+      p(xOffset + 1, yOffset - 4, NOSE);
+      p(xOffset + 1, yOffset - 3, NOSE);
+      p(xOffset + 3, yOffset - 6 + (step % 4), '#00e5ff');
+    } else if (isDancing) {
+      // Gafas de fiesta 😎
+      for (let g = 0; g <= 3; g++) p(xOffset + g, yOffset - 4, '#111111');
+      p(xOffset + 1, yOffset - 3, '#00e5ff');
+      p(xOffset + 3, yOffset - 3, '#111111');
+    } else {
+      // Ojito cerrado sereno y pacífico
+      p(xOffset, yOffset - 3, NOSE);
+      p(xOffset + 1, yOffset - 4, NOSE);
+      p(xOffset + 2, yOffset - 3, NOSE);
+    }
+
+    // Cuerpo robusto y tierno
+    for (let x = -5; x <= 3; x++) {
+      for (let y = 0; y <= 5; y++) {
+        p(xOffset + x, yOffset + y, FUR);
+      }
+    }
+    // Lomo superior claro y panza oscura
+    for (let x = -4; x <= 2; x++) p(xOffset + x, yOffset, FUR_LIGHT);
+    for (let x = -4; x <= 2; x++) p(xOffset + x, yOffset + 5, FUR_DARK);
+
+    // Patitas cortas
+    if (sitting) {
+      p(xOffset - 4, yOffset + 6, FUR_DARK);
+      p(xOffset - 3, yOffset + 6, FUR_DARK);
+      p(xOffset + 2, yOffset + 6, FUR_DARK);
+      p(xOffset + 3, yOffset + 6, FUR_DARK);
+    } else if (walking) {
+      const stepPhase = Math.floor((step * 0.25) % 4);
+      const stepOffset = stepPhase < 2 ? 1 : 0;
+      p(xOffset - 4, yOffset + 6 - stepOffset, FUR_DARK);
+      p(xOffset - 3, yOffset + 6 - stepOffset, FUR_DARK);
+      p(xOffset + 2, yOffset + 6 + stepOffset - 1, FUR_DARK);
+      p(xOffset + 3, yOffset + 6 + stepOffset - 1, FUR_DARK);
+    } else {
+      p(xOffset - 4, yOffset + 6, FUR_DARK);
+      p(xOffset - 3, yOffset + 6, FUR_DARK);
+      p(xOffset + 2, yOffset + 6, FUR_DARK);
+      p(xOffset + 3, yOffset + 6, FUR_DARK);
+    }
+  }
+
+  // --- AVATAR 6: BYTE (EL MAPACHE HACKER) 🦝 ---
+  function drawRaccoon(step, mood, walking, sitting) {
+    const isDancing = mood === 'DANCE';
+    const isWorking = mood === 'WORK';
+    const isError = mood === 'ERROR';
+
+    let bob = walking ? Math.floor(Math.sin(step * 0.35) * 1.5) : Math.floor(Math.sin(step * 0.12) * 1);
+    let danceOffset = isDancing ? Math.sin(step * 0.38) * 3 : 0;
+    let xOffset = Math.round(avatarX + danceOffset);
+    let yOffset = Math.round(18 + jumpY + (sitting ? 1 : bob));
+    currentAvatarOriginX = xOffset;
+
+    const GRAY = '#94a3b8';
+    const MASK = '#1e293b';
+    const WHITE = '#f8fafc';
+    const HOODIE = '#06b6d4';
+    const PIZZA_CRUST = '#f59e0b';
+    const PIZZA_CHEESE = '#fbbf24';
+    const PIZZA_RED = '#ef4444';
+
+    // Orejas puntiagudas con borde negro y centro blanco
+    p(xOffset - 4, yOffset - 8, MASK);
+    p(xOffset - 3, yOffset - 8, MASK);
+    p(xOffset - 3, yOffset - 7, WHITE);
+    p(xOffset + 3, yOffset - 8, MASK);
+    p(xOffset + 4, yOffset - 8, MASK);
+    p(xOffset + 3, yOffset - 7, WHITE);
+
+    // Cabeza gris
+    for (let x = -4; x <= 4; x++) {
+      for (let y = -6; y <= -1; y++) {
+        p(xOffset + x, yOffset + y, GRAY);
+      }
+    }
+
+    // Antifaz negro característico del mapache
+    for (let x = -4; x <= 4; x++) {
+      p(xOffset + x, yOffset - 4, MASK);
+    }
+    p(xOffset - 3, yOffset - 3, MASK);
+    p(xOffset - 2, yOffset - 3, MASK);
+    p(xOffset + 2, yOffset - 3, MASK);
+    p(xOffset + 3, yOffset - 3, MASK);
+
+    // Ojos astutos dentro del antifaz
+    if (isError) {
+      p(xOffset - 2, yOffset - 4, '#ef4444');
+      p(xOffset + 2, yOffset - 4, '#ef4444');
+      p(xOffset + 5, yOffset - 5 + (step % 4), '#00e5ff');
+    } else if (isDancing) {
+      // Visor cyberpunk de hacker 😎
+      for (let v = -3; v <= 3; v++) p(xOffset + v, yOffset - 4, '#f72585');
+      p(xOffset - 2, yOffset - 4, '#00f5d4');
+      p(xOffset + 2, yOffset - 4, '#00f5d4');
+    } else {
+      const isBlinking = step % 60 < 4;
+      if (isBlinking) {
+        p(xOffset - 2, yOffset - 4, GRAY);
+        p(xOffset + 2, yOffset - 4, GRAY);
+      } else {
+        p(xOffset - 2, yOffset - 4, WHITE);
+        p(xOffset + 2, yOffset - 4, WHITE);
+      }
+    }
+
+    // Hocico blanco y naricita
+    p(xOffset - 1, yOffset - 2, WHITE);
+    p(xOffset, yOffset - 2, MASK);
+    p(xOffset + 1, yOffset - 2, WHITE);
+    p(xOffset, yOffset - 1, WHITE);
+
+    // Cuello con hoodie/bandana de hacker cyan
+    for (let x = -3; x <= 3; x++) p(xOffset + x, yOffset, HOODIE);
+
+    // Cuerpo
+    for (let x = -3; x <= 3; x++) {
+      for (let y = 1; y <= 5; y++) {
+        p(xOffset + x, yOffset + y, GRAY);
+      }
+    }
+    // Pecho más claro
+    for (let y = 1; y <= 3; y++) {
+      p(xOffset, yOffset + y, WHITE);
+    }
+
+    // Cola anillada a rayas
+    const tailY = yOffset + 2;
+    p(xOffset - 4, tailY + 1, MASK);
+    p(xOffset - 5, tailY, GRAY);
+    p(xOffset - 6, tailY, MASK);
+    p(xOffset - 7, tailY - 1, GRAY);
+    p(xOffset - 7, tailY - 2, MASK);
+
+    // En descansos o sentado: sostiene una rebanada de pizza pixel art 🍕
+    if (isDancing || sitting) {
+      p(xOffset + 3, yOffset + 2, PIZZA_CRUST);
+      p(xOffset + 4, yOffset + 2, PIZZA_CRUST);
+      p(xOffset + 3, yOffset + 1, PIZZA_CHEESE);
+      p(xOffset + 2, yOffset + 1, PIZZA_RED);
+      p(xOffset + 2, yOffset, PIZZA_CHEESE);
+    }
+
+    // Patitas negras
+    if (sitting) {
+      p(xOffset - 2, yOffset + 6, MASK);
+      p(xOffset + 2, yOffset + 6, MASK);
+    } else if (walking) {
+      const stepPhase = Math.floor((step * 0.35) % 4);
+      if (stepPhase === 0 || stepPhase === 1) {
+        p(xOffset - 2, yOffset + 6, MASK);
+        p(xOffset + 2, yOffset + 5, MASK);
+      } else {
+        p(xOffset - 2, yOffset + 5, MASK);
+        p(xOffset + 2, yOffset + 6, MASK);
+      }
+    } else {
+      p(xOffset - 2, yOffset + 6, MASK);
+      p(xOffset + 2, yOffset + 6, MASK);
+    }
+  }
+
   // Bucle principal de renderizado gráfico
   // Bucle principal de renderizado gráfico y simulación física
   function renderLoop() {
@@ -1137,6 +1520,15 @@
           break;
         case 'robot':
           drawRobot(animTick, activeMood, isWalking, isSittingInChair);
+          break;
+        case 'duck':
+          drawDuck(animTick, activeMood, isWalking, isSittingInChair);
+          break;
+        case 'capy':
+          drawCapy(animTick, activeMood, isWalking, isSittingInChair);
+          break;
+        case 'raccoon':
+          drawRaccoon(animTick, activeMood, isWalking, isSittingInChair);
           break;
         case 'neko':
         default:
@@ -1359,6 +1751,21 @@
           'SALTO_VERTICAL.EXE EJECUTADO CON ÉXITO 🤖',
           '¡BEEP BOOP! ❤️',
         ],
+        duck: [
+          '¡QUACK! ¡Resolviste la duda con el patito! 🦆✨',
+          '¡Flotando alto como en la bañera! 🦆🧼',
+          '¡Quack elegante con sombrero de copa! 🎩',
+        ],
+        capy: [
+          'Ok I pull up... ¡Salto chill! ☕✨',
+          'Tranqui, todo se compila a su tiempo 🍊',
+          'Zen mode: máximo nivel de paz 🧘‍♂️',
+        ],
+        raccoon: [
+          '¡Salto ninja por más snacks de medianoche! 🦝🍕',
+          '¡Hacking the mainframe en el aire! ⚡',
+          '¡Misión sigilosa completada con éxito! 🐾',
+        ],
       };
       const quotes = petQuotes[currentAvatar] || petQuotes.neko;
       setDialogue(quotes[Math.floor(Math.random() * quotes.length)]);
@@ -1453,7 +1860,13 @@
             ? 'NekoDev 🐱'
             : newAvatar === 'wizard'
             ? 'CodeMage 🧙‍♂️'
-            : 'PixelBot 🤖';
+            : newAvatar === 'robot'
+            ? 'PixelBot 🤖'
+            : newAvatar === 'duck'
+            ? 'Sir Ducky 🦆'
+            : newAvatar === 'capy'
+            ? 'CapyDev ☕'
+            : 'Byte 🦝';
         setDialogue(`¡Hola! Ahora soy tu compañero ${nameLabel}! Listo para programar.`);
       }
     });
