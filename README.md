@@ -12,80 +12,84 @@
   <a href="https://github.com/rgarduno/PomoBuddy"><img src="https://img.shields.io/badge/size-%3C60KB-success.svg?style=for-the-badge" alt="Package Size" /></a>
 </p>
 
+<p align="center">
+  <b>English</b> | <a href="README.es.md">Español</a>
+</p>
+
 <h1 align="center">🍅 PomoBuddy</h1>
 
 <p align="center">
-  <b>Tu compañero de productividad y concentración en pixel art para Visual Studio Code.</b><br>
-  Temporizador Pomodoro interactivo con físicas en tiempo real, compañeros con personalidad propia, escenarios temáticos con clima procedural, animaciones festivas en descansos y reacciones a diagnósticos de tu código.
+  <b>Your pixel art productivity and focus companion for Visual Studio Code.</b><br>
+  Interactive Pomodoro timer featuring real-time physics, unique companions with distinct personalities, procedural weather-animated stages, break celebrations, and live code diagnostics reactions.
 </p>
 
 ---
 
-## 🌟 ¿Qué es PomoBuddy?
+## 🌟 What is PomoBuddy?
 
-**PomoBuddy** transforma la técnica Pomodoro tradicional en una experiencia viva, entretenida y visualmente gratificante dentro de tu editor de código. 
+**PomoBuddy** re-imagines the traditional Pomodoro technique into a lively, engaging, and rewarding companion experience right inside your editor.
 
-En lugar de simples números estáticos en una pestaña o alarmas invasivas, PomoBuddy te brinda **compañeros dev animados en pixel art** que caminan libremente por tu entorno de trabajo, juegan contigo con físicas interactivas, reaccionan cuando tienes errores de sintaxis en el archivo activo y celebran cada ciclo de concentración completado.
+Instead of boring countdown digits or disruptive notification chimes, PomoBuddy introduces **animated pixel art developer companions** that roam freely across your workspace, interact with you through real-time physics, react when linting or syntax errors hit your active file, and celebrate every completed focus milestone.
 
 ---
 
-## 🐾 Catálogo de Compañeros Dev (6 Avatares)
+## 🐾 Companion Roster (6 Avatars)
 
-Elige a tu compañero favorito desde el menú de **`⚙️ Ajustes`**. Cada uno cuenta con diseño procedural único, animaciones de pasos, físicas de salto y diálogos contextuales:
+Choose your favorite companion from the **`⚙️ Settings`** menu. Each character features procedural pixel rendering, walk cycles, jump physics, and contextual dialogue:
 
-| Compañero | Rol Dev | Visual & Animación | Cita Representativa |
+| Companion | Dev Archetype | Visuals & Animation | Signature Quote |
 | :--- | :---: | :--- | :--- |
-| **NekoDev** 🐱 | *El Gatito Programador* | Pelaje anaranjado, bufanda roja, orejitas expresivas y colita rítmica que se mece al andar o descansar. | *"¡Miau! Menos scrolling, más coding. 🐾"* |
-| **CodeMage** 🧙‍♂️ | *El Archimago del Código* | Túnica azul medianoche, sombrero cónico puntiagudo, barba blanca y báculo arcano con gema brillante. | *"¡Por las barbas de Merlín! ¡Levitación arcana activada! 🔮"* |
-| **PixelBot** 🤖 | *La IA Retro de Terminal* | Chasis metálico, antena con indicador RGB, visor cibernético verde neón y brazos articulados. | *"COMPILACIÓN_EXITOSA: Nivel de dopamina al 100% ⚡"* |
-| **Sir Ducky** 🦆 | *Rubber Duck Debugger* | Plumaje amarillo, pico anaranjado, **sombrero de copa negro**, gafas oscuras y moño de gala. Bamboleo simpático al andar. | *"¡QUACK! Cuéntame tu bug línea por línea y lo resolvemos. 🦆✨"* |
-| **CapyDev** ☕ | *Capibara Zen Anti-Burnout* | Marrón cálido, ojos relajados entrecerrados, **naranjita con hoja verde en la cabeza** (*onsen style*) y taza de café. | *"Ok I pull up... Respira hondo. Todo se compila a su tiempo. ☕"* |
-| **Byte** 🦝 | *El Mapache Hacker* | Pelaje gris, **antifaz negro de bandido**, sudadera con capucha cian, cola rayada y **rebanada de pizza** 🍕 en descansos. | *"¡Salto ninja por más snacks de medianoche! Hacking the mainframe... 🦝"* |
+| **NekoDev** 🐱 | *The Coding Kitty* | Orange fur, red scarf, expressive ears, and a waving tail that bobs rhythmically while walking or resting. | *"Meow! Less scrolling, more coding. 🐾"* |
+| **CodeMage** 🧙‍♂️ | *The Archmage of Code* | Midnight blue robe, pointed conical hat, white beard, and an arcane staff topped with a glowing orb. | *"By Merlin's beard! Arcane levitation activated! 🔮"* |
+| **PixelBot** 🤖 | *The Retro Terminal AI* | Classic metallic chassis, RGB status antenna, neon green cyber-visor, and articulating mechanical arms. | *"BUILD_SUCCESSFUL: Dopamine levels charged to 100% ⚡"* |
+| **Sir Ducky** 🦆 | *Rubber Duck Debugger* | Bright yellow feathers, orange beak, **black top hat**, dark sunglasses, and a red formal bowtie. Signature waddle walk! | *"QUACK! Walk me through your bug line by line, we'll solve it. 🦆✨"* |
+| **CapyDev** ☕ | *Zen Anti-Burnout Capybara* | Warm brown tones, serene half-closed eyes, **fresh orange with green leaf on head** (*onsen style*), and a steaming coffee mug. | *"Ok I pull up... Take a deep breath. Code compiles in its own time. ☕"* |
+| **Byte** 🦝 | *The Midnight Hacker* | Slate gray fur, **black bandit eye mask**, electric cyan hoodie, striped tail, and a slice of **pizza** 🍕 during breaks. | *"Stealth jump for midnight snacks! Hacking the mainframe... 🦝"* |
 
 ---
 
-## 🌄 5 Escenarios Temáticos con Clima Animado
+## 🌄 5 Thematic Stages with Animated Weather
 
-Personaliza el mundo donde habita tu compañero con iluminación y partículas climáticas dinámicas:
+Tailor the world your companion lives in with atmospheric lighting and dynamic particle systems:
 
-* ❄️ **Invierno Nevado (Winter):** Cielos nocturnos estrellados, montañas púrpuras con cumbres blancas, pinos nevados y una ventisca suave de copos de nieve flotantes.
-* 🌲 **Bosque Mágico (Forest):** Colinas en verde esmeralda bajo la luz de la luna, frondosos robles y enjambres de luciérnagas doradas titilantes.
-* 🌆 **Cyberpunk Synthwave:** Skyline de rascacielos con antenas parpadeantes, asfalto mojado con reflejos de luz y lluvia digital diagonal.
-* ☕ **Café Lo-Fi:** Vista cálida al atardecer por la ventana, guirnalda de luces colgantes, librería con suculentas y motas de polvo dorado suspendidas en la luz.
-* ⬛ **Minimalista Zen:** Escenario 100% transparente integrado de forma nativa con cualquier tema claro o de alto contraste de VS Code.
-
----
-
-## 🚀 Características Principales de UX e Ingeniería
-
-### 1. 🎾 Juguete Interactivo con Físicas Reales
-Haz clic en el botón **`🎾`** del HUD o pulsa en cualquier lugar del suelo para lanzar una pelotita de tenis pixel art con simulación de **gravedad, fricción y rebote**. Tu compañero correrá emocionado hacia ella, **la pateará en el aire, dará un salto acrobático y celebrará**.
-
-### 2. 🖥️ Experiencia Dual Inteligente (Barra Lateral + Panel Inferior)
-* **Barra Lateral (Sidebar):** Vista compacta para acompañarte discretamente mientras programas.
-* **Barra Inferior Panorámica (Bottom Panel):** Ubicado junto a la Terminal/Output, tu compañero recorre **el 100% del ancho de tu monitor** en un escenario extendido.
-* **Alternancia en 1 Clic:** Cambia de barra con un botón en Ajustes y PomoBuddy cerrará automáticamente el panel anterior para evitar duplicaciones.
-
-### 3. ⏱️ Minimal Frosted HUD Flotante
-Una barra superior en cristal translúcido (*frosted glass* con `backdrop-filter: blur(10px)`) que flota sobre el escenario sin recortes ni colisiones:
-`[ 🍅 ENFOQUE 24:50  1/4 ] [ ▶ Iniciar ] [ ↺ ] [ ⏭ ] [ 🎾 ] [ ⚙️ ]`
-
-### 4. 😵‍💫 Reacción a Diagnósticos del Editor en Tiempo Real
-Conectado a la API de diagnósticos (`vscode.languages.onDidChangeDiagnostics`):
-* Si introduces errores de sintaxis o linter en tu archivo activo, tu compañero se preocupa o se marea.
-* Al solucionar los problemas o guardar con éxito (`Cmd+S` / `Ctrl+S`), celebra con estrellas y un pulgar arriba.
-
-### 5. 🔊 Audio Sintetizado Retro 8-bit
-Generado en tiempo real con la **Web Audio API nativa**:
-* **0 KB de archivos de audio pesados** (cero dependencias MP3 o WAV externas).
-* Totalmente libre de latencia y conmutador rápido de silencio (`pomobuddy.toggleMute`) para llamadas de Zoom/Meet.
-
-### 6. 🛡️ Motor de Tiempo Blindado contra Modo Reposo (*Sleep Mode*)
-A diferencia de temporizadores basados en simples contadores `setInterval`, PomoBuddy calcula cada segundo evaluando **deltas contra marcas de tiempo del sistema** (`targetEndTime = Date.now() + delta`). Si cierras la tapa de tu laptop o entra en suspensión, el tiempo se sincroniza con exactitud matemática al despertar.
+* ❄️ **Snowy Winter (Default):** Star-filled midnight sky, purple mountain ranges with snow caps, evergreen pines, and a gentle blizzard of falling snowflakes.
+* 🌲 **Enchanted Forest:** Moonlit emerald hills, lush oak trees, and golden fireflies drifting through the night.
+* 🌆 **Cyberpunk Synthwave:** Towering skyscraper skyline, neon-lit horizon, wet asphalt pavement with reflections, and diagonal digital rain.
+* ☕ **Lo-Fi Café:** Warm sunset window view, hanging fairy lights, wooden bookshelf with succulents, and golden dust motes floating in sunlight.
+* ⬛ **Minimalist Zen:** Pure transparent backdrop seamlessly blending into any light, dark, or high-contrast VS Code theme.
 
 ---
 
-## 🏛️ Arquitectura Técnica
+## 🚀 Key UX & Engineering Features
+
+### 1. 🎾 Interactive Physics Toy (Rebound Ball)
+Click the **`🎾`** button on the HUD or tap anywhere on the stage floor to toss a pixel art tennis ball simulated with **gravity, bounce elasticity, and friction**. Your companion will eagerly sprint toward the ball, **kick it into the air, perform an acrobatic jump, and celebrate**.
+
+### 2. 🖥️ Intelligent Dual Display (Sidebar + Bottom Panel)
+* **Sidebar Mode:** Compact, cozy view that accompanies your files discretely.
+* **Panoramic Bottom Panel:** Placed alongside your Terminal & Output tabs, stretching across **100% of your display width** for a sprawling playground.
+* **1-Click Seamless Switch:** Toggle between views in Settings; PomoBuddy automatically closes the opposing view to avoid duplicate panels.
+
+### 3. ⏱️ Minimal Frosted Glass Floating HUD
+A modern floating pill crafted in translucent frosted glass (`backdrop-filter: blur(10px)`) that hovers unobtrusively over the scene:
+`[ 🍅 FOCUS 24:50  1/4 ] [ ▶ Start ] [ ↺ ] [ ⏭ ] [ 🎾 ] [ ⚙️ ]`
+
+### 4. 😵‍💫 Real-Time IDE Diagnostics Reactions
+Tied directly into the VS Code Diagnostics API (`vscode.languages.onDidChangeDiagnostics`):
+* If syntax or linter errors appear in your active file, your companion shows concern or gets dizzy.
+* Resolving the issues or saving your work (`Cmd+S` / `Ctrl+S`) triggers an enthusiastic thumbs-up with sparkle particles.
+
+### 5. 🔊 Procedural 8-Bit Retro Audio
+Synthesized on-the-fly using the native **Web Audio API**:
+* **0 KB of external audio files** (zero MP3/WAV dependencies, instant loading).
+* Zero latency, fully offline, and accompanied by a quick mute shortcut (`pomobuddy.toggleMute`) for Zoom/Meet calls.
+
+### 6. 🛡️ Sleep Mode Resilient Delta Clock
+Unlike naive timers relying on continuous `setInterval` ticks, PomoBuddy computes time remaining using **system clock delta timestamps** (`targetEndTime = Date.now() + delta`). When your laptop lid closes or enters sleep mode, the timer resumes with mathematical precision upon wake-up.
+
+---
+
+## 🏛️ Technical Architecture
 
 ```
 ┌────────────────────────────────────────────────────────┐
@@ -109,50 +113,65 @@ A diferencia de temporizadores basados en simples contadores `setInterval`, Pomo
 └────────────────────────────────────────────────────────┘
 ```
 
-* **Lenguaje:** TypeScript 5.3+ estricto, compilado con `esbuild` ultra-rápido.
-* **Peso Total del Paquete:** Menor a **60 KB** (arquitectura ultra-liviana sin dependencias en runtime).
-* **Persistencia:** Almacenamiento seguro mediante `vscode.Memento` (`globalState`).
+* **Core Language:** Strict TypeScript 5.3+ bundled with high-speed `esbuild`.
+* **Lightweight Footprint:** Entire packaged extension is under **60 KB** (no heavy runtime bloat).
+* **State Persistence:** Reliable session recovery via `vscode.Memento` (`globalState`).
 
 ---
 
-## 📦 Instalación y Uso
+## 🧪 Unit Testing Suite (Jest)
 
-### Desde archivo VSIX
-
-1. Descarga el archivo de lanzamiento [`pomobuddy-0.1.0.vsix`](https://github.com/rgarduno/PomoBuddy/releases).
-2. En VS Code, abre la paleta de comandos (`Cmd+Shift+P` en Mac / `Ctrl+Shift+P` en Windows/Linux).
-3. Escribe y selecciona: **`Extensions: Install from VSIX...`**
-4. Elige el archivo `pomobuddy-0.1.0.vsix`.
-5. ¡Listo! Haz clic en el ícono del tomatito 🍅 en la barra de actividad izquierda o en la pestaña inferior.
-
-### Desarrollo y Compilación Local
+PomoBuddy includes an automated test suite verifying state machine integrity, delta math, sleep-mode recovery, and UI formatting:
 
 ```bash
-# 1. Clonar el repositorio
+# Run unit tests
+npm test
+
+# Generate code coverage report
+npm run test:coverage
+```
+
+- **22 Unit Tests across 2 Suites** (`timerManager.test.ts`, `statusBarManager.test.ts`).
+- Lightweight VS Code API mocks (`tests/__mocks__/vscode.ts`) execute tests in **~1.3 seconds**.
+- **>80% line coverage** and **>95% function coverage** across core timing logic.
+
+---
+
+## 📦 Installation & Setup
+
+### Install via VSIX
+
+1. Download the latest [`pomobuddy-0.1.0.vsix`](https://github.com/rgarduno/PomoBuddy/releases) package.
+2. Open the Command Palette in VS Code (`Cmd+Shift+P` on macOS / `Ctrl+Shift+P` on Windows & Linux).
+3. Search and select: **`Extensions: Install from VSIX...`**
+4. Choose `pomobuddy-0.1.0.vsix`.
+5. Click the tomato icon 🍅 on the left Activity Bar or the bottom PomoBuddy panel.
+
+### Local Development & Build
+
+```bash
+# 1. Clone the repository
 git clone https://github.com/rgarduno/PomoBuddy.git
 cd PomoBuddy
 
-# 2. Instalar dependencias de compilación
+# 2. Install build dependencies
 npm install
 
-# 3. Compilar TypeScript
+# 3. Compile TypeScript
 npm run compile
 
-# 4. Ejecutar la suite de pruebas unitarias (Jest)
+# 4. Run Jest test suite
 npm test
 
-# 5. Generar reporte de cobertura de código
-npm run test:coverage
-
-# 6. Generar paquete instalable .vsix
+# 5. Package into .vsix extension
 npm run package
 ```
 
 ---
 
-## ⚙️ Configuración Personalizada
+## ⚙️ Custom Configuration
 
-Puedes ajustar tus preferencias desde el modal `⚙️ Ajustes` en la extensión o directamente en tu `settings.json`:
+Customize your settings through the in-extension `⚙️ Settings` modal or directly in `settings.json`:
 
 ```json
 {
@@ -168,34 +187,34 @@ Puedes ajustar tus preferencias desde el modal `⚙️ Ajustes` en la extensión
 
 ---
 
-## ⌨️ Comandos Disponibles
+## ⌨️ Available Commands
 
-| Comando | ID de Comando | Descripción |
+| Command Title | Command ID | Description |
 | :--- | :--- | :--- |
-| **Iniciar Temporizador** | `pomobuddy.start` | Comienza o reanuda la cuenta regresiva |
-| **Pausar Temporizador** | `pomobuddy.pause` | Pausa el tiempo activo |
-| **Reiniciar Intervalo** | `pomobuddy.reset` | Reinicia la ronda actual |
-| **Saltar Intervalo** | `pomobuddy.skip` | Avanza de inmediato al siguiente bloque |
-| **Silenciar / Activar Sonido** | `pomobuddy.toggleMute` | Alterna los efectos de audio retro |
-| **Abrir en Barra Lateral** | `pomobuddy.openCompanion` | Abre la vista en el panel izquierdo |
-| **Abrir en Barra Inferior** | `pomobuddy.openBottomPanel` | Abre la vista panorámica inferior |
+| **Start Timer** | `pomobuddy.start` | Start or resume countdown |
+| **Pause Timer** | `pomobuddy.pause` | Pause the active session |
+| **Reset Timer** | `pomobuddy.reset` | Reset current interval |
+| **Skip Interval** | `pomobuddy.skip` | Immediately jump to the next interval |
+| **Mute / Unmute Audio** | `pomobuddy.toggleMute` | Toggle 8-bit sound synthesizer |
+| **Open in Sidebar** | `pomobuddy.openCompanion` | Focus companion in the left sidebar |
+| **Open in Bottom Panel** | `pomobuddy.openBottomPanel` | Focus companion in panoramic bottom panel |
 
 ---
 
-## 🤝 Contribuciones
+## 🤝 Contributing
 
-Las contribuciones, sugerencias y pull requests son bienvenidas. Si tienes ideas para nuevos avatares en pixel art, fondos de escenario o efectos de sonido, ¡no dudes en abrir un Issue o Pull Request!
+Contributions, issues, and feature requests are welcome! If you have ideas for new pixel art companions, stage themes, or retro sound effects, feel free to open an Issue or Pull Request:
 
-1. Haz un Fork del proyecto.
-2. Crea tu rama de características (`git checkout -b feature/NuevoAvatar`).
-3. Haz Commit de tus cambios (`git commit -m 'feat: agregar nuevo avatar'`).
-4. Haz Push a la rama (`git push origin feature/NuevoAvatar`).
-5. Abre un Pull Request.
+1. Fork the project.
+2. Create your feature branch (`git checkout -b feature/NewCompanion`).
+3. Commit your changes (`git commit -m 'feat: add new companion'`).
+4. Push to the branch (`git push origin feature/NewCompanion`).
+5. Open a Pull Request.
 
 ---
 
-## 📄 Licencia
+## 📄 License
 
-Distribuido bajo la Licencia MIT. Consulta el archivo [LICENSE](LICENSE) para más información.
+Distributed under the **MIT License**. See [LICENSE](LICENSE) for more details.
 
-**Desarrollado con dedicación por [Rafael Alejandro](https://github.com/rgarduno)** 🚀
+**Crafted with dedication by [Rafael Alejandro](https://github.com/rgarduno)** 🚀
