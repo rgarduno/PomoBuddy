@@ -23,7 +23,7 @@ Este documento es la **fuente de la verdad** del proyecto. Se actualizará const
 | **Efectos de Sonido 8-bit** | ✅ Sintetizador Web Audio retro básico | ✅ Múltiples Sound Packs (Lo-Fi, Synthwave) | 🟢 Completado (v0.1.0) |
 | **Reacción Básica a Errores / Linter** | ✅ Avatar preocupado ante líneas rojas | ✅ Reacciones personalizadas / Modos | 🟢 Completado (v0.1.0) |
 | **Reacción al Guardar Código (Cmd+S)** | ✅ Gesto rápido de pulgar arriba 👍 | ✅ Animación especial configurable | 🟢 Completado (v0.1.0) |
-| **Catálogo Base de Avatares** | ✅ 3 personajes (NekoDev, CodeMage, Robot) | ✅ Todos los base + catálogo VIP | 🟢 Completado (v0.1.0) |
+| **Catálogo Base de Avatares** | ✅ 6 personajes (NekoDev, CodeMage, Robot, Sir Ducky, CapyDev, Byte) | ✅ Todos los base + catálogo VIP | 🟢 Completado (v0.1.0) |
 | **Mascota Flotante de Escritorio (Desktop Overlay)** | ❌ No disponible | 💎 **Exclusivo Pro** (Camina físicamente sobre el código) | ⚪ Planificado (Fase 4) |
 | **Subida de Avatar Propio** | ❌ No disponible | 💎 **Exclusivo Pro** (GIF/PNG o Spritesheet) | ⚪ Planificado (Fase 4) |
 | **Personalidades Roast / Sarcástico** | ❌ No disponible | 💎 **Exclusivo Pro** (Frases picantes ante bugs) | ⚪ Planificado (Fase 4) |

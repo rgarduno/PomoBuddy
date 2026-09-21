@@ -1,0 +1,311 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 340" width="100%" height="340" style="background:#0c0f1d;border-radius:12px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+  <defs>
+    <!-- Background Gradients -->
+    <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#080a14"/>
+      <stop offset="60%" stop-color="#181c3a"/>
+      <stop offset="100%" stop-color="#2d2250"/>
+    </linearGradient>
+    <linearGradient id="glowGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ff4757" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#ff4757" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="frostedBlur" x="-10%" y="-10%" width="120%" height="120%">
+      <feGaussianBlur stdDeviation="6"/>
+    </filter>
+  </defs>
+
+  <!-- Sky -->
+  <rect width="900" height="340" fill="url(#skyGrad)"/>
+
+  <!-- Stars in sky -->
+  <g fill="#ffffff" opacity="0.8">
+    <rect x="45" y="35" width="2" height="2"/>
+    <rect x="120" y="65" width="3" height="3" opacity="0.9"/>
+    <rect x="190" y="28" width="2" height="2"/>
+    <rect x="270" y="80" width="2" height="2"/>
+    <rect x="340" y="45" width="3" height="3"/>
+    <rect x="420" y="20" width="2" height="2"/>
+    <rect x="510" y="70" width="2" height="2"/>
+    <rect x="580" y="32" width="3" height="3"/>
+    <rect x="660" y="60" width="2" height="2"/>
+    <rect x="740" y="25" width="3" height="3"/>
+    <rect x="830" y="55" width="2" height="2"/>
+    <rect x="870" y="95" width="2" height="2"/>
+    <rect x="90" y="110" width="2" height="2"/>
+    <rect x="790" y="115" width="2" height="2"/>
+  </g>
+
+  <!-- Moon glow & Moon -->
+  <circle cx="810" cy="70" r="32" fill="#ffd32a" opacity="0.15"/>
+  <circle cx="810" cy="70" r="22" fill="#fff5cc"/>
+  <circle cx="818" cy="66" r="19" fill="#181c3a"/>
+
+  <!-- Distant Mountains -->
+  <polygon points="0,260 110,180 230,260" fill="#241e42"/>
+  <polygon points="90,195 110,180 130,195" fill="#a5b1c2"/>
+  
+  <polygon points="170,260 310,160 450,260" fill="#2d2654"/>
+  <polygon points="280,182 310,160 340,182 325,190 310,185 295,190" fill="#d1d8e0"/>
+
+  <polygon points="410,260 550,150 690,260" fill="#241e42"/>
+  <polygon points="520,174 550,150 580,174 565,182 550,178 535,182" fill="#a5b1c2"/>
+
+  <polygon points="650,260 770,175 890,260" fill="#2d2654"/>
+  <polygon points="745,193 770,175 795,193 782,200 770,196" fill="#d1d8e0"/>
+
+  <!-- Pine Trees with snow -->
+  <!-- Tree 1 -->
+  <polygon points="40,265 65,215 90,265" fill="#162e2b"/>
+  <polygon points="48,245 65,215 82,245" fill="#ffffff" opacity="0.9"/>
+  <!-- Tree 2 -->
+  <polygon points="135,265 155,225 175,265" fill="#1b3834"/>
+  <polygon points="142,250 155,225 168,250" fill="#ffffff" opacity="0.9"/>
+  <!-- Tree 3 -->
+  <polygon points="720,265 745,218 770,265" fill="#162e2b"/>
+  <polygon points="728,246 745,218 762,246" fill="#ffffff" opacity="0.9"/>
+  <!-- Tree 4 -->
+  <polygon points="815,265 840,222 865,265" fill="#1b3834"/>
+  <polygon points="823,248 840,222 857,248" fill="#ffffff" opacity="0.9"/>
+
+  <!-- Snowy Ground -->
+  <rect x="0" y="255" width="900" height="85" fill="#dbe4f0"/>
+  <rect x="0" y="260" width="900" height="80" fill="#e9eef5"/>
+  <rect x="0" y="270" width="900" height="70" fill="#f4f7fb"/>
+  <!-- Snow path shadows -->
+  <ellipse cx="450" cy="285" rx="380" ry="12" fill="#cbd7e6" opacity="0.4"/>
+
+  <!-- Falling Snowflakes (pixel squares) -->
+  <g fill="#ffffff">
+    <rect x="50" y="140" width="3" height="3" opacity="0.75"/>
+    <rect x="110" y="175" width="4" height="4" opacity="0.9"/>
+    <rect x="180" y="130" width="3" height="3" opacity="0.65"/>
+    <rect x="240" y="205" width="4" height="4" opacity="0.85"/>
+    <rect x="320" y="145" width="3" height="3" opacity="0.7"/>
+    <rect x="400" y="190" width="4" height="4" opacity="0.95"/>
+    <rect x="470" y="135" width="3" height="3" opacity="0.75"/>
+    <rect x="530" y="180" width="4" height="4" opacity="0.8"/>
+    <rect x="610" y="140" width="3" height="3" opacity="0.7"/>
+    <rect x="680" y="200" width="4" height="4" opacity="0.9"/>
+    <rect x="760" y="150" width="3" height="3" opacity="0.75"/>
+    <rect x="840" y="190" width="4" height="4" opacity="0.85"/>
+    <rect x="290" y="225" width="3" height="3" opacity="0.8"/>
+    <rect x="630" y="235" width="3" height="3" opacity="0.8"/>
+  </g>
+
+  <!-- ==================== HEADER & TITLE ==================== -->
+  <!-- Logo Tomato Pixel Icon -->
+  <g transform="translate(240, 24) scale(1.6)">
+    <path fill="#2ecc71" d="M11 2h2v3h-2zM8 4h3v2H8zM13 4h3v2h-3z"/>
+    <path fill="#e74c3c" d="M7 6h10v2H7zM5 8h14v2H5zM4 10h16v6H4zM5 16h14v2H5zM7 18h10v2H7z"/>
+    <path fill="#ff7675" d="M7 8h3v2H7zM6 10h2v2H6z"/>
+    <path fill="#2d3436" d="M8 12h2v2H8zM14 12h2v2h-2z"/>
+    <path fill="#ffffff" d="M8 12h1v1H8zM14 12h1v1h-1z"/>
+  </g>
+
+  <!-- Title Text -->
+  <text x="286" y="52" font-size="34" font-weight="900" fill="#ffffff" letter-spacing="1">Pomo<tspan fill="#ff4757">Buddy</tspan></text>
+  <text x="288" y="74" font-size="13" font-weight="500" fill="#a4b0be" letter-spacing="0.5">Pixel Art Pomodoro &amp; Companions for VS Code</text>
+
+  <!-- Floating Frosted Glass HUD (Header element) -->
+  <g transform="translate(250, 92)">
+    <rect width="400" height="38" rx="19" fill="#1e243d" fill-opacity="0.85" stroke="rgba(255,255,255,0.18)" stroke-width="1.2"/>
+    <!-- Timer pill -->
+    <rect x="6" y="5" width="138" height="28" rx="14" fill="#ff4757" fill-opacity="0.22" stroke="#ff4757" stroke-width="1"/>
+    <text x="18" y="24" font-size="12" font-weight="700" fill="#ff6b81">🍅 FOCUS</text>
+    <text x="86" y="24" font-size="13" font-weight="800" fill="#ffffff" font-family="'Courier New', monospace">25:00</text>
+    <!-- Round pill -->
+    <rect x="150" y="5" width="46" height="28" rx="14" fill="rgba(255,255,255,0.08)"/>
+    <text x="162" y="23" font-size="11" font-weight="700" fill="#ced6e0">1/4</text>
+    <!-- Controls -->
+    <rect x="202" y="5" width="82" height="28" rx="14" fill="#2ed573" fill-opacity="0.25" stroke="#2ed573" stroke-width="1"/>
+    <text x="216" y="23" font-size="11" font-weight="800" fill="#2ed573">▶ INICIAR</text>
+    <rect x="290" y="5" width="30" height="28" rx="14" fill="rgba(255,255,255,0.08)"/>
+    <text x="300" y="23" font-size="12" fill="#ffffff">↺</text>
+    <rect x="326" y="5" width="30" height="28" rx="14" fill="rgba(255,255,255,0.08)"/>
+    <text x="333" y="23" font-size="12" fill="#ffffff">🎾</text>
+    <rect x="362" y="5" width="30" height="28" rx="14" fill="rgba(255,255,255,0.08)"/>
+    <text x="371" y="23" font-size="12" fill="#ffffff">⚙️</text>
+  </g>
+
+  <!-- ==================== 6 COMPANIONS PIXEL ART ROSTER ==================== -->
+
+  <!-- 1. NekoDev (Cat) -->
+  <g transform="translate(100, 232)">
+    <!-- Shadow -->
+    <ellipse cx="20" cy="42" rx="18" ry="4" fill="#000000" opacity="0.25"/>
+    <!-- Body pixels scaled 3x -->
+    <!-- Ears -->
+    <rect x="8" y="0" width="6" height="6" fill="#e67e22"/>
+    <rect x="10" y="2" width="3" height="3" fill="#ffb8b8"/>
+    <rect x="26" y="0" width="6" height="6" fill="#e67e22"/>
+    <rect x="27" y="2" width="3" height="3" fill="#ffb8b8"/>
+    <!-- Head -->
+    <rect x="8" y="6" width="24" height="15" fill="#f39c12"/>
+    <rect x="11" y="10" width="4" height="5" fill="#2c3e50"/>
+    <rect x="12" y="10" width="2" height="2" fill="#ffffff"/>
+    <rect x="25" y="10" width="4" height="5" fill="#2c3e50"/>
+    <rect x="26" y="10" width="2" height="2" fill="#ffffff"/>
+    <rect x="19" y="14" width="3" height="3" fill="#ff7675"/>
+    <!-- Red Scarf -->
+    <rect x="6" y="21" width="28" height="5" fill="#e74c3c"/>
+    <rect x="26" y="24" width="5" height="9" fill="#c0392b"/>
+    <!-- Body -->
+    <rect x="10" y="26" width="20" height="12" fill="#f39c12"/>
+    <rect x="15" y="26" width="10" height="10" fill="#ffffff"/>
+    <!-- Tail -->
+    <rect x="2" y="24" width="8" height="4" fill="#d35400"/>
+    <rect x="0" y="20" width="4" height="6" fill="#d35400"/>
+    <!-- Feet -->
+    <rect x="11" y="38" width="6" height="4" fill="#d35400"/>
+    <rect x="23" y="38" width="6" height="4" fill="#d35400"/>
+    <!-- Label -->
+    <text x="20" y="55" font-size="11" font-weight="700" fill="#2c3e50" text-anchor="middle">NekoDev 🐱</text>
+  </g>
+
+  <!-- 2. CodeMage (Wizard) -->
+  <g transform="translate(240, 222)">
+    <!-- Shadow -->
+    <ellipse cx="20" cy="52" rx="18" ry="4" fill="#000000" opacity="0.25"/>
+    <!-- Hat cone -->
+    <polygon points="20,0 12,18 28,18" fill="#3867d6"/>
+    <rect x="18" y="6" width="4" height="4" fill="#fed330"/>
+    <rect x="7" y="17" width="26" height="5" fill="#273c75"/>
+    <!-- Face & Beard -->
+    <rect x="13" y="22" width="14" height="8" fill="#fed330" opacity="0.4"/>
+    <rect x="14" y="24" width="3" height="3" fill="#2d3436"/>
+    <rect x="23" y="24" width="3" height="3" fill="#2d3436"/>
+    <!-- Long White Beard -->
+    <polygon points="12,28 28,28 20,40" fill="#f5f6fa"/>
+    <!-- Robe -->
+    <rect x="10" y="30" width="20" height="18" fill="#3867d6"/>
+    <rect x="18" y="30" width="4" height="18" fill="#fed330"/>
+    <!-- Magic Staff with Glowing Orb -->
+    <rect x="32" y="16" width="3" height="34" fill="#795548"/>
+    <circle cx="33" cy="14" r="6" fill="#00f5d4" opacity="0.4"/>
+    <circle cx="33" cy="14" r="4" fill="#00f5d4"/>
+    <!-- Label -->
+    <text x="20" y="65" font-size="11" font-weight="700" fill="#2c3e50" text-anchor="middle">CodeMage 🧙‍♂️</text>
+  </g>
+
+  <!-- 3. PixelBot (Robot) -->
+  <g transform="translate(380, 230)">
+    <!-- Shadow -->
+    <ellipse cx="20" cy="44" rx="18" ry="4" fill="#000000" opacity="0.25"/>
+    <!-- Antenna -->
+    <rect x="18" y="0" width="3" height="7" fill="#718093"/>
+    <circle cx="19" cy="0" r="3" fill="#ff4757"/>
+    <!-- Head -->
+    <rect x="7" y="7" width="25" height="16" fill="#a4b0be" stroke="#2f3542" stroke-width="1.5"/>
+    <!-- Screen visor with neon eyes -->
+    <rect x="10" y="11" width="19" height="8" fill="#1e272e"/>
+    <rect x="13" y="13" width="4" height="4" fill="#2ed573"/>
+    <rect x="22" y="13" width="4" height="4" fill="#2ed573"/>
+    <!-- Neck -->
+    <rect x="16" y="23" width="7" height="3" fill="#718093"/>
+    <!-- Chest Body -->
+    <rect x="9" y="26" width="21" height="14" fill="#a4b0be" stroke="#2f3542" stroke-width="1.5"/>
+    <rect x="13" y="29" width="5" height="4" fill="#00a8ff"/>
+    <rect x="21" y="29" width="5" height="4" fill="#e84118"/>
+    <!-- Feet -->
+    <rect x="10" y="40" width="7" height="4" fill="#2f3542"/>
+    <rect x="22" y="40" width="7" height="4" fill="#2f3542"/>
+    <!-- Label -->
+    <text x="20" y="57" font-size="11" font-weight="700" fill="#2c3e50" text-anchor="middle">PixelBot 🤖</text>
+  </g>
+
+  <!-- 4. Sir Ducky (Rubber Duck Debugger) -->
+  <g transform="translate(520, 226)">
+    <!-- Shadow -->
+    <ellipse cx="20" cy="48" rx="18" ry="4" fill="#000000" opacity="0.25"/>
+    <!-- Black Top Hat -->
+    <rect x="11" y="0" width="16" height="12" fill="#1e272e"/>
+    <rect x="11" y="9" width="16" height="3" fill="#e74c3c"/>
+    <rect x="6" y="12" width="26" height="3" fill="#1e272e"/>
+    <!-- Head -->
+    <rect x="10" y="15" width="18" height="14" fill="#fed330"/>
+    <!-- Eye with monocle -->
+    <rect x="20" y="18" width="3" height="3" fill="#2c3e50"/>
+    <circle cx="21" cy="19" r="4" fill="none" stroke="#f39c12" stroke-width="1"/>
+    <!-- Orange Beak -->
+    <rect x="27" y="22" width="9" height="5" fill="#fa8231"/>
+    <!-- Red Bowtie -->
+    <polygon points="17,29 25,29 21,32" fill="#e74c3c"/>
+    <polygon points="17,35 25,35 21,32" fill="#e74c3c"/>
+    <!-- Chubby Body -->
+    <rect x="8" y="31" width="24" height="12" fill="#fed330"/>
+    <rect x="3" y="30" width="6" height="6" fill="#f39c12"/>
+    <!-- Feet -->
+    <rect x="13" y="43" width="6" height="3" fill="#fa8231"/>
+    <rect x="23" y="43" width="6" height="3" fill="#fa8231"/>
+    <!-- Label -->
+    <text x="20" y="61" font-size="11" font-weight="700" fill="#2c3e50" text-anchor="middle">Sir Ducky 🦆</text>
+  </g>
+
+  <!-- 5. CapyDev (Capybara Zen) -->
+  <g transform="translate(660, 230)">
+    <!-- Shadow -->
+    <ellipse cx="22" cy="44" rx="20" ry="4" fill="#000000" opacity="0.25"/>
+    <!-- Orange with leaf on head (Onsen style) -->
+    <circle cx="20" cy="5" r="4" fill="#fa8231"/>
+    <path d="M20,2 Q23,-1 24,1" stroke="#20bf6b" stroke-width="1.5" fill="none"/>
+    <!-- Ears -->
+    <rect x="9" y="8" width="4" height="4" fill="#6d4c41"/>
+    <!-- Head block -->
+    <rect x="10" y="10" width="26" height="16" fill="#8d6e63"/>
+    <!-- Zen closed chill eyes -->
+    <path d="M24,16 Q27,18 29,16" stroke="#3e2723" stroke-width="1.5" fill="none"/>
+    <!-- Snout & Nose -->
+    <rect x="30" y="18" width="8" height="8" fill="#6d4c41"/>
+    <rect x="35" y="20" width="3" height="3" fill="#3e2723"/>
+    <!-- Body -->
+    <rect x="6" y="24" width="28" height="16" fill="#8d6e63"/>
+    <!-- Zen cup of coffee -->
+    <rect x="0" y="26" width="6" height="7" fill="#ffffff" rx="1"/>
+    <path d="M1,24 Q3,21 2,19" stroke="#d1d8e0" stroke-width="1" fill="none"/>
+    <!-- Feet -->
+    <rect x="9" y="40" width="6" height="4" fill="#4e342e"/>
+    <rect x="25" y="40" width="6" height="4" fill="#4e342e"/>
+    <!-- Label -->
+    <text x="22" y="57" font-size="11" font-weight="700" fill="#2c3e50" text-anchor="middle">CapyDev ☕</text>
+  </g>
+
+  <!-- 6. Byte (Raccoon Hacker) -->
+  <g transform="translate(790, 228)">
+    <!-- Shadow -->
+    <ellipse cx="20" cy="46" rx="18" ry="4" fill="#000000" opacity="0.25"/>
+    <!-- Ears with white tips -->
+    <rect x="8" y="2" width="5" height="5" fill="#2d3436"/>
+    <rect x="9" y="1" width="3" height="2" fill="#ffffff"/>
+    <rect x="25" y="2" width="5" height="5" fill="#2d3436"/>
+    <rect x="26" y="1" width="3" height="2" fill="#ffffff"/>
+    <!-- Gray Head -->
+    <rect x="8" y="7" width="22" height="14" fill="#7f8c8d"/>
+    <!-- Bandit Eye Mask -->
+    <rect x="8" y="11" width="22" height="6" fill="#1e272e"/>
+    <!-- Shrewd White Eyes -->
+    <rect x="12" y="12" width="3" height="3" fill="#ffffff"/>
+    <rect x="23" y="12" width="3" height="3" fill="#ffffff"/>
+    <!-- Snout & Nose -->
+    <rect x="15" y="17" width="8" height="5" fill="#ffffff"/>
+    <rect x="18" y="18" width="3" height="2" fill="#2d3436"/>
+    <!-- Cyan Hacker Hoodie -->
+    <rect x="7" y="22" width="24" height="6" fill="#00d2d3"/>
+    <!-- Body -->
+    <rect x="9" y="28" width="20" height="13" fill="#7f8c8d"/>
+    <!-- Slice of Pizza in Paws -->
+    <polygon points="26,30 36,34 30,40" fill="#feca57"/>
+    <polygon points="34,32 37,34 31,41" fill="#e67e22"/>
+    <circle cx="30" cy="34" r="1.5" fill="#ee5253"/>
+    <!-- Striped Tail -->
+    <rect x="0" y="30" width="8" height="4" fill="#1e272e"/>
+    <rect x="2" y="34" width="6" height="4" fill="#7f8c8d"/>
+    <rect x="4" y="38" width="5" height="3" fill="#1e272e"/>
+    <!-- Feet -->
+    <rect x="11" y="41" width="6" height="4" fill="#1e272e"/>
+    <rect x="21" y="41" width="6" height="4" fill="#1e272e"/>
+    <!-- Label -->
+    <text x="20" y="59" font-size="11" font-weight="700" fill="#2c3e50" text-anchor="middle">Byte 🦝</text>
+  </g>
+
+</svg>
