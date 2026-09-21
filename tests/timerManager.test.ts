@@ -17,6 +17,7 @@ describe('TimerManager', () => {
       longBreakDuration: 15,
       roundsBeforeLongBreak: 4,
       soundEnabled: true,
+      soundPack: 'arcade',
       avatar: 'neko',
       background: 'winter',
     };
@@ -40,10 +41,16 @@ describe('TimerManager', () => {
       expect(snapshot.currentRound).toBe(1);
       expect(snapshot.totalRounds).toBe(4);
       expect(snapshot.completedRounds).toBe(0);
+      expect(snapshot.avatar).toBe('neko');
     });
 
     it('should return the current configuration', () => {
       expect(timerManager.getConfig()).toEqual(config);
+    });
+
+    it('should update sound pack via setSoundPack', () => {
+      timerManager.setSoundPack('zen');
+      expect(timerManager.getConfig().soundPack).toBe('zen');
     });
   });
 
@@ -246,4 +253,46 @@ describe('TimerManager', () => {
       restoredManager.dispose();
     });
   });
+
+  describe('Productivity Stats & Streaks', () => {
+    it('should initialize with 0 stats and 7 days in history chart', () => {
+      const stats = timerManager.getStats();
+      expect(stats.todayCount).toBe(0);
+      expect(stats.todayMinutes).toBe(0);
+      expect(stats.totalCompleted).toBe(0);
+      expect(stats.streakDays).toBe(0);
+      expect(stats.last7Days).toHaveLength(7);
+      expect(stats.last7Days[stats.last7Days.length - 1].count).toBe(0);
+    });
+
+    it('should record completed pomodoros and emit onStatsUpdated', () => {
+      const statsSpy = jest.fn();
+      timerManager.onStatsUpdated = statsSpy;
+
+      timerManager.start();
+      // Complete full 25 min work session
+      jest.advanceTimersByTime(25 * 60 * 1000);
+
+      const stats = timerManager.getStats();
+      expect(stats.todayCount).toBe(1);
+      expect(stats.todayMinutes).toBe(25);
+      expect(stats.totalCompleted).toBe(1);
+      expect(stats.streakDays).toBe(1);
+      expect(statsSpy).toHaveBeenCalledWith(expect.objectContaining({ todayCount: 1, todayMinutes: 25 }));
+    });
+
+    it('should reset stats via resetStats()', () => {
+      timerManager.start();
+      jest.advanceTimersByTime(25 * 60 * 1000);
+      expect(timerManager.getStats().todayCount).toBe(1);
+
+      timerManager.resetStats();
+      const stats = timerManager.getStats();
+      expect(stats.todayCount).toBe(0);
+      expect(stats.todayMinutes).toBe(0);
+      expect(stats.totalCompleted).toBe(0);
+      expect(stats.streakDays).toBe(0);
+    });
+  });
 });
+

@@ -79,12 +79,25 @@ Conectado a la API de diagnósticos (`vscode.languages.onDidChangeDiagnostics`):
 * Si introduces errores de sintaxis o linter en tu archivo activo, tu compañero se preocupa o se marea.
 * Al solucionar los problemas o guardar con éxito (`Cmd+S` / `Ctrl+S`), celebra con estrellas y un pulgar arriba.
 
-### 5. 🔊 Audio Sintetizado Retro 8-bit
+### 5. 🔊 Audio Sintetizado Retro 8-bit y Paquetes de Sonido
 Generado en tiempo real con la **Web Audio API nativa**:
+* **3 Paquetes de Sonido:** Cambia fácilmente entre **Arcade 👾** (auténticos pitidos chiptune), **Zen 🧘‍♂️** (campana armónica estilo cuenco tibetano con caída suave) y **Cyber 🌆** (sintetizador estilo synthwave/analógico).
 * **0 KB de archivos de audio pesados** (cero dependencias MP3 o WAV externas).
 * Totalmente libre de latencia y conmutador rápido de silencio (`pomobuddy.toggleMute`) para llamadas de Zoom/Meet.
 
-### 6. 🛡️ Motor de Tiempo Blindado contra Modo Reposo (*Sleep Mode*)
+### 6. 📊 Tablero de Estadísticas y Racha Diaria
+Monitorea tu avance y enfoque directamente desde los ajustes de la extensión:
+* **Métricas del Día:** Conteo en tiempo real de Pomodoros completados hoy y minutos acumulados de Trabajo Profundo (*Deep Work*).
+* **Contador de Racha de Días:** Mantén el hábito registrando días continuos de productividad.
+* **Mini Gráfico de Barras de 7 Días:** Visualiza de un vistazo tu constancia a lo largo de la semana.
+* **100% Local y Privado:** Tus métricas se guardan de forma segura en `globalState` de VS Code, con botón de reinicio en un clic.
+
+### 7. 🐾 Mini-Avatar Dinámico en la Barra de Estado
+Ten a tu compañero siempre a la vista, incluso con los paneles minimizados:
+* Muestra el emoji del avatar activo (`🐱`, `🧙‍♂️`, `🤖`, `🦆`, `☕`, `🦝`) junto al reloj, la ronda actual y el estado del temporizador.
+* Haz clic en la barra de estado para traer a PomoBuddy al primer plano al instante.
+
+### 8. 🛡️ Motor de Tiempo Blindado contra Modo Reposo (*Sleep Mode*)
 A diferencia de temporizadores basados en simples contadores `setInterval`, PomoBuddy calcula cada segundo evaluando **deltas contra marcas de tiempo del sistema** (`targetEndTime = Date.now() + delta`). Si cierras la tapa de tu laptop o entra en suspensión, el tiempo se sincroniza con exactitud matemática al despertar.
 
 ---
@@ -95,11 +108,14 @@ A diferencia de temporizadores basados en simples contadores `setInterval`, Pomo
 ┌────────────────────────────────────────────────────────┐
 │             VS Code Extension Host (Node.js)           │
 │                                                        │
-│   extension.ts ──► timerManager.ts (Delta Clock)       │
+│   extension.ts ──► timerManager.ts (Delta Clock/Stats) │
 │        ▲                   │                           │
 │        │                   ▼                           │
 │   ideEvents.ts     pomoWebviewProvider.ts              │
 │  (Diagnostics/IO)          │                           │
+│        │                   │                           │
+│        ▼                   ▼                           │
+│   statusBarManager.ts (Mini-Avatar en Vivo)            │
 └────────────────────────────┼───────────────────────────┘
                              ▼ Typed PostMessage Protocol
 ┌────────────────────────────────────────────────────────┐
@@ -108,14 +124,32 @@ A diferencia de temporizadores basados en simples contadores `setInterval`, Pomo
 │   • Procedural Pixel Renderer (60 FPS Game Loop)       │
 │   • Physics Engine (Gravity, Bounces, Collision)       │
 │   • Weather Particle System (Snow, Fireflies, Rain)    │
-│   • Web Audio API Synthesizer (Oscillators/Filters)    │
-│   • Frosted Glass Responsive HUD                       │
+│   • Web Audio API Synthesizer (Arcade, Zen, Cyber)     │
+│   • Frosted Glass Responsive HUD & Tablero Stats       │
 └────────────────────────────────────────────────────────┘
 ```
 
 * **Lenguaje:** TypeScript 5.3+ estricto, compilado con `esbuild` ultra-rápido.
 * **Peso Total del Paquete:** Menor a **60 KB** (arquitectura ultra-liviana sin dependencias en runtime).
-* **Persistencia:** Almacenamiento seguro mediante `vscode.Memento` (`globalState`).
+* **Persistencia:** Almacenamiento seguro de estado y rachas mediante `vscode.Memento` (`globalState`).
+
+---
+
+## 🧪 Suite de Pruebas Unitarias (Jest)
+
+PomoBuddy incluye una suite de pruebas automatizadas que valida la máquina de estados, el cálculo de deltas, la recuperación tras el modo reposo, el registro de rachas y el formateo de interfaz:
+
+```bash
+# Ejecutar pruebas unitarias
+npm test
+
+# Generar reporte de cobertura de código
+npm run test:coverage
+```
+
+- **26 Pruebas Unitarias en 2 Suites** (`timerManager.test.ts`, `statusBarManager.test.ts`).
+- Mocks ligeros de la API de VS Code (`tests/__mocks__/vscode.ts`) ejecutando la suite en **~1.8 segundos**.
+- **>83% de cobertura de líneas** y **>97% de cobertura de funciones** en la lógica de temporizador y barra de estado.
 
 ---
 

@@ -173,6 +173,16 @@
           ],
           "default": "winter",
           "description": "Fondo pixel art de escenario (winter, forest, cyberpunk, lofi, minimal)"
+        },
+        "pomobuddy.soundPack": {
+          "type": "string",
+          "enum": [
+            "arcade",
+            "zen",
+            "cyber"
+          ],
+          "default": "arcade",
+          "description": "Estilo de efectos de sonido sintetizados (arcade, zen, cyber)"
         }
       }
     }

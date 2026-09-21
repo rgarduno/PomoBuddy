@@ -34,6 +34,7 @@
   // Estado local
   let currentAvatar = 'neko';
   let currentBackground = 'winter';
+  let currentSoundPack = 'arcade';
   let soundEnabled = true;
   let weatherParticles = [];
   let timerState = {
@@ -223,58 +224,136 @@
     osc.stop(audioCtx.currentTime + startTime + duration);
   }
 
+  function playZenChime(baseFreq = 432, duration = 1.6) {
+    if (!soundEnabled) return;
+    initAudio();
+    if (!audioCtx) return;
+    try {
+      const t = audioCtx.currentTime;
+      [1, 2.76, 5.4].forEach((ratio, i) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(baseFreq * ratio, t);
+        const lvl = 0.09 / (i + 1);
+        gain.gain.setValueAtTime(lvl, t);
+        gain.gain.exponentialRampToValueAtTime(0.0001, t + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(t);
+        osc.stop(t + duration);
+      });
+    } catch (e) {}
+  }
+
+  function playCyberChime(freq = 880, duration = 0.35) {
+    if (!soundEnabled) return;
+    initAudio();
+    if (!audioCtx) return;
+    try {
+      const t = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(freq, t);
+      osc.frequency.exponentialRampToValueAtTime(freq * 1.5, t + duration * 0.4);
+      osc.frequency.exponentialRampToValueAtTime(freq * 0.85, t + duration);
+      gain.gain.setValueAtTime(0.12, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + duration);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(t);
+      osc.stop(t + duration);
+    } catch (e) {}
+  }
+
   function playWorkStartSound() {
     initAudio();
-    // Melodía ascendente retro de inicio
-    playTone(330, 'square', 0.1, 0);     // E4
-    playTone(392, 'square', 0.1, 0.1);   // G4
-    playTone(523.25, 'square', 0.18, 0.2); // C5
+    if (currentSoundPack === 'zen') {
+      playZenChime(432, 1.8);
+    } else if (currentSoundPack === 'cyber') {
+      playCyberChime(523.25, 0.2);
+      setTimeout(() => playCyberChime(1046.5, 0.35), 100);
+    } else {
+      // Arcade Chiptune
+      playTone(330, 'square', 0.1, 0);     // E4
+      playTone(392, 'square', 0.1, 0.1);   // G4
+      playTone(523.25, 'square', 0.18, 0.2); // C5
+    }
   }
 
   function playBreakDanceSound() {
     initAudio();
-    // Fanfarria festiva de baile 8-bit
-    playTone(523.25, 'triangle', 0.12, 0);       // C5
-    playTone(659.25, 'square', 0.12, 0.12);     // E5
-    playTone(783.99, 'square', 0.14, 0.24);     // G5
-    playTone(1046.50, 'triangle', 0.35, 0.38);  // C6
-    playTone(880, 'square', 0.15, 0.75);        // A5
-    playTone(1046.50, 'square', 0.4, 0.9);      // C6 final
+    if (currentSoundPack === 'zen') {
+      playZenChime(528, 2.2); // Frecuencia Solfeggio relajante
+    } else if (currentSoundPack === 'cyber') {
+      playCyberChime(659.25, 0.15);
+      setTimeout(() => playCyberChime(783.99, 0.15), 120);
+      setTimeout(() => playCyberChime(1046.5, 0.35), 240);
+    } else {
+      // Fanfarria festiva de baile 8-bit
+      playTone(523.25, 'triangle', 0.12, 0);       // C5
+      playTone(659.25, 'square', 0.12, 0.12);     // E5
+      playTone(783.99, 'square', 0.14, 0.24);     // G5
+      playTone(1046.50, 'triangle', 0.35, 0.38);  // C6
+      playTone(880, 'square', 0.15, 0.75);        // A5
+      playTone(1046.50, 'square', 0.4, 0.9);      // C6 final
+    }
   }
 
   function playCycleVictorySound() {
     initAudio();
-    // Melodía triunfal épica de fanfarria 8-bit al completar las 4 rondas
-    const notes = [
-      { f: 523.25, d: 0.14, t: 0 },    // C5
-      { f: 523.25, d: 0.14, t: 0.14 }, // C5
-      { f: 523.25, d: 0.14, t: 0.28 }, // C5
-      { f: 659.25, d: 0.35, t: 0.42 }, // E5
-      { f: 587.33, d: 0.15, t: 0.77 }, // D5
-      { f: 659.25, d: 0.2, t: 0.92 },  // E5
-      { f: 783.99, d: 0.4, t: 1.12 },  // G5
-      { f: 1046.5, d: 0.75, t: 1.55 }, // C6 largo triunfal
-    ];
-    notes.forEach((n) => playTone(n.f, 'square', n.d, n.t, 0.12));
+    if (currentSoundPack === 'zen') {
+      playZenChime(396, 2.5);
+      setTimeout(() => playZenChime(528, 2.5), 500);
+      setTimeout(() => playZenChime(639, 3.0), 1000);
+    } else {
+      // Melodía triunfal épica de fanfarria 8-bit al completar las 4 rondas
+      const notes = [
+        { f: 523.25, d: 0.14, t: 0 },    // C5
+        { f: 523.25, d: 0.14, t: 0.14 }, // C5
+        { f: 523.25, d: 0.14, t: 0.28 }, // C5
+        { f: 659.25, d: 0.35, t: 0.42 }, // E5
+        { f: 587.33, d: 0.15, t: 0.77 }, // D5
+        { f: 659.25, d: 0.2, t: 0.92 },  // E5
+        { f: 783.99, d: 0.4, t: 1.12 },  // G5
+        { f: 1046.5, d: 0.75, t: 1.55 }, // C6 largo triunfal
+      ];
+      notes.forEach((n) => playTone(n.f, currentSoundPack === 'cyber' ? 'sawtooth' : 'square', n.d, n.t, 0.12));
+    }
   }
 
   function playErrorBlip() {
     initAudio();
-    // Glitch de alarma descendente
-    playTone(300, 'sawtooth', 0.15, 0, 0.15);
-    playTone(200, 'sawtooth', 0.2, 0.12, 0.12);
+    if (currentSoundPack === 'zen') {
+      playTone(216, 'sine', 0.35, 0, 0.08);
+    } else {
+      playTone(300, 'sawtooth', 0.15, 0, 0.15);
+      playTone(200, 'sawtooth', 0.2, 0.12, 0.12);
+    }
   }
 
   function playSaveChime() {
     initAudio();
-    // Tintineo agudo de éxito
-    playTone(987.77, 'sine', 0.1, 0, 0.08); // B5
-    playTone(1318.5, 'sine', 0.2, 0.08, 0.1); // E6
+    if (currentSoundPack === 'zen') {
+      playZenChime(864, 1.2);
+    } else if (currentSoundPack === 'cyber') {
+      playCyberChime(1318.5, 0.2);
+    } else {
+      playTone(987.77, 'sine', 0.1, 0, 0.08); // B5
+      playTone(1318.5, 'sine', 0.2, 0.08, 0.1); // E6
+    }
   }
 
   function playClick() {
     initAudio();
-    playTone(600, 'square', 0.04, 0, 0.04);
+    if (currentSoundPack === 'zen') {
+      playTone(800, 'sine', 0.02, 0, 0.03);
+    } else if (currentSoundPack === 'cyber') {
+      playTone(1200, 'triangle', 0.03, 0, 0.04);
+    } else {
+      playTone(600, 'square', 0.04, 0, 0.04);
+    }
   }
 
   // ==========================================
@@ -1903,12 +1982,86 @@
     vscode.postMessage({ type: 'TOGGLE_SOUND', payload: soundEnabled });
   });
 
+  // Selector de Paquetes de Sonido
+  const soundPackButtons = document.querySelectorAll('.sound-pack-btn');
+  soundPackButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      playClick();
+      const pack = btn.getAttribute('data-sound');
+      if (pack) {
+        currentSoundPack = pack;
+        soundPackButtons.forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        vscode.postMessage({ type: 'CHANGE_SOUND_PACK', payload: pack });
+        if (pack === 'zen') {
+          playZenChime(528, 1.8);
+          setDialogue('Modo Zen activado: cuenco tibetano armónico 🧘‍♂️');
+        } else if (pack === 'cyber') {
+          playCyberChime(1046.5, 0.4);
+          setDialogue('Modo Cyber activado: sintetizador analógico 🌆');
+        } else {
+          playWorkStartSound();
+          setDialogue('Modo Arcade activado: clásicos pitidos chiptune 👾');
+        }
+      }
+    });
+  });
+
+  // Tablero de Estadísticas & Rachas de Enfoque
+  const btnResetStats = document.getElementById('btnResetStats');
+  btnResetStats?.addEventListener('click', () => {
+    playClick();
+    vscode.postMessage({ type: 'RESET_STATS' });
+    setDialogue('Historial de estadísticas reiniciado.');
+  });
+
+  function updateStatsUI(stats) {
+    if (!stats) return;
+    const elToday = document.getElementById('statTodayCount');
+    const elTime = document.getElementById('statTodayTime');
+    const elStreak = document.getElementById('statStreak');
+    const elTotal = document.getElementById('statTotal');
+    const elBars = document.getElementById('statsBars');
+
+    if (elToday) elToday.textContent = stats.todayCount || 0;
+    if (elTime) {
+      const mins = stats.todayMinutes || 0;
+      const hrs = Math.floor(mins / 60);
+      const rem = mins % 60;
+      elTime.textContent = hrs > 0 ? `${hrs}h ${rem}m` : `${rem}m`;
+    }
+    if (elStreak) elStreak.textContent = `${stats.streakDays || 0}d`;
+    if (elTotal) elTotal.textContent = stats.totalCompleted || 0;
+
+    if (elBars && stats.last7Days) {
+      const maxVal = Math.max(1, ...stats.last7Days.map((d) => d.count));
+      elBars.innerHTML = stats.last7Days
+        .map((d) => {
+          const pct = Math.round((d.count / maxVal) * 100);
+          const isEmpty = d.count === 0;
+          return `
+            <div class="stat-bar-col" title="${d.date}: ${d.count} pomodoros">
+              <div class="stat-bar-track">
+                <div class="stat-bar-fill ${isEmpty ? 'empty' : ''}" style="height: ${isEmpty ? '0%' : pct + '%'}"></div>
+              </div>
+              <span class="stat-bar-day">${d.dayLabel}</span>
+            </div>
+          `;
+        })
+        .join('');
+    }
+  }
+
   // ==========================================
   // 5. RECEPCIÓN DE MENSAJES DE LA EXTENSIÓN
   // ==========================================
   window.addEventListener('message', (event) => {
     const message = event.data;
     switch (message.type) {
+      case 'STATS_UPDATED':
+        updateStatsUI(message.payload);
+        break;
+
       case 'TICK':
         updateTimerUI(message.payload);
         break;
@@ -1998,6 +2151,18 @@
         } else {
           preset25?.classList.add('active');
           preset50?.classList.remove('active');
+        }
+
+        // Actualizar paquete de sonido activo
+        if (cfg.soundPack) {
+          currentSoundPack = cfg.soundPack;
+          soundPackButtons.forEach((b) => {
+            if (b.getAttribute('data-sound') === currentSoundPack) {
+              b.classList.add('active');
+            } else {
+              b.classList.remove('active');
+            }
+          });
         }
         break;
     }

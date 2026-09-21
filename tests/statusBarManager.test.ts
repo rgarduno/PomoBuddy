@@ -23,7 +23,7 @@ describe('StatusBarManager', () => {
     expect(mockItem.show).toHaveBeenCalled();
   });
 
-  it('should display idle state formatted time', () => {
+  it('should display idle state formatted time with avatar emoji', () => {
     const snapshot: TimerSnapshot = {
       mode: 'WORK',
       status: 'IDLE',
@@ -32,13 +32,14 @@ describe('StatusBarManager', () => {
       currentRound: 1,
       totalRounds: 4,
       completedRounds: 0,
+      avatar: 'neko',
     };
 
     statusBarManager.update(snapshot);
-    expect(mockItem.text).toContain('PomoBuddy: Pomodoro listo (25:00)');
+    expect(mockItem.text).toContain('PomoBuddy: 🐱 Pomodoro listo (25:00)');
   });
 
-  it('should display active focus state with flame icon and round count', () => {
+  it('should display active focus state with flame icon, avatar, and round count', () => {
     const snapshot: TimerSnapshot = {
       mode: 'WORK',
       status: 'RUNNING',
@@ -47,13 +48,14 @@ describe('StatusBarManager', () => {
       currentRound: 2,
       totalRounds: 4,
       completedRounds: 1,
+      avatar: 'robot',
     };
 
     statusBarManager.update(snapshot);
-    expect(mockItem.text).toContain('$(flame) 24:45 (2/4)');
+    expect(mockItem.text).toContain('$(flame) 🤖 24:45 (2/4)');
   });
 
-  it('should display paused state with pause icon', () => {
+  it('should display paused state with pause icon and avatar', () => {
     const snapshot: TimerSnapshot = {
       mode: 'WORK',
       status: 'PAUSED',
@@ -62,13 +64,14 @@ describe('StatusBarManager', () => {
       currentRound: 1,
       totalRounds: 4,
       completedRounds: 0,
+      avatar: 'wizard',
     };
 
     statusBarManager.update(snapshot);
-    expect(mockItem.text).toContain('$(debug-pause) 20:00 [Pausado]');
+    expect(mockItem.text).toContain('$(debug-pause) 🧙‍♂️ 20:00 [Pausado]');
   });
 
-  it('should display short break with coffee icon', () => {
+  it('should display short break with coffee icon and avatar', () => {
     const snapshot: TimerSnapshot = {
       mode: 'SHORT_BREAK',
       status: 'RUNNING',
@@ -77,13 +80,14 @@ describe('StatusBarManager', () => {
       currentRound: 1,
       totalRounds: 4,
       completedRounds: 1,
+      avatar: 'duck',
     };
 
     statusBarManager.update(snapshot);
-    expect(mockItem.text).toContain('$(coffee) 04:30 [Descanso 🕺]');
+    expect(mockItem.text).toContain('$(coffee) 🦆 04:30 [Descanso 🕺]');
   });
 
-  it('should display long break with star icon', () => {
+  it('should display long break with star icon and avatar', () => {
     const snapshot: TimerSnapshot = {
       mode: 'LONG_BREAK',
       status: 'RUNNING',
@@ -92,10 +96,11 @@ describe('StatusBarManager', () => {
       currentRound: 4,
       totalRounds: 4,
       completedRounds: 4,
+      avatar: 'capy',
     };
 
     statusBarManager.update(snapshot);
-    expect(mockItem.text).toContain('$(star-full) 14:10 [Descanso Largo 🌟]');
+    expect(mockItem.text).toContain('$(star-full) ☕ 14:10 [Descanso Largo 🌟]');
   });
 
   it('should call dispose on the underlying status bar item', () => {

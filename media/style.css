@@ -659,3 +659,173 @@ body.vscode-light .hud-progress-wrap {
   background: rgba(255, 255, 255, 0.15);
   border-color: var(--accent-color);
 }
+
+/* Selector de Paquetes de Sonido */
+.sound-selector {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  width: 100%;
+}
+
+.sound-pack-btn {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 8px 4px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.sound-pack-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-1px);
+}
+
+.sound-pack-btn.active {
+  background: rgba(255, 184, 0, 0.18);
+  border-color: #ffb800;
+  box-shadow: 0 0 10px rgba(255, 184, 0, 0.35);
+}
+
+.sound-emoji {
+  font-size: 16px;
+}
+
+.sound-name {
+  font-size: 10px;
+  font-weight: 700;
+}
+
+/* Tablero de Estadísticas & Rachas */
+.stats-group {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.stats-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.stats-reset-btn {
+  background: none;
+  border: none;
+  color: #a4b0be;
+  font-size: 10px;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.stats-reset-btn:hover {
+  color: #ff4757;
+  background: rgba(255, 71, 87, 0.15);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.stat-card {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 6px;
+  padding: 6px 2px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--accent-color);
+  font-family: 'Courier New', monospace;
+}
+
+.stat-label {
+  font-size: 9px;
+  color: #a4b0be;
+  margin-top: 2px;
+  text-transform: uppercase;
+}
+
+/* Gráfico de Barras de 7 días */
+.stats-chart-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stats-chart-title {
+  font-size: 8px;
+  letter-spacing: 0.5px;
+  color: #718093;
+  font-weight: 700;
+}
+
+.stats-bars {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 4px;
+  height: 44px;
+  padding-top: 6px;
+}
+
+.stat-bar-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  justify-content: flex-end;
+  gap: 2px;
+}
+
+.stat-bar-track {
+  width: 100%;
+  max-width: 16px;
+  height: 26px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.stat-bar-fill {
+  width: 100%;
+  background: #2ed573;
+  border-radius: 2px 2px 0 0;
+  transition: height 0.4s ease;
+  min-height: 2px;
+}
+
+.stat-bar-fill.empty {
+  background: transparent;
+  min-height: 0;
+}
+
+.stat-bar-day {
+  font-size: 8px;
+  color: #718093;
+  font-weight: 600;
+}
+

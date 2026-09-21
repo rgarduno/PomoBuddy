@@ -79,12 +79,25 @@ Tied directly into the VS Code Diagnostics API (`vscode.languages.onDidChangeDia
 * If syntax or linter errors appear in your active file, your companion shows concern or gets dizzy.
 * Resolving the issues or saving your work (`Cmd+S` / `Ctrl+S`) triggers an enthusiastic thumbs-up with sparkle particles.
 
-### 5. 🔊 Procedural 8-Bit Retro Audio
+### 5. 🔊 Procedural 8-Bit Retro Audio & Sound Packs
 Synthesized on-the-fly using the native **Web Audio API**:
+* **3 Curated Sound Packs:** Switch seamlessly between **Arcade 👾** (authentic chiptune bleeps), **Zen 🧘‍♂️** (calming harmonic Tibetan bowl chimes with soft exponential decay), and **Cyber 🌆** (punchy synthwave tones).
 * **0 KB of external audio files** (zero MP3/WAV dependencies, instant loading).
 * Zero latency, fully offline, and accompanied by a quick mute shortcut (`pomobuddy.toggleMute`) for Zoom/Meet calls.
 
-### 6. 🛡️ Sleep Mode Resilient Delta Clock
+### 6. 📊 Productivity Stats Dashboard & Daily Streak Tracker
+Track your deep focus momentum right inside the companion settings:
+* **Today's Focus Metrics:** Instant view of completed Pomodoros and accumulated minutes of Deep Work.
+* **Daily Streak Counter:** Keeps you motivated to maintain a consistent daily coding routine.
+* **7-Day Focus Bar Chart:** High-contrast visual mini-bars displaying your daily output over the last week.
+* **Persistent & Privacy-First:** Data stays 100% local inside your VS Code storage (`globalState`), with a 1-click reset option.
+
+### 7. 🐾 Dynamic Companion Mini-Avatar in Status Bar
+Never lose track of your buddy even with panels minimized:
+* Shows your active companion's live emoji (`🐱`, `🧙‍♂️`, `🤖`, `🦆`, `☕`, `🦝`) alongside remaining time, round counter, and state icons.
+* Click the status bar anytime to instantly bring PomoBuddy to the foreground.
+
+### 8. 🛡️ Sleep Mode Resilient Delta Clock
 Unlike naive timers relying on continuous `setInterval` ticks, PomoBuddy computes time remaining using **system clock delta timestamps** (`targetEndTime = Date.now() + delta`). When your laptop lid closes or enters sleep mode, the timer resumes with mathematical precision upon wake-up.
 
 ---
@@ -95,11 +108,14 @@ Unlike naive timers relying on continuous `setInterval` ticks, PomoBuddy compute
 ┌────────────────────────────────────────────────────────┐
 │             VS Code Extension Host (Node.js)           │
 │                                                        │
-│   extension.ts ──► timerManager.ts (Delta Clock)       │
+│   extension.ts ──► timerManager.ts (Delta Clock/Stats) │
 │        ▲                   │                           │
 │        │                   ▼                           │
 │   ideEvents.ts     pomoWebviewProvider.ts              │
 │  (Diagnostics/IO)          │                           │
+│        │                   │                           │
+│        ▼                   ▼                           │
+│   statusBarManager.ts (Live Avatar Status)             │
 └────────────────────────────┼───────────────────────────┘
                              ▼ Typed PostMessage Protocol
 ┌────────────────────────────────────────────────────────┐
@@ -108,20 +124,20 @@ Unlike naive timers relying on continuous `setInterval` ticks, PomoBuddy compute
 │   • Procedural Pixel Renderer (60 FPS Game Loop)       │
 │   • Physics Engine (Gravity, Bounces, Collision)       │
 │   • Weather Particle System (Snow, Fireflies, Rain)    │
-│   • Web Audio API Synthesizer (Oscillators/Filters)    │
-│   • Frosted Glass Responsive HUD                       │
+│   • Web Audio API Synthesizer (Arcade, Zen, Cyber)     │
+│   • Frosted Glass Responsive HUD & Stats Dashboard     │
 └────────────────────────────────────────────────────────┘
 ```
 
 * **Core Language:** Strict TypeScript 5.3+ bundled with high-speed `esbuild`.
 * **Lightweight Footprint:** Entire packaged extension is under **60 KB** (no heavy runtime bloat).
-* **State Persistence:** Reliable session recovery via `vscode.Memento` (`globalState`).
+* **State Persistence:** Reliable session recovery and streak tracking via `vscode.Memento` (`globalState`).
 
 ---
 
 ## 🧪 Unit Testing Suite (Jest)
 
-PomoBuddy includes an automated test suite verifying state machine integrity, delta math, sleep-mode recovery, and UI formatting:
+PomoBuddy includes an automated test suite verifying state machine integrity, delta math, sleep-mode recovery, streak tracking, and UI formatting:
 
 ```bash
 # Run unit tests
@@ -131,9 +147,9 @@ npm test
 npm run test:coverage
 ```
 
-- **22 Unit Tests across 2 Suites** (`timerManager.test.ts`, `statusBarManager.test.ts`).
-- Lightweight VS Code API mocks (`tests/__mocks__/vscode.ts`) execute tests in **~1.3 seconds**.
-- **>80% line coverage** and **>95% function coverage** across core timing logic.
+- **26 Unit Tests across 2 Suites** (`timerManager.test.ts`, `statusBarManager.test.ts`).
+- Lightweight VS Code API mocks (`tests/__mocks__/vscode.ts`) execute tests in **~1.8 seconds**.
+- **>83% line coverage** and **>97% function coverage** across core timing and status bar logic.
 
 ---
 

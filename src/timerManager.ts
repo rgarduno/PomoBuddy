@@ -1,5 +1,13 @@
 import * as vscode from 'vscode';
-import { PomodoroConfig, TimerMode, TimerSnapshot, TimerStatus } from './types';
+import {
+  DayStat,
+  PomodoroConfig,
+  ProductivityStats,
+  SoundPack,
+  TimerMode,
+  TimerSnapshot,
+  TimerStatus,
+} from './types';
 
 export class TimerManager {
   private config: PomodoroConfig;
@@ -16,6 +24,7 @@ export class TimerManager {
   public onStateChange: ((snapshot: TimerSnapshot) => void) | null = null;
   public onRoundFinished: ((mode: TimerMode, round: number) => void) | null = null;
   public onCycleCompleted: ((totalRounds: number) => void) | null = null;
+  public onStatsUpdated: ((stats: ProductivityStats) => void) | null = null;
 
   constructor(config: PomodoroConfig, globalState?: vscode.Memento) {
     this.config = config;
@@ -114,6 +123,7 @@ export class TimerManager {
       currentRound: this.currentRound,
       totalRounds: this.config.roundsBeforeLongBreak,
       completedRounds: this.completedRounds,
+      avatar: this.config.avatar,
     };
   }
 
@@ -194,6 +204,7 @@ export class TimerManager {
 
     if (completedMode === 'WORK') {
       this.completedRounds++;
+      this.recordCompletedPomodoro();
       // ¿Se completó el ciclo completo de 4 rondas?
       if (completedRound >= this.config.roundsBeforeLongBreak) {
         if (this.onCycleCompleted) {
@@ -301,6 +312,105 @@ export class TimerManager {
     if (this.onStateChange) {
       this.onStateChange(this.getSnapshot());
     }
+  }
+
+  public setSoundPack(soundPack: SoundPack) {
+    this.config.soundPack = soundPack;
+    const wsConfig = vscode.workspace.getConfiguration('pomobuddy');
+    wsConfig.update('soundPack', soundPack, vscode.ConfigurationTarget.Global);
+  }
+
+  public recordCompletedPomodoro() {
+    if (!this.globalState) return;
+    const history = this.globalState.get<Record<string, number>>('pomobuddy_history_stats', {}) || {};
+    const todayStr = this.getLocalDateString();
+    history[todayStr] = (history[todayStr] || 0) + 1;
+    this.globalState.update('pomobuddy_history_stats', history);
+    this.notifyStatsUpdated();
+  }
+
+  public getStats(): ProductivityStats {
+    const history: Record<string, number> =
+      (this.globalState && this.globalState.get<Record<string, number>>('pomobuddy_history_stats', {})) || {};
+
+    const todayStr = this.getLocalDateString();
+    const todayCount = history[todayStr] || 0;
+    const todayMinutes = todayCount * this.config.workDuration;
+
+    let totalCompleted = 0;
+    for (const d in history) {
+      totalCompleted += history[d] || 0;
+    }
+
+    // Cálculo de racha de días consecutivos
+    let streakDays = 0;
+    const checkDate = new Date();
+    const todayKey = this.getLocalDateString(checkDate);
+
+    if ((history[todayKey] || 0) > 0) {
+      streakDays++;
+      checkDate.setDate(checkDate.getDate() - 1);
+    } else {
+      // Si hoy no ha hecho pomodoros todavía, verificar si ayer sí para mantener racha activa
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+      const yesterdayKey = this.getLocalDateString(yesterday);
+      if ((history[yesterdayKey] || 0) > 0) {
+        checkDate.setDate(checkDate.getDate() - 1);
+      }
+    }
+
+    while (true) {
+      const dateKey = this.getLocalDateString(checkDate);
+      if ((history[dateKey] || 0) > 0) {
+        streakDays++;
+        checkDate.setDate(checkDate.getDate() - 1);
+      } else {
+        break;
+      }
+    }
+
+    // Últimos 7 días con etiquetas breves
+    const dayLabels = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+    const last7Days: DayStat[] = [];
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      const dStr = this.getLocalDateString(d);
+      last7Days.push({
+        date: dStr,
+        dayLabel: dayLabels[d.getDay()],
+        count: history[dStr] || 0,
+      });
+    }
+
+    return {
+      todayCount,
+      todayMinutes,
+      streakDays,
+      totalCompleted,
+      last7Days,
+    };
+  }
+
+  public resetStats() {
+    if (this.globalState) {
+      this.globalState.update('pomobuddy_history_stats', {});
+      this.notifyStatsUpdated();
+    }
+  }
+
+  private notifyStatsUpdated() {
+    if (this.onStatsUpdated) {
+      this.onStatsUpdated(this.getStats());
+    }
+  }
+
+  private getLocalDateString(d: Date = new Date()): string {
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 
   public dispose() {

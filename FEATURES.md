@@ -17,10 +17,10 @@ Este documento es la **fuente de la verdad** del proyecto. Se actualizará const
 | **Llamar al Avatar con un Clic** | ✅ Camina hacia donde hagas clic en el suelo | ✅ Interacciones avanzadas | 🟢 Completado (v0.1.0) |
 | **Sillita de Descanso Retro** | ✅ Sillita pixel art para descansos | ✅ Sillitas/muebles temáticos | 🟢 Completado (v0.1.0) |
 | **Interacción Tamagotchi (Petting)** | ✅ Clic para salto acrobático + estrellas | ✅ Más caricias e interacciones | 🟢 Completado (v0.1.0) |
-| **Contador en Barra de Estado** | ✅ `🍅 24:50 [1/4]` interactivo | ✅ Interactivo con personalizaciones | 🟢 Completado (v0.1.0) |
+| **Contador y Avatar en Barra de Estado** | ✅ Emojis dinámicos (`🐱`, `🧙‍♂️`, `🤖`, `🦆`, `☕`, `🦝`) + reloj interactivo | ✅ Interactivo con personalizaciones | 🟢 Completado (v0.1.0) |
 | **Animación de Baile en Descansos** | ✅ Baile retro festivo (disco/confeti) | ✅ Bailes exclusivos por personaje | 🟢 Completado (v0.1.0) |
 | **Celebración Fin de Ciclo (4/4)** | ✅ Trofeo dorado y fanfarria triunfal | ✅ Animaciones de victoria pro | 🟢 Completado (v0.1.0) |
-| **Efectos de Sonido 8-bit** | ✅ Sintetizador Web Audio retro básico | ✅ Múltiples Sound Packs (Lo-Fi, Synthwave) | 🟢 Completado (v0.1.0) |
+| **Paquetes de Sonido 8-bit (Sound Packs)** | ✅ 3 packs: Arcade 👾, Zen 🧘‍♂️ y Cyber 🌆 (Web Audio sintetizado) | ✅ Subida de MP3/WAV y packs ilimitados | 🟢 Completado (v0.1.0) |
 | **Reacción Básica a Errores / Linter** | ✅ Avatar preocupado ante líneas rojas | ✅ Reacciones personalizadas / Modos | 🟢 Completado (v0.1.0) |
 | **Reacción al Guardar Código (Cmd+S)** | ✅ Gesto rápido de pulgar arriba 👍 | ✅ Animación especial configurable | 🟢 Completado (v0.1.0) |
 | **Catálogo Base de Avatares** | ✅ 6 personajes (NekoDev, CodeMage, Robot, Sir Ducky, CapyDev, Byte) | ✅ Todos los base + catálogo VIP | 🟢 Completado (v0.1.0) |
@@ -30,7 +30,7 @@ Este documento es la **fuente de la verdad** del proyecto. Se actualizará const
 | **Modo Extintor / Pánico en Errores** | ❌ No disponible | 💎 **Exclusivo Pro** (Apaga fuegos en pantalla) | ⚪ Planificado (Fase 4) |
 | **Integración Git & Unit Tests** | ❌ No disponible | 💎 **Exclusivo Pro** (Fiesta en push / tests pass) | ⚪ Planificado (Fase 4) |
 | **Modos de Vista Avanzados** | ❌ Barra lateral y panel inferior | 💎 **Exclusivo Pro** (Pestaña dedicada / Flotante) | ⚪ Planificado (Fase 4) |
-| **Estadísticas de Productividad** | ❌ Contador de sesión actual | 💎 **Exclusivo Pro** (Historial diario/semanal) | ⚪ Planificado (Fase 4) |
+| **Estadísticas de Productividad & Rachas** | ✅ Conteo diario, minutos Deep Work, racha y gráfico 7 días | 💎 **Exclusivo Pro** (Exportación CSV / Analytics mes) | 🟢 Completado (v0.1.0) |
 
 ---
 

@@ -48,16 +48,18 @@ Este archivo registra el avance en tiempo real del proyecto. Las tareas se irán
   - [ ] Modo Roast My Code / Sarcástico (comentarios mordaces ante bugs).
   - [ ] Modo Detective (inspección con lupa).
   - [ ] Modo Pánico con Extintor de Incendios.
-- [ ] **Sound Packs Temáticos:**
-  - [ ] Pack Lo-Fi Chill.
-  - [ ] Pack Synthwave / Cyberpunk.
-  - [ ] Pack Arcade 16-bit.
+- [x] **Sound Packs Temáticos Sintetizados:**
+  - [x] Pack Zen / Cuenco Tibetano Armónico (tonos meditativos con caída exponencial suave).
+  - [x] Pack Synthwave / Cyberpunk (tonos analógicos contundentes).
+  - [x] Pack Arcade 8-bit Clásico (pitidos estilo NES/GameBoy).
 - [ ] **Modos de Visualización Flexibles:**
   - [ ] **Mascota Flotante de Escritorio (Desktop Overlay):** Mini ventana transparente Always-On-Top que camina libremente por encima de cualquier ventana y de tu código.
   - [ ] Modo pestaña completa del editor (Full Editor View para segundo monitor).
-  - [ ] Modo mini-avatar caminando en la barra de estado.
-- [ ] **Métricas y Estadísticas de Productividad:**
-  - [ ] Gráfico de pomodoros completados por día y semana.
+  - [x] Modo mini-avatar dinámico en la barra de estado (`🐱`, `🧙‍♂️`, `🤖`, `🦆`, `☕`, `🦝`).
+- [x] **Métricas y Estadísticas de Productividad:**
+  - [x] Pomodoros completados hoy y minutos acumulados de trabajo profundo.
+  - [x] Contador de racha de días consecutivos de productividad.
+  - [x] Gráfico mini de barras de los últimos 7 días con botón de reinicio.
 
 ---
 

@@ -5,6 +5,8 @@ import {
   ExtensionToWebviewMessage,
   IdeReactionType,
   PomodoroConfig,
+  ProductivityStats,
+  SoundPack,
   TimerMode,
   TimerSnapshot,
   WebviewToExtensionMessage,
@@ -78,8 +80,14 @@ export class PomoWebviewProvider implements vscode.WebviewViewProvider {
         case 'CHANGE_BACKGROUND':
           this.handleBackgroundChange(message.payload);
           break;
+        case 'CHANGE_SOUND_PACK':
+          this.timerManager.setSoundPack(message.payload);
+          break;
         case 'TOGGLE_SOUND':
           this.handleSoundToggle(message.payload);
+          break;
+        case 'RESET_STATS':
+          this.timerManager.resetStats();
           break;
         case 'SET_PRESET':
           this.timerManager.setPreset(
@@ -106,9 +114,17 @@ export class PomoWebviewProvider implements vscode.WebviewViewProvider {
             type: 'STATE_CHANGE',
             payload: this.timerManager.getSnapshot(),
           });
+          this.postMessage({
+            type: 'STATS_UPDATED',
+            payload: this.timerManager.getStats(),
+          });
           break;
       }
     });
+  }
+
+  public sendStats(stats: ProductivityStats) {
+    this.postMessage({ type: 'STATS_UPDATED', payload: stats });
   }
 
   public sendTick(snapshot: TimerSnapshot) {
@@ -328,10 +344,59 @@ export class PomoWebviewProvider implements vscode.WebviewViewProvider {
             </div>
           </div>
 
+          <!-- Estadísticas & Racha Diaria -->
+          <div class="settings-group stats-group">
+            <div class="stats-header-row">
+              <label class="settings-label">ESTADÍSTICAS &amp; RACHA DE ENFOQUE</label>
+              <button class="stats-reset-btn" id="btnResetStats" title="Reiniciar historial">↺ Reset</button>
+            </div>
+            <div class="stats-grid">
+              <div class="stat-card">
+                <span class="stat-value" id="statTodayCount">0</span>
+                <span class="stat-label">🍅 Hoy</span>
+              </div>
+              <div class="stat-card">
+                <span class="stat-value" id="statTodayTime">0m</span>
+                <span class="stat-label">⏱️ Deep Work</span>
+              </div>
+              <div class="stat-card">
+                <span class="stat-value" id="statStreak">0</span>
+                <span class="stat-label">🔥 Racha</span>
+              </div>
+              <div class="stat-card">
+                <span class="stat-value" id="statTotal">0</span>
+                <span class="stat-label">🏆 Total</span>
+              </div>
+            </div>
+            <div class="stats-chart-wrap">
+              <span class="stats-chart-title">ÚLTIMOS 7 DÍAS</span>
+              <div class="stats-bars" id="statsBars"></div>
+            </div>
+          </div>
+
+          <!-- Paquete de Sonido -->
+          <div class="settings-group">
+            <label class="settings-label">PAQUETE DE SONIDO (AUDIO PACK)</label>
+            <div class="sound-selector">
+              <button class="sound-pack-btn active" data-sound="arcade" title="Chiptunes clásicos de 8-bit y arpegios alegres">
+                <span class="sound-emoji">👾</span>
+                <span class="sound-name">Arcade 8-bit</span>
+              </button>
+              <button class="sound-pack-btn" data-sound="zen" title="Cuenco tibetano armónico y campana relajante">
+                <span class="sound-emoji">🧘‍♂️</span>
+                <span class="sound-name">Zen Bowl</span>
+              </button>
+              <button class="sound-pack-btn" data-sound="cyber" title="Chimes cristalinos estilo sintetizador futurista">
+                <span class="sound-emoji">🌆</span>
+                <span class="sound-name">Cyber Chime</span>
+              </button>
+            </div>
+          </div>
+
           <div class="settings-group settings-row-group">
             <label class="toggle-container" title="Activar/desactivar sintetizador retro">
               <input type="checkbox" id="soundToggle" checked>
-              <span class="toggle-label">🔊 Efectos de sonido 8-bit</span>
+              <span class="toggle-label">🔊 Sonido activado</span>
             </label>
           </div>
 

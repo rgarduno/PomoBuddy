@@ -1,5 +1,14 @@
 import * as vscode from 'vscode';
-import { TimerSnapshot } from './types';
+import { AvatarId, TimerSnapshot } from './types';
+
+const AVATAR_EMOJIS: Record<AvatarId, string> = {
+  neko: '🐱',
+  wizard: '🧙‍♂️',
+  robot: '🤖',
+  duck: '🦆',
+  capy: '☕',
+  raccoon: '🦝',
+};
 
 export class StatusBarManager {
   private statusBarItem: vscode.StatusBarItem;
@@ -21,27 +30,28 @@ export class StatusBarManager {
     const timeFormatted = `${minutes.toString().padStart(2, '0')}:${seconds
       .toString()
       .padStart(2, '0')}`;
+    const avatarEmoji = AVATAR_EMOJIS[snapshot.avatar] || '🐱';
 
     if (snapshot.status === 'IDLE') {
       const modeLabel = snapshot.mode === 'WORK' ? 'Pomodoro' : 'Descanso';
-      this.statusBarItem.text = `$(watch) PomoBuddy: ${modeLabel} listo (${timeFormatted})`;
+      this.statusBarItem.text = `$(watch) PomoBuddy: ${avatarEmoji} ${modeLabel} listo (${timeFormatted})`;
       this.statusBarItem.tooltip = `PomoBuddy [Inactivo] - Ronda ${snapshot.currentRound}/${snapshot.totalRounds}. Clic para abrir.`;
       return;
     }
 
     if (snapshot.status === 'PAUSED') {
-      this.statusBarItem.text = `$(debug-pause) ${timeFormatted} [Pausado]`;
+      this.statusBarItem.text = `$(debug-pause) ${avatarEmoji} ${timeFormatted} [Pausado]`;
       this.statusBarItem.tooltip = `PomoBuddy en pausa. Clic para abrir el panel y reanudar.`;
       return;
     }
 
     if (snapshot.mode === 'WORK') {
-      this.statusBarItem.text = `$(flame) ${timeFormatted} (${snapshot.currentRound}/${snapshot.totalRounds})`;
+      this.statusBarItem.text = `$(flame) ${avatarEmoji} ${timeFormatted} (${snapshot.currentRound}/${snapshot.totalRounds})`;
       this.statusBarItem.tooltip = `PomoBuddy: Modo Enfoque - Ronda ${snapshot.currentRound}/${snapshot.totalRounds}. Clic para abrir el panel.`;
     } else {
       const icon = snapshot.mode === 'LONG_BREAK' ? '$(star-full)' : '$(coffee)';
       const label = snapshot.mode === 'LONG_BREAK' ? 'Descanso Largo 🌟' : 'Descanso 🕺';
-      this.statusBarItem.text = `${icon} ${timeFormatted} [${label}]`;
+      this.statusBarItem.text = `${icon} ${avatarEmoji} ${timeFormatted} [${label}]`;
       this.statusBarItem.tooltip = `PomoBuddy: ¡Tiempo de descansar y despejarse! Clic para ver a tu avatar bailar.`;
     }
   }
