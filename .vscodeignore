@@ -1,6 +1,9 @@
 .vscode/**
 .vscode-test/**
 src/**
+tests/**
+coverage/**
+jest.config.js
 .gitignore
 tsconfig.json
 esbuild.js

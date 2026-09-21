@@ -34,6 +34,7 @@ Este archivo registra el avance en tiempo real del proyecto. Las tareas se irán
 - [x] **Renombrar el proyecto oficialmente a `PomoBuddy`:** Actualizar identificadores, `package.json`, comandos, configuración y documentación.
 - [x] **Banner e Identidad Visual (`media/banner.svg`):** Banner vectorial pixel art con los 6 compañeros, HUD flotante y escenario nevado para el README.
 - [x] **README Profesional de Alto Impacto:** Badges de Shields.io, matriz de compañeros, arquitectura técnica y comandos.
+- [x] **Suite de Pruebas Unitarias con Jest:** 22 pruebas automatizadas para `TimerManager` (deltas `Date.now()`, sleep mode, transiciones de rondas, presets, persistencia) y `StatusBarManager`.
 - [ ] **Guía de Contribución (`CONTRIBUTING.md`):** Explicar cómo la comunidad de GitHub puede dibujar y proponer nuevos avatares en pixel art.
 
 ---

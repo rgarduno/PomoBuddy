@@ -151,13 +151,26 @@
         },
         "pomobuddy.avatar": {
           "type": "string",
-          "enum": ["neko", "wizard", "robot", "duck", "capy", "raccoon"],
+          "enum": [
+            "neko",
+            "wizard",
+            "robot",
+            "duck",
+            "capy",
+            "raccoon"
+          ],
           "default": "neko",
           "description": "Avatar activo en pixel art (neko, wizard, robot, duck, capy, raccoon)"
         },
         "pomobuddy.background": {
           "type": "string",
-          "enum": ["winter", "forest", "cyberpunk", "lofi", "minimal"],
+          "enum": [
+            "winter",
+            "forest",
+            "cyberpunk",
+            "lofi",
+            "minimal"
+          ],
           "default": "winter",
           "description": "Fondo pixel art de escenario (winter, forest, cyberpunk, lofi, minimal)"
         }
@@ -169,13 +182,18 @@
     "build": "node esbuild.js --production",
     "watch": "node esbuild.js --watch",
     "compile": "tsc -p ./",
-    "package": "npm run build && vsce package --no-dependencies"
+    "package": "npm run build && vsce package --no-dependencies",
+    "test": "jest",
+    "test:coverage": "jest --coverage"
   },
   "devDependencies": {
+    "@types/jest": "^30.0.0",
     "@types/node": "^20.11.0",
     "@types/vscode": "^1.85.0",
     "@vscode/vsce": "^2.24.0",
     "esbuild": "^0.20.0",
+    "jest": "^30.5.2",
+    "ts-jest": "^29.4.12",
     "typescript": "^5.3.3"
   }
 }

@@ -8,6 +8,7 @@
   <a href="https://github.com/rgarduno/PomoBuddy/releases"><img src="https://img.shields.io/badge/version-0.1.0-2ecc71.svg?style=for-the-badge" alt="Version 0.1.0" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-f1c40f.svg?style=for-the-badge" alt="License MIT" /></a>
   <a href="https://github.com/rgarduno/PomoBuddy/pulls"><img src="https://img.shields.io/badge/PRs-welcome-blueviolet.svg?style=for-the-badge" alt="PRs Welcome" /></a>
+  <a href="https://github.com/rgarduno/PomoBuddy"><img src="https://img.shields.io/badge/tests-22%20passed-brightgreen.svg?style=for-the-badge&logo=jest&logoColor=white" alt="Tests" /></a>
   <a href="https://github.com/rgarduno/PomoBuddy"><img src="https://img.shields.io/badge/size-%3C60KB-success.svg?style=for-the-badge" alt="Package Size" /></a>
 </p>
 
@@ -137,7 +138,13 @@ npm install
 # 3. Compilar TypeScript
 npm run compile
 
-# 4. Generar paquete .vsix
+# 4. Ejecutar la suite de pruebas unitarias (Jest)
+npm test
+
+# 5. Generar reporte de cobertura de código
+npm run test:coverage
+
+# 6. Generar paquete instalable .vsix
 npm run package
 ```
 
