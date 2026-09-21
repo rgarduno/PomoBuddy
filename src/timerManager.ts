@@ -38,13 +38,15 @@ export class TimerManager {
   }
 
   public setPreset(workDuration: number, breakDuration: number) {
-    this.config.workDuration = workDuration;
-    this.config.shortBreakDuration = breakDuration;
+    const validWork = Math.max(1, Math.min(240, Math.round(Number(workDuration)) || 25));
+    const validBreak = Math.max(1, Math.min(240, Math.round(Number(breakDuration)) || 5));
+    this.config.workDuration = validWork;
+    this.config.shortBreakDuration = validBreak;
 
     // Actualizar configuración en VS Code
     const wsConfig = vscode.workspace.getConfiguration('pomobuddy');
-    wsConfig.update('workDuration', workDuration, vscode.ConfigurationTarget.Global);
-    wsConfig.update('shortBreakDuration', breakDuration, vscode.ConfigurationTarget.Global);
+    wsConfig.update('workDuration', validWork, vscode.ConfigurationTarget.Global);
+    wsConfig.update('shortBreakDuration', validBreak, vscode.ConfigurationTarget.Global);
 
     if (this.status === 'IDLE') {
       this.remainingSeconds = this.getTotalSecondsForCurrentMode();

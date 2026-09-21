@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import {
   AvatarId,
   BackgroundTheme,
+  ErrorPersonality,
   ExtensionToWebviewMessage,
   IdeReactionType,
   PomodoroConfig,
@@ -12,6 +13,12 @@ import {
   WebviewToExtensionMessage,
 } from './types';
 import { TimerManager } from './timerManager';
+
+const VALID_AVATARS: readonly AvatarId[] = ['neko', 'wizard', 'robot', 'duck', 'capy', 'raccoon', 'custom'];
+const VALID_BACKGROUNDS: readonly BackgroundTheme[] = ['winter', 'forest', 'cyberpunk', 'lofi', 'minimal'];
+const VALID_SOUND_PACKS: readonly SoundPack[] = ['arcade', 'zen', 'cyber'];
+const VALID_ERROR_PERSONALITIES: readonly ErrorPersonality[] = ['roast', 'detective', 'panic', 'classic'];
+const ALLOWED_IMAGE_EXTENSIONS = new Set(['png', 'gif', 'jpg', 'jpeg', 'webp']);
 
 export class PomoWebviewProvider implements vscode.WebviewViewProvider {
   public static readonly sidebarViewType = 'pomobuddy.companionView';
@@ -76,17 +83,25 @@ export class PomoWebviewProvider implements vscode.WebviewViewProvider {
           this.timerManager.skip();
           break;
         case 'CHANGE_AVATAR':
-          this.handleAvatarChange(message.payload);
+          if (VALID_AVATARS.includes(message.payload)) {
+            this.handleAvatarChange(message.payload);
+          }
           break;
         case 'CHANGE_BACKGROUND':
-          this.handleBackgroundChange(message.payload);
+          if (VALID_BACKGROUNDS.includes(message.payload)) {
+            this.handleBackgroundChange(message.payload);
+          }
           break;
         case 'CHANGE_SOUND_PACK':
-          this.timerManager.setSoundPack(message.payload);
+          if (VALID_SOUND_PACKS.includes(message.payload)) {
+            this.timerManager.setSoundPack(message.payload);
+          }
           break;
         case 'CHANGE_ERROR_PERSONALITY':
-          this.timerManager.setErrorPersonality(message.payload);
-          this.sendConfig(this.timerManager.getConfig());
+          if (VALID_ERROR_PERSONALITIES.includes(message.payload)) {
+            this.timerManager.setErrorPersonality(message.payload);
+            this.sendConfig(this.timerManager.getConfig());
+          }
           break;
         case 'PICK_CUSTOM_AVATAR':
           await this.handlePickCustomAvatar();
@@ -98,19 +113,30 @@ export class PomoWebviewProvider implements vscode.WebviewViewProvider {
           await this.handleRemoveCustomAvatar();
           break;
         case 'TOGGLE_SOUND':
-          this.handleSoundToggle(message.payload);
+          if (typeof message.payload === 'boolean') {
+            this.handleSoundToggle(message.payload);
+          }
           break;
         case 'RESET_STATS':
           this.timerManager.resetStats();
           break;
-        case 'SET_PRESET':
-          this.timerManager.setPreset(
-            message.payload.workDuration,
-            message.payload.breakDuration
-          );
-          this.sendConfig(this.timerManager.getConfig());
-          this.sendStateChange(this.timerManager.getSnapshot());
+        case 'SET_PRESET': {
+          const work = Number(message.payload?.workDuration);
+          const brk = Number(message.payload?.breakDuration);
+          if (
+            Number.isInteger(work) &&
+            Number.isInteger(brk) &&
+            work >= 1 &&
+            work <= 240 &&
+            brk >= 1 &&
+            brk <= 240
+          ) {
+            this.timerManager.setPreset(work, brk);
+            this.sendConfig(this.timerManager.getConfig());
+            this.sendStateChange(this.timerManager.getSnapshot());
+          }
           break;
+        }
         case 'OPEN_BOTTOM_PANEL':
           await vscode.commands.executeCommand('workbench.action.closeSidebar');
           await vscode.commands.executeCommand('pomobuddy.bottomView.focus');
@@ -215,8 +241,15 @@ export class PomoWebviewProvider implements vscode.WebviewViewProvider {
         return;
       }
 
+      const ext = fileUri.path.split('.').pop()?.toLowerCase() || '';
+      if (!ALLOWED_IMAGE_EXTENSIONS.has(ext)) {
+        vscode.window.showErrorMessage(
+          'PomoBuddy: Solo se permiten archivos PNG, GIF, JPG o WebP.'
+        );
+        return;
+      }
+
       const fileBytes = await vscode.workspace.fs.readFile(fileUri);
-      const ext = fileUri.path.split('.').pop()?.toLowerCase() || 'png';
       const mime =
         ext === 'gif'
           ? 'image/gif'
@@ -240,12 +273,34 @@ export class PomoWebviewProvider implements vscode.WebviewViewProvider {
   private async handleSetCustomAvatarData(dataOrUrl: string) {
     if (!dataOrUrl || typeof dataOrUrl !== 'string') return;
     const trimmed = dataOrUrl.trim();
-    if (
-      !trimmed.startsWith('data:image/') &&
-      !trimmed.startsWith('https://') &&
-      !trimmed.startsWith('http://')
-    ) {
-      vscode.window.showErrorMessage('PomoBuddy: Formato de imagen o URL no válido.');
+
+    // 1. Límite de longitud máxima para prevenir DoS / Memory Bloat en globalState (máx. 3 MB)
+    if (trimmed.length > 3 * 1024 * 1024) {
+      vscode.window.showErrorMessage('PomoBuddy: La imagen supera el límite máximo permitido (máx. 2 MB).');
+      return;
+    }
+
+    // 2. Validación estricta de protocolo y formato seguro
+    let isValid = false;
+    if (trimmed.startsWith('https://')) {
+      // URL HTTPS válida (máximo 2048 caracteres, sin espacios ni caracteres de inyección HTML)
+      if (trimmed.length <= 2048 && !/\s|"|<|>|'/.test(trimmed)) {
+        try {
+          const parsed = new URL(trimmed);
+          isValid = parsed.protocol === 'https:';
+        } catch {
+          isValid = false;
+        }
+      }
+    } else if (trimmed.startsWith('data:image/')) {
+      // Data URI Base64 estrictamente rasterizado (png, jpeg, jpg, gif, webp). SVG descartado explícitamente para evitar scripts XML.
+      isValid = /^data:image\/(png|jpeg|jpg|gif|webp);base64,[A-Za-z0-9+/=]+$/.test(trimmed);
+    }
+
+    if (!isValid) {
+      vscode.window.showErrorMessage(
+        'PomoBuddy: Formato de imagen no válido o inseguro. Debe ser una URL HTTPS segura o imagen rasterizada (PNG, GIF, JPG, WebP).'
+      );
       return;
     }
 
@@ -300,7 +355,7 @@ export class PomoWebviewProvider implements vscode.WebviewViewProvider {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource} 'unsafe-inline'; script-src 'nonce-${nonce}'; img-src ${webview.cspSource} https: data:;">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource} 'unsafe-inline'; script-src 'nonce-${nonce}'; img-src ${webview.cspSource} https: data:; base-uri 'none'; form-action 'none';">
   <link rel="stylesheet" href="${styleUri}">
   <title>PomoBuddy Companion</title>
 </head>

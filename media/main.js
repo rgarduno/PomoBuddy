@@ -1681,7 +1681,11 @@
     customAvatarImg.onload = () => {
       const preview = document.getElementById('customAvatarPreview');
       if (preview) {
-        preview.innerHTML = `<img src="${dataUri}" alt="Custom Avatar" />`;
+        preview.textContent = '';
+        const img = document.createElement('img');
+        img.src = dataUri;
+        img.alt = 'Custom Avatar';
+        preview.appendChild(img);
       }
     };
     customAvatarImg.onerror = () => {
@@ -1695,7 +1699,11 @@
     customAvatarImg = null;
     const preview = document.getElementById('customAvatarPreview');
     if (preview) {
-      preview.innerHTML = `<span id="customPreviewPlaceholder">Sin avatar</span>`;
+      preview.textContent = '';
+      const placeholder = document.createElement('span');
+      placeholder.id = 'customPreviewPlaceholder';
+      placeholder.textContent = 'Sin avatar';
+      preview.appendChild(placeholder);
     }
   }
 
@@ -2025,7 +2033,7 @@
   }
 
   function clearConfetti() {
-    partyEffects.innerHTML = '';
+    partyEffects.textContent = '';
   }
 
   // ==========================================
@@ -2318,49 +2326,58 @@
     renderStatsBars();
   });
 
+  function createStatBarNode(title, pct, isEmpty, labelText) {
+    const col = document.createElement('div');
+    col.className = 'stat-bar-col';
+    col.title = title;
+
+    const track = document.createElement('div');
+    track.className = 'stat-bar-track';
+
+    const fill = document.createElement('div');
+    fill.className = `stat-bar-fill${isEmpty ? ' empty' : ''}`;
+    fill.style.height = isEmpty ? '0%' : `${pct}%`;
+
+    track.appendChild(fill);
+    col.appendChild(track);
+
+    const label = document.createElement('span');
+    label.className = 'stat-bar-day';
+    label.textContent = labelText;
+    col.appendChild(label);
+
+    return col;
+  }
+
   function renderStatsBars() {
     if (!cachedStats) return;
     const elBars = document.getElementById('statsBars');
     const elChartTitle = document.getElementById('statsChartTitle');
     if (!elBars) return;
 
+    elBars.textContent = '';
+
     if (currentStatsPeriod === 'weeks' && cachedStats.last4Weeks) {
       if (elChartTitle) elChartTitle.textContent = 'ÚLTIMAS 4 SEMANAS';
       const maxVal = Math.max(1, ...cachedStats.last4Weeks.map((w) => w.count));
-      elBars.innerHTML = cachedStats.last4Weeks
-        .map((w) => {
-          const pct = Math.round((w.count / maxVal) * 100);
-          const isEmpty = w.count === 0;
-          const hrs = Math.floor((w.minutes || 0) / 60);
-          const remMins = (w.minutes || 0) % 60;
-          const timeText = hrs > 0 ? `${hrs}h ${remMins}m` : `${remMins}m`;
-          return `
-            <div class="stat-bar-col" title="${w.rangeLabel}: ${w.count} pomodoros (${timeText})">
-              <div class="stat-bar-track">
-                <div class="stat-bar-fill ${isEmpty ? 'empty' : ''}" style="height: ${isEmpty ? '0%' : pct + '%'}"></div>
-              </div>
-              <span class="stat-bar-day">${w.weekLabel}</span>
-            </div>
-          `;
-        })
-        .join('');
+      cachedStats.last4Weeks.forEach((w) => {
+        const pct = Math.round((w.count / maxVal) * 100);
+        const isEmpty = w.count === 0;
+        const hrs = Math.floor((w.minutes || 0) / 60);
+        const remMins = (w.minutes || 0) % 60;
+        const timeText = hrs > 0 ? `${hrs}h ${remMins}m` : `${remMins}m`;
+        const title = `${w.rangeLabel}: ${w.count} pomodoros (${timeText})`;
+        elBars.appendChild(createStatBarNode(title, pct, isEmpty, w.weekLabel));
+      });
     } else if (cachedStats.last7Days) {
       if (elChartTitle) elChartTitle.textContent = 'ÚLTIMOS 7 DÍAS';
       const maxVal = Math.max(1, ...cachedStats.last7Days.map((d) => d.count));
-      elBars.innerHTML = cachedStats.last7Days
-        .map((d) => {
-          const pct = Math.round((d.count / maxVal) * 100);
-          const isEmpty = d.count === 0;
-          return `
-            <div class="stat-bar-col" title="${d.date}: ${d.count} pomodoros">
-              <div class="stat-bar-track">
-                <div class="stat-bar-fill ${isEmpty ? 'empty' : ''}" style="height: ${isEmpty ? '0%' : pct + '%'}"></div>
-              </div>
-              <span class="stat-bar-day">${d.dayLabel}</span>
-            </div>
-          `;
-        })
-        .join('');
+      cachedStats.last7Days.forEach((d) => {
+        const pct = Math.round((d.count / maxVal) * 100);
+        const isEmpty = d.count === 0;
+        const title = `${d.date}: ${d.count} pomodoros`;
+        elBars.appendChild(createStatBarNode(title, pct, isEmpty, d.dayLabel));
+      });
     }
   }
 

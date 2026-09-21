@@ -66,4 +66,25 @@ Este archivo registra el avance en tiempo real del proyecto. Las tareas se irán
 
 ---
 
+## 🔒 Fase 5: Auditoría y Blindaje de Seguridad Integral (Completada)
+- [x] **Eliminación Total de `innerHTML` en el Webview:**
+  - Migración a APIs seguras del DOM (`document.createElement`, `textContent`, `appendChild`).
+  - Blindaje contra inyección de HTML / XSS en previsualización de avatares personalizados.
+  - Generación de barras estadísticas de productividad usando nodos DOM nativos.
+- [x] **Validación Estricta de Payloads en WebviewProvider:**
+  - Validación con listas blancas para `CHANGE_AVATAR`, `CHANGE_BACKGROUND`, `CHANGE_SOUND_PACK`, `CHANGE_ERROR_PERSONALITY`.
+  - Validación de tipos booleanos para `TOGGLE_SOUND`.
+  - Validación de enteros y rangos acotados (1 a 240 minutos) para `SET_PRESET`.
+- [x] **Blindaje y Sanitización de Imágenes Personalizadas:**
+  - Límite estricto de tamaño de payload de 3 MB para prevenir DoS / Memory Bloat en `globalState`.
+  - Filtro estricto de extensiones en selector nativo (`png`, `gif`, `jpg`, `jpeg`, `webp`).
+  - Restricción estricta de URLs a `https://` (máx. 2048 caracteres, sin caracteres de inyección).
+  - Data URIs restringidos exclusivamente a imágenes rasterizadas base64 (`image/png`, `image/jpeg`, `image/gif`, `image/webp`), descartando XML/SVG para eliminar cualquier vector de ejecución de scripts.
+- [x] **Endurecimiento de Content Security Policy (CSP):**
+  - Adición de `base-uri 'none'` y `form-action 'none'`.
+- [x] **Sanitización de Límites en TimerManager:**
+  - Clamping estricto de duraciones (`Math.max(1, Math.min(240, ...))`) en `setPreset`.
+
+---
+
 *Archivo de seguimiento y roadmap técnico del proyecto.*
