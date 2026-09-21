@@ -222,11 +222,11 @@ Puedes ajustar tus preferencias desde el modal `⚙️ Ajustes` en la extensión
 
 ## 🤝 Contribuciones
 
-Las contribuciones, sugerencias y pull requests son bienvenidas. Si tienes ideas para nuevos avatares en pixel art, fondos de escenario o efectos de sonido, ¡no dudes en abrir un Issue o Pull Request!
+Las contribuciones, sugerencias y pull requests son bienvenidas. Si deseas diseñar un nuevo compañero en pixel art, crear nuevos escenarios o paquetes de sonido, consulta nuestra **[Guía de Contribución (CONTRIBUTING.md)](CONTRIBUTING.md)** donde se detallan las coordenadas de lienzo, emociones, animaciones y el paso a paso para integrarlo en código.
 
 1. Haz un Fork del proyecto.
 2. Crea tu rama de características (`git checkout -b feature/NuevoAvatar`).
-3. Haz Commit de tus cambios (`git commit -m 'feat: agregar nuevo avatar'`).
+3. Haz Commit de tus cambios (`git commit -m 'feat(avatar): agregar nuevo avatar'`).
 4. Haz Push a la rama (`git push origin feature/NuevoAvatar`).
 5. Abre un Pull Request.
 

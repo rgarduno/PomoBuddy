@@ -219,11 +219,11 @@ Customize your settings through the in-extension `⚙️ Settings` modal or dire
 
 ## 🤝 Contributing
 
-Contributions, issues, and feature requests are welcome! If you have ideas for new pixel art companions, stage themes, or retro sound effects, feel free to open an Issue or Pull Request:
+Contributions, issues, and feature requests are welcome! If you want to design a new pixel art companion, create ambient themes, or add sound packs, please read our comprehensive **[Contribution Guide (CONTRIBUTING.md)](CONTRIBUTING.md)** for canvas coordinate systems, emotional moods, and step-by-step code integration.
 
 1. Fork the project.
 2. Create your feature branch (`git checkout -b feature/NewCompanion`).
-3. Commit your changes (`git commit -m 'feat: add new companion'`).
+3. Commit your changes (`git commit -m 'feat(avatar): add new companion'`).
 4. Push to the branch (`git push origin feature/NewCompanion`).
 5. Open a Pull Request.
 
