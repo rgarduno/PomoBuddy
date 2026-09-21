@@ -217,17 +217,18 @@ Puedes ajustar tus preferencias desde el modal `⚙️ Ajustes` en la extensión
 
 ---
 
-## ⌨️ Comandos Disponibles
-
-| Comando | ID de Comando | Descripción |
-| :--- | :--- | :--- |
-| **Iniciar Temporizador** | `pomobuddy.start` | Comienza o reanuda la cuenta regresiva |
-| **Pausar Temporizador** | `pomobuddy.pause` | Pausa el tiempo activo |
-| **Reiniciar Intervalo** | `pomobuddy.reset` | Reinicia la ronda actual |
-| **Saltar Intervalo** | `pomobuddy.skip` | Avanza de inmediato al siguiente bloque |
-| **Silenciar / Activar Sonido** | `pomobuddy.toggleMute` | Alterna los efectos de audio retro |
-| **Abrir en Barra Lateral** | `pomobuddy.openCompanion` | Abre la vista en el panel izquierdo |
-| **Abrir en Barra Inferior** | `pomobuddy.openBottomPanel` | Abre la vista panorámica inferior |
+## ⌨️ Comandos Disponibles y Atajos de Teclado
+ 
+| Comando | ID de Comando | Atajo por Defecto (Mac / Win) | Descripción |
+| :--- | :--- | :--- | :--- |
+| **Iniciar / Pausar Pomodoro** | `pomobuddy.toggle` | `Cmd+Alt+P Espacio` / `Alt+P Espacio` | Alterna entre cuenta regresiva y pausa |
+| **Reiniciar Intervalo** | `pomobuddy.reset` | `Cmd+Alt+P R` / `Alt+P R` | Reinicia la ronda actual al tiempo completo |
+| **Saltar Intervalo** | `pomobuddy.skip` | `Cmd+Alt+P S` / `Alt+P S` | Avanza de inmediato al siguiente bloque |
+| **Silenciar / Activar Sonido** | `pomobuddy.toggleMute` | `Cmd+Alt+P M` / `Alt+P M` | Alterna los efectos de audio sintetizados |
+| **Iniciar Temporizador** | `pomobuddy.start` | — | Comienza o reanuda la cuenta regresiva |
+| **Pausar Temporizador** | `pomobuddy.pause` | — | Pausa el tiempo activo |
+| **Abrir en Barra Lateral** | `pomobuddy.openCompanion` | — | Abre la vista en el panel izquierdo |
+| **Abrir en Barra Inferior** | `pomobuddy.openBottomPanel` | — | Abre la vista panorámica inferior |
 
 ---
 

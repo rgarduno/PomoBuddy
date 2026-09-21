@@ -114,6 +114,22 @@ describe('TimerManager', () => {
       expect(snapshot.status).toBe('IDLE');
       expect(snapshot.remainingSeconds).toBe(25 * 60);
     });
+
+    it('should toggle between running and paused states', () => {
+      expect(timerManager.getStatus()).toBe('IDLE');
+
+      // Toggle from IDLE -> RUNNING
+      timerManager.toggle();
+      expect(timerManager.getStatus()).toBe('RUNNING');
+
+      // Toggle from RUNNING -> PAUSED
+      timerManager.toggle();
+      expect(timerManager.getStatus()).toBe('PAUSED');
+
+      // Toggle from PAUSED -> RUNNING
+      timerManager.toggle();
+      expect(timerManager.getStatus()).toBe('RUNNING');
+    });
   });
 
   describe('Delta Timing & Sleep Mode Resiliency', () => {

@@ -4,11 +4,20 @@
   "description": "Tu compañero de concentración en pixel art para VS Code. Temporizador Pomodoro con físicas interactivas, fondos animados, descansos festivos y reacciones en tiempo real a tu código.",
   "version": "0.1.0",
   "publisher": "rgarduno",
+  "icon": "media/icon.png",
+  "galleryBanner": {
+    "color": "#1a1a2e",
+    "theme": "dark"
+  },
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/rgarduno/PomoBuddy"
   },
+  "bugs": {
+    "url": "https://github.com/rgarduno/PomoBuddy/issues"
+  },
+  "homepage": "https://github.com/rgarduno/PomoBuddy#readme",
   "engines": {
     "vscode": "^1.85.0"
   },
@@ -77,6 +86,12 @@
         "icon": "$(debug-pause)"
       },
       {
+        "command": "pomobuddy.toggle",
+        "title": "Iniciar / Pausar Pomodoro",
+        "category": "PomoBuddy",
+        "icon": "$(play)"
+      },
+      {
         "command": "pomobuddy.reset",
         "title": "Reiniciar Pomodoro",
         "category": "PomoBuddy",
@@ -105,6 +120,28 @@
         "title": "Abrir Compañero en Barra Inferior (Panorámico)",
         "category": "PomoBuddy",
         "icon": "$(layout-panel)"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "pomobuddy.toggle",
+        "key": "alt+p space",
+        "mac": "cmd+alt+p space"
+      },
+      {
+        "command": "pomobuddy.reset",
+        "key": "alt+p r",
+        "mac": "cmd+alt+p r"
+      },
+      {
+        "command": "pomobuddy.skip",
+        "key": "alt+p s",
+        "mac": "cmd+alt+p s"
+      },
+      {
+        "command": "pomobuddy.toggleMute",
+        "key": "alt+p m",
+        "mac": "cmd+alt+p m"
       }
     ],
     "menus": {

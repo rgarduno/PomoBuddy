@@ -214,17 +214,18 @@ Customize your settings through the in-extension `⚙️ Settings` modal or dire
 
 ---
 
-## ⌨️ Available Commands
+## ⌨️ Available Commands & Keyboard Shortcuts
 
-| Command Title | Command ID | Description |
-| :--- | :--- | :--- |
-| **Start Timer** | `pomobuddy.start` | Start or resume countdown |
-| **Pause Timer** | `pomobuddy.pause` | Pause the active session |
-| **Reset Timer** | `pomobuddy.reset` | Reset current interval |
-| **Skip Interval** | `pomobuddy.skip` | Immediately jump to the next interval |
-| **Mute / Unmute Audio** | `pomobuddy.toggleMute` | Toggle 8-bit sound synthesizer |
-| **Open in Sidebar** | `pomobuddy.openCompanion` | Focus companion in the left sidebar |
-| **Open in Bottom Panel** | `pomobuddy.openBottomPanel` | Focus companion in panoramic bottom panel |
+| Command Title | Command ID | Default Shortcut (Mac / Win) | Description |
+| :--- | :--- | :--- | :--- |
+| **Start / Pause Timer** | `pomobuddy.toggle` | `Cmd+Alt+P Space` / `Alt+P Space` | Toggle countdown on or off |
+| **Reset Timer** | `pomobuddy.reset` | `Cmd+Alt+P R` / `Alt+P R` | Reset current interval to full duration |
+| **Skip Interval** | `pomobuddy.skip` | `Cmd+Alt+P S` / `Alt+P S` | Jump immediately to next interval |
+| **Mute / Unmute Audio** | `pomobuddy.toggleMute` | `Cmd+Alt+P M` / `Alt+P M` | Toggle sound synthesizer on/off |
+| **Start Timer** | `pomobuddy.start` | — | Start or resume countdown |
+| **Pause Timer** | `pomobuddy.pause` | — | Pause the active session |
+| **Open in Sidebar** | `pomobuddy.openCompanion` | — | Focus companion in the left sidebar |
+| **Open in Bottom Panel** | `pomobuddy.openBottomPanel` | — | Focus companion in panoramic bottom panel |
 
 ---
 

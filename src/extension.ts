@@ -56,6 +56,9 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand('pomobuddy.pause', () => {
       timerManager.pause();
     }),
+    vscode.commands.registerCommand('pomobuddy.toggle', () => {
+      timerManager.toggle();
+    }),
     vscode.commands.registerCommand('pomobuddy.reset', () => {
       timerManager.reset();
     }),

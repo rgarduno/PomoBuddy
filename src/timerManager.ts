@@ -178,6 +178,18 @@ export class TimerManager {
     this.advanceToNextPhase();
   }
 
+  public toggle() {
+    if (this.status === 'RUNNING') {
+      this.pause();
+    } else {
+      this.start();
+    }
+  }
+
+  public getStatus(): TimerStatus {
+    return this.status;
+  }
+
   public addExtraMinutes(minutes: number) {
     this.remainingSeconds += minutes * 60;
     if (this.status === 'RUNNING') {
