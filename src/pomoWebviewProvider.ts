@@ -20,7 +20,8 @@ export class PomoWebviewProvider implements vscode.WebviewViewProvider {
 
   constructor(
     private readonly extensionUri: vscode.Uri,
-    private readonly timerManager: TimerManager
+    private readonly timerManager: TimerManager,
+    private readonly context: vscode.ExtensionContext
   ) {}
 
   public resolveWebviewView(
@@ -83,6 +84,19 @@ export class PomoWebviewProvider implements vscode.WebviewViewProvider {
         case 'CHANGE_SOUND_PACK':
           this.timerManager.setSoundPack(message.payload);
           break;
+        case 'CHANGE_ERROR_PERSONALITY':
+          this.timerManager.setErrorPersonality(message.payload);
+          this.sendConfig(this.timerManager.getConfig());
+          break;
+        case 'PICK_CUSTOM_AVATAR':
+          await this.handlePickCustomAvatar();
+          break;
+        case 'SET_CUSTOM_AVATAR_DATA':
+          await this.handleSetCustomAvatarData(message.payload);
+          break;
+        case 'REMOVE_CUSTOM_AVATAR':
+          await this.handleRemoveCustomAvatar();
+          break;
         case 'TOGGLE_SOUND':
           this.handleSoundToggle(message.payload);
           break;
@@ -110,6 +124,13 @@ export class PomoWebviewProvider implements vscode.WebviewViewProvider {
             type: 'CONFIG_UPDATED',
             payload: this.timerManager.getConfig(),
           });
+          const customData = this.context.globalState.get<string>('pomobuddy_custom_avatar');
+          if (customData) {
+            this.postMessage({
+              type: 'CUSTOM_AVATAR_LOADED',
+              payload: customData,
+            });
+          }
           this.postMessage({
             type: 'STATE_CHANGE',
             payload: this.timerManager.getSnapshot(),
@@ -169,6 +190,76 @@ export class PomoWebviewProvider implements vscode.WebviewViewProvider {
     const updated = { ...this.timerManager.getConfig(), avatar };
     this.timerManager.updateConfig(updated);
     this.sendConfig(updated);
+    this.sendStateChange(this.timerManager.getSnapshot());
+  }
+
+  private async handlePickCustomAvatar() {
+    const uris = await vscode.window.showOpenDialog({
+      canSelectMany: false,
+      openLabel: 'Usar como Avatar',
+      filters: {
+        'Imágenes (PNG, GIF, JPG, WebP)': ['png', 'gif', 'jpg', 'jpeg', 'webp'],
+      },
+    });
+
+    if (!uris || uris.length === 0) return;
+
+    const fileUri = uris[0];
+    try {
+      const stat = await vscode.workspace.fs.stat(fileUri);
+      // Límite de seguridad de 2 MB (2 * 1024 * 1024 bytes)
+      if (stat.size > 2 * 1024 * 1024) {
+        vscode.window.showErrorMessage(
+          'PomoBuddy: La imagen seleccionada supera el límite máximo de 2 MB. Por favor elige una imagen más ligera.'
+        );
+        return;
+      }
+
+      const fileBytes = await vscode.workspace.fs.readFile(fileUri);
+      const ext = fileUri.path.split('.').pop()?.toLowerCase() || 'png';
+      const mime =
+        ext === 'gif'
+          ? 'image/gif'
+          : ext === 'jpg' || ext === 'jpeg'
+          ? 'image/jpeg'
+          : ext === 'webp'
+          ? 'image/webp'
+          : 'image/png';
+      const base64 = Buffer.from(fileBytes).toString('base64');
+      const dataUri = `data:${mime};base64,${base64}`;
+
+      await this.context.globalState.update('pomobuddy_custom_avatar', dataUri);
+      this.handleAvatarChange('custom');
+      this.postMessage({ type: 'CUSTOM_AVATAR_LOADED', payload: dataUri });
+      vscode.window.showInformationMessage('PomoBuddy: ¡Avatar personalizado cargado con éxito! 🎨');
+    } catch (err: any) {
+      vscode.window.showErrorMessage(`PomoBuddy: Error al leer la imagen: ${err?.message || err}`);
+    }
+  }
+
+  private async handleSetCustomAvatarData(dataOrUrl: string) {
+    if (!dataOrUrl || typeof dataOrUrl !== 'string') return;
+    const trimmed = dataOrUrl.trim();
+    if (
+      !trimmed.startsWith('data:image/') &&
+      !trimmed.startsWith('https://') &&
+      !trimmed.startsWith('http://')
+    ) {
+      vscode.window.showErrorMessage('PomoBuddy: Formato de imagen o URL no válido.');
+      return;
+    }
+
+    await this.context.globalState.update('pomobuddy_custom_avatar', trimmed);
+    this.handleAvatarChange('custom');
+    this.postMessage({ type: 'CUSTOM_AVATAR_LOADED', payload: trimmed });
+    vscode.window.showInformationMessage('PomoBuddy: ¡Avatar personalizado actualizado! 🎨');
+  }
+
+  private async handleRemoveCustomAvatar() {
+    await this.context.globalState.update('pomobuddy_custom_avatar', undefined);
+    this.handleAvatarChange('neko');
+    this.postMessage({ type: 'CUSTOM_AVATAR_LOADED', payload: '' });
+    vscode.window.showInformationMessage('PomoBuddy: Avatar personalizado eliminado. Regresando a NekoDev.');
   }
 
   private handleBackgroundChange(background: BackgroundTheme) {
@@ -303,6 +394,63 @@ export class PomoWebviewProvider implements vscode.WebviewViewProvider {
                 <span class="avatar-emoji">🦝</span>
                 <span class="avatar-name">Byte</span>
               </button>
+              <button class="avatar-btn" data-avatar="custom" title="Custom Avatar Studio (Carga tu propio PNG o GIF)">
+                <span class="avatar-emoji">🎨</span>
+                <span class="avatar-name">Custom</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Custom Avatar Studio -->
+          <div class="settings-group custom-studio-card" id="customAvatarStudio">
+            <div class="custom-studio-header">
+              <span class="settings-label">🎨 CUSTOM AVATAR STUDIO</span>
+              <span class="custom-studio-tag">Retro Scaler</span>
+            </div>
+            <div class="custom-studio-content">
+              <div class="custom-preview-row">
+                <div class="custom-preview-box" id="customAvatarPreview">
+                  <span id="customPreviewPlaceholder">Sin avatar</span>
+                </div>
+                <div class="custom-buttons-col">
+                  <button class="custom-action-btn primary" id="btnPickAvatarFile" title="Seleccionar archivo PNG o GIF (Máx 2 MB)">
+                    📁 Cargar archivo (PNG/GIF)
+                  </button>
+                  <button class="custom-action-btn danger" id="btnRemoveCustomAvatar" title="Quitar avatar y volver a NekoDev">
+                    🗑️ Quitar avatar
+                  </button>
+                </div>
+              </div>
+              <div class="custom-url-row">
+                <input type="text" id="inputCustomAvatarUrl" class="custom-url-input" placeholder="https://.../avatar.png o GIF" />
+                <button class="custom-action-btn secondary" id="btnApplyCustomUrl">Cargar URL</button>
+              </div>
+              <div class="custom-studio-note">
+                Soporta PNG y GIF animado (máx. 2 MB). Se escala y procesa automáticamente con suavizado retro pixel art.
+              </div>
+            </div>
+          </div>
+
+          <!-- Personalidad ante Errores -->
+          <div class="settings-group">
+            <label class="settings-label">PERSONALIDAD ANTE ERRORES (LINTER/BUGS)</label>
+            <div class="personality-selector">
+              <button class="personality-btn active" data-personality="roast" title="Roast My Code: Comentarios sarcásticos y cómicos ante errores">
+                <span class="personality-emoji">🔥</span>
+                <span class="personality-name">Roast</span>
+              </button>
+              <button class="personality-btn" data-personality="detective" title="Detective: Inspección minuciosa con lupa pixel art y deducción">
+                <span class="personality-emoji">🔍</span>
+                <span class="personality-name">Detective</span>
+              </button>
+              <button class="personality-btn" data-personality="panic" title="Pánico: ¡Alarma de incendio! Extintor retro rociando espuma">
+                <span class="personality-emoji">🧯</span>
+                <span class="personality-name">Pánico</span>
+              </button>
+              <button class="personality-btn" data-personality="classic" title="Clásica: Diálogos originales del personaje">
+                <span class="personality-emoji">🐱</span>
+                <span class="personality-name">Clásica</span>
+              </button>
             </div>
           </div>
 
@@ -378,17 +526,17 @@ export class PomoWebviewProvider implements vscode.WebviewViewProvider {
           <div class="settings-group">
             <label class="settings-label">PAQUETE DE SONIDO (AUDIO PACK)</label>
             <div class="sound-selector">
-              <button class="sound-pack-btn active" data-sound="arcade" title="Chiptunes clásicos de 8-bit y arpegios alegres">
+              <button class="sound-pack-btn active" data-sound="arcade" title="Arcade 16-bit: Clásicos pitidos retro y arpegios chiptune">
                 <span class="sound-emoji">👾</span>
-                <span class="sound-name">Arcade 8-bit</span>
+                <span class="sound-name">Arcade 16-bit</span>
               </button>
-              <button class="sound-pack-btn" data-sound="zen" title="Cuenco tibetano armónico y campana relajante">
-                <span class="sound-emoji">🧘‍♂️</span>
-                <span class="sound-name">Zen Bowl</span>
+              <button class="sound-pack-btn" data-sound="zen" title="Lo-Fi Chill: Campana tibia armónica y acordes suaves estilo cuenco tibetano">
+                <span class="sound-emoji">☕</span>
+                <span class="sound-name">Lo-Fi Chill</span>
               </button>
-              <button class="sound-pack-btn" data-sound="cyber" title="Chimes cristalinos estilo sintetizador futurista">
+              <button class="sound-pack-btn" data-sound="cyber" title="Synthwave / Cyberpunk: Sintetizador analógico con modulación FM">
                 <span class="sound-emoji">🌆</span>
-                <span class="sound-name">Cyber Chime</span>
+                <span class="sound-name">Cyberpunk</span>
               </button>
             </div>
           </div>

@@ -50,6 +50,39 @@
   let animTick = 0;
   let currentMood = 'IDLE'; // 'IDLE', 'WORK', 'DANCE', 'ERROR', 'SAVED', 'CYCLE'
   let moodTimeout = null;
+  let currentErrorPersonality = 'roast'; // 'roast', 'detective', 'panic', 'classic'
+  let customAvatarData = null;
+  let customAvatarImg = null;
+  let foamParticles = [];
+
+  // Frases especiales según la personalidad ante errores
+  const errorQuotesByPersonality = {
+    roast: [
+      '¿Escribiste esto con los ojos cerrados o qué? 💀',
+      'Ese bug tiene más años que el legado de COBOL... 🤦‍♂️',
+      'El compilador está llorando en una esquina por esa línea 😭',
+      'Premio al código espagueti del año 🍝',
+      '¿Quién te hizo tanto daño para escribir ese null pointer? 🙃',
+      'No es un feature, es un crimen de guerra digital 💥',
+      'Hasta un mono aporreando teclas tendría menos warnings 🐒',
+    ],
+    detective: [
+      '¡Elemental! Detecto una irregularidad en esta línea 🔍',
+      'Siguiendo el rastro del stack trace sospechoso... 🕵️‍♂️',
+      'El mayordomo fue el linter, caso casi resuelto 🔎',
+      'Inspeccionando huellas dactilares del bug... 🧐',
+      'Pista clave: falta un paréntesis o punto y coma 📜',
+      'Un crimen de sintaxis no queda impune en mi guardia 🔦',
+    ],
+    panic: [
+      '¡FUEGO EN PRODUCCIÓN! ¡TRAIGAN EL EXTINTOR! 🧯🔥',
+      '¡CÓDIGO EN LLAMAS! ¡SÁLVESE QUIEN PUEDA! 🚨🚒',
+      '¡TODO ESTÁ ARDIENDO! ¡ROCÍA ESPUMA POR TODAS PARTES! 💨',
+      '¡EMERGENCIA NIVEL 5! ¡COMPILACIÓN EXPLOSIVA! 💥',
+      '¡ALERTA ROJA! ¡EL SERVIDOR VA A COLAPSAR! 🌋',
+      '¡EVACUEN EL ARCHIVO! ¡LOS BUGS NOS RODEAN! 🧯',
+    ],
+  };
 
   // Frases de diálogo personalizadas por cada personaje
   const quotesByAvatar = {
@@ -161,9 +194,31 @@
       fixed: '¡Bug neutralizado como un profesional! ✨',
       saved: '¡Datos asegurados en la bóveda secreta! 👍',
     },
+    custom: {
+      work: [
+        '¡Tu compañero personalizado dándolo todo! 🎨💻',
+        'Enfocado al 100% en este bloque Pomodoro 🚀',
+        'Cero distracciones, puro código limpio ✨',
+        'Avanzando juntos hacia el próximo commit ☕',
+      ],
+      dance: [
+        '¡A mover el esqueleto! ¡Descanso merecido! 🕺',
+        '¡Fiesta retro con tu avatar custom! 🎉',
+        '¡Pausa para estirarse y respirar hondo! 🧘‍♂️',
+      ],
+      error: '¡Ups! Algo se rompió en el archivo activo 😵‍💫',
+      fixed: '¡Bug aniquilado con estilo! ✨',
+      saved: '¡Archivo guardado a salvo! 👍',
+    },
   };
 
   function getRandomQuote(category) {
+    if (category === 'error' && currentErrorPersonality !== 'classic') {
+      const list = errorQuotesByPersonality[currentErrorPersonality];
+      if (list && list.length > 0) {
+        return list[Math.floor(Math.random() * list.length)];
+      }
+    }
     const charQuotes = quotesByAvatar[currentAvatar] || quotesByAvatar.neko;
     const list = charQuotes[category];
     if (Array.isArray(list)) {
@@ -1440,7 +1495,210 @@
     }
   }
 
-  // Bucle principal de renderizado gráfico
+  // --- RENDERIZADO DE AVATAR PERSONALIZADO (CUSTOM AVATAR STUDIO) ---
+  function drawCustomAvatar(step, mood, walking, sitting) {
+    const isDancing = mood === 'DANCE';
+    let bob = walking ? Math.floor(Math.sin(step * 0.3) * 1.5) : Math.floor(Math.sin(step * 0.12));
+    let danceOffset = isDancing ? Math.sin(step * 0.35) * 3 : 0;
+    let xOffset = Math.round(avatarX + danceOffset);
+    let yOffset = Math.round(18 + jumpY + (sitting ? 1 : bob));
+    currentAvatarOriginX = xOffset;
+
+    if (!customAvatarImg || !customAvatarImg.complete || customAvatarImg.naturalWidth === 0) {
+      // Fallback a Neko si no hay imagen personalizada activa
+      drawNeko(step, mood, walking, sitting);
+      return;
+    }
+
+    ctx.save();
+    ctx.imageSmoothingEnabled = false;
+
+    // Escalar la imagen respetando proporciones a resolución retro pixelada (~22x22 px virtuales)
+    const maxDimension = 22 * PIXEL_SCALE;
+    const aspect = customAvatarImg.naturalWidth / customAvatarImg.naturalHeight;
+    let drawW, drawH;
+    if (aspect >= 1) {
+      drawW = maxDimension;
+      drawH = maxDimension / aspect;
+    } else {
+      drawH = maxDimension;
+      drawW = maxDimension * aspect;
+    }
+
+    const centerX = xOffset * PIXEL_SCALE;
+    const baseY = (yOffset + 6) * PIXEL_SCALE; // alineado al suelo/patas
+    const drawX = centerX - drawW / 2;
+    const drawY = baseY - drawH;
+
+    if (facingDir === -1) {
+      ctx.translate(centerX, 0);
+      ctx.scale(-1, 1);
+      ctx.translate(-centerX, 0);
+    }
+
+    ctx.drawImage(customAvatarImg, drawX, drawY, drawW, drawH);
+
+    // Si está bailando en descanso, añadir gafas retro de fiesta
+    if (isDancing) {
+      const eyeY = yOffset - 3;
+      for (let g = -3; g <= 3; g++) p(xOffset + g, eyeY, '#111111');
+      p(xOffset - 2, eyeY + 1, '#00e5ff');
+      p(xOffset + 2, eyeY + 1, '#00e5ff');
+    }
+
+    ctx.restore();
+  }
+
+  // --- EFECTOS VISUALES DE PERSONALIDAD ANTE ERRORES ---
+  function drawMagnifyingGlass(vx, vy, step) {
+    const glassX = vx + (facingDir === 1 ? 7 : -7);
+    const glassY = vy - 1 + Math.floor(Math.sin(step * 0.2) * 1.5);
+    const WOOD = '#795548';
+    const GOLD = '#ffd700';
+    const CYAN = '#00e5ff';
+    const WHITE = '#ffffff';
+
+    // Mango de madera
+    p(glassX + (facingDir === 1 ? 3 : -3), glassY + 3, WOOD);
+    p(glassX + (facingDir === 1 ? 2 : -2), glassY + 2, WOOD);
+    p(glassX + (facingDir === 1 ? 1 : -1), glassY + 1, GOLD);
+
+    // Marco circular de la lupa
+    p(glassX - 1, glassY - 2, GOLD);
+    p(glassX, glassY - 2, GOLD);
+    p(glassX + 1, glassY - 2, GOLD);
+    p(glassX - 2, glassY - 1, GOLD);
+    p(glassX + 2, glassY - 1, GOLD);
+    p(glassX - 2, glassY, GOLD);
+    p(glassX + 2, glassY, GOLD);
+    p(glassX - 1, glassY + 1, GOLD);
+    p(glassX, glassY + 1, GOLD);
+    p(glassX + 1, glassY + 1, GOLD);
+
+    // Cristal y destello reflectivo
+    p(glassX - 1, glassY - 1, WHITE);
+    p(glassX, glassY - 1, CYAN);
+    p(glassX + 1, glassY - 1, CYAN);
+    p(glassX - 1, glassY, CYAN);
+    p(glassX, glassY, CYAN);
+    p(glassX + 1, glassY, CYAN);
+  }
+
+  function drawFireExtinguisherAndFoam(vx, vy, step) {
+    const extX = vx + (facingDir === 1 ? 5 : -5);
+    const extY = vy + 1;
+    const RED = '#d63031';
+    const DARK = '#2d3436';
+    const GOLD = '#ffd700';
+    const GRAY = '#b2bec3';
+
+    // Cilindro rojo del extintor
+    for (let x = -1; x <= 1; x++) {
+      for (let y = 0; y <= 3; y++) {
+        p(extX + x, extY + y, RED);
+      }
+    }
+    // Válvula, manómetro y manguera
+    p(extX, extY - 1, DARK);
+    p(extX - (facingDir === 1 ? 1 : -1), extY - 1, GOLD);
+    p(extX + (facingDir === 1 ? 2 : -2), extY - 1, GRAY);
+    p(extX + (facingDir === 1 ? 3 : -3), extY, GRAY);
+
+    // Fuego en el suelo
+    const fireX = vx + (facingDir === 1 ? 14 : -14);
+    const fireY = 22;
+    const flicker = step % 4;
+    p(fireX, fireY, '#ff4757');
+    p(fireX - 1, fireY, '#ff4757');
+    p(fireX + 1, fireY, '#ff4757');
+    p(fireX, fireY - 1 - (flicker % 2), '#ffa502');
+    p(fireX + (flicker > 1 ? 1 : -1), fireY - 1, '#fffa65');
+    if (flicker === 2) p(fireX, fireY - 2, '#fffa65');
+
+    // Chorro de partículas de espuma blanca
+    if (step % 2 === 0) {
+      foamParticles.push({
+        x: extX + (facingDir === 1 ? 4 : -4),
+        y: extY,
+        vx: (facingDir === 1 ? 1.4 : -1.4) + (Math.random() - 0.5) * 0.4,
+        vy: -0.4 + (Math.random() - 0.5) * 0.3,
+        size: Math.random() > 0.4 ? 2 : 1,
+        life: 18 + Math.floor(Math.random() * 8),
+        color: Math.random() > 0.25 ? '#ffffff' : '#70a1ff',
+      });
+    }
+  }
+
+  function updateAndDrawFoamParticles() {
+    for (let i = foamParticles.length - 1; i >= 0; i--) {
+      const fp = foamParticles[i];
+      fp.x += fp.vx;
+      fp.y += fp.vy;
+      fp.vy += 0.05; // gravedad suave
+      fp.life--;
+      ctx.fillStyle = fp.color;
+      ctx.fillRect(
+        Math.round(fp.x) * PIXEL_SCALE,
+        Math.round(fp.y) * PIXEL_SCALE,
+        fp.size * PIXEL_SCALE,
+        fp.size * PIXEL_SCALE
+      );
+      if (fp.life <= 0) {
+        foamParticles.splice(i, 1);
+      }
+    }
+  }
+
+  function drawRoastSkull(vx, vy, step) {
+    const skullX = vx;
+    const skullY = vy - 10 + Math.floor(Math.sin(step * 0.25) * 1.5);
+    const WHITE = '#ffffff';
+    const DARK = '#111111';
+    const FLAME = step % 2 === 0 ? '#ff4757' : '#ffa502';
+
+    // Llamita de roast sobre la cabeza
+    p(skullX, skullY - 3, FLAME);
+    p(skullX - 1, skullY - 2, FLAME);
+    p(skullX + 1, skullY - 2, FLAME);
+
+    // Calaverita pixel art
+    for (let x = -2; x <= 2; x++) {
+      for (let y = -1; y <= 1; y++) {
+        p(skullX + x, skullY + y, WHITE);
+      }
+    }
+    p(skullX - 1, skullY, DARK);
+    p(skullX + 1, skullY, DARK);
+    p(skullX - 1, skullY + 2, WHITE);
+    p(skullX, skullY + 2, DARK);
+    p(skullX + 1, skullY + 2, WHITE);
+  }
+
+  function loadCustomAvatarFromDataUri(dataUri) {
+    if (!dataUri) return;
+    customAvatarData = dataUri;
+    customAvatarImg = new Image();
+    customAvatarImg.onload = () => {
+      const preview = document.getElementById('customAvatarPreview');
+      if (preview) {
+        preview.innerHTML = `<img src="${dataUri}" alt="Custom Avatar" />`;
+      }
+    };
+    customAvatarImg.onerror = () => {
+      setDialogue('Error al procesar la imagen del avatar.');
+    };
+    customAvatarImg.src = dataUri;
+  }
+
+  function clearCustomAvatar() {
+    customAvatarData = null;
+    customAvatarImg = null;
+    const preview = document.getElementById('customAvatarPreview');
+    if (preview) {
+      preview.innerHTML = `<span id="customPreviewPlaceholder">Sin avatar</span>`;
+    }
+  }
+
   // Bucle principal de renderizado gráfico y simulación física
   function renderLoop() {
     animTick++;
@@ -1609,12 +1867,33 @@
         case 'raccoon':
           drawRaccoon(animTick, activeMood, isWalking, isSittingInChair);
           break;
+        case 'custom':
+          drawCustomAvatar(animTick, activeMood, isWalking, isSittingInChair);
+          break;
         case 'neko':
         default:
           drawNeko(animTick, activeMood, isWalking, isSittingInChair);
           break;
       }
     }
+
+    // 5.1 Reacciones visuales de personalidades ante errores
+    if (activeMood === 'ERROR') {
+      const originX = avatarX;
+      const originY = Math.round(
+        18 + jumpY + (isSittingInChair ? 1 : isWalking ? Math.floor(Math.sin(animTick * 0.3) * 1.5) : Math.floor(Math.sin(animTick * 0.12)))
+      );
+      if (currentErrorPersonality === 'detective') {
+        drawMagnifyingGlass(originX, originY, animTick);
+      } else if (currentErrorPersonality === 'panic') {
+        drawFireExtinguisherAndFoam(originX, originY, animTick);
+      } else if (currentErrorPersonality === 'roast') {
+        drawRoastSkull(originX, originY, animTick);
+      }
+    }
+
+    // 5.2 Actualizar y dibujar partículas de espuma de extintor
+    updateAndDrawFoamParticles();
 
     // 6. Dibujar partículas de interacción
     updateAndDrawParticles();
@@ -1945,7 +2224,9 @@
             ? 'Sir Ducky 🦆'
             : newAvatar === 'capy'
             ? 'CapyDev ☕'
-            : 'Byte 🦝';
+            : newAvatar === 'raccoon'
+            ? 'Byte 🦝'
+            : 'Custom Avatar 🎨';
         setDialogue(`¡Hola! Ahora soy tu compañero ${nameLabel}! Listo para programar.`);
       }
     });
@@ -2052,6 +2333,54 @@
     }
   }
 
+  // --- CUSTOM AVATAR STUDIO LISTENERS ---
+  const btnPickAvatarFile = document.getElementById('btnPickAvatarFile');
+  btnPickAvatarFile?.addEventListener('click', () => {
+    playClick();
+    vscode.postMessage({ type: 'PICK_CUSTOM_AVATAR' });
+  });
+
+  const btnRemoveCustomAvatar = document.getElementById('btnRemoveCustomAvatar');
+  btnRemoveCustomAvatar?.addEventListener('click', () => {
+    playClick();
+    clearCustomAvatar();
+    vscode.postMessage({ type: 'REMOVE_CUSTOM_AVATAR' });
+    setDialogue('Avatar personalizado eliminado. ¡Hola de nuevo, NekoDev! 🐱');
+  });
+
+  const btnApplyCustomUrl = document.getElementById('btnApplyCustomUrl');
+  const inputCustomAvatarUrl = document.getElementById('inputCustomAvatarUrl');
+  btnApplyCustomUrl?.addEventListener('click', () => {
+    playClick();
+    const url = inputCustomAvatarUrl?.value?.trim();
+    if (url) {
+      vscode.postMessage({ type: 'SET_CUSTOM_AVATAR_DATA', payload: url });
+      setDialogue('Cargando avatar desde URL... 🎨');
+    }
+  });
+
+  // --- SELECTOR DE PERSONALIDAD ANTE ERRORES ---
+  const personalityButtons = document.querySelectorAll('.personality-btn');
+  personalityButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      playClick();
+      const p = btn.getAttribute('data-personality');
+      if (p) {
+        currentErrorPersonality = p;
+        personalityButtons.forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        vscode.postMessage({ type: 'CHANGE_ERROR_PERSONALITY', payload: p });
+        const labels = {
+          roast: 'Modo Roast My Code: ¡humor sarcástico ante bugs! 🔥💀',
+          detective: 'Modo Detective: lupa de aumento pixel art 🔍🕵️‍♂️',
+          panic: 'Modo Pánico: extintores y alarma de incendios 🧯🚨',
+          classic: 'Modo Clásico: reacciones estándar del compañero 🐱',
+        };
+        setDialogue(labels[p] || 'Personalidad actualizada');
+      }
+    });
+  });
+
   // ==========================================
   // 5. RECEPCIÓN DE MENSAJES DE LA EXTENSIÓN
   // ==========================================
@@ -2116,6 +2445,12 @@
             2000
           );
         }
+      case 'CUSTOM_AVATAR_LOADED':
+        if (message.payload) {
+          loadCustomAvatarFromDataUri(message.payload);
+        } else {
+          clearCustomAvatar();
+        }
         break;
 
       case 'CONFIG_UPDATED':
@@ -2163,6 +2498,23 @@
               b.classList.remove('active');
             }
           });
+        }
+
+        // Actualizar personalidad ante errores
+        if (cfg.errorPersonality) {
+          currentErrorPersonality = cfg.errorPersonality;
+          personalityButtons.forEach((b) => {
+            if (b.getAttribute('data-personality') === currentErrorPersonality) {
+              b.classList.add('active');
+            } else {
+              b.classList.remove('active');
+            }
+          });
+        }
+
+        // Cargar avatar custom si viene en la configuración
+        if (cfg.customAvatarData && !customAvatarImg) {
+          loadCustomAvatarFromDataUri(cfg.customAvatarData);
         }
         break;
     }

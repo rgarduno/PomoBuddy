@@ -20,6 +20,7 @@ describe('TimerManager', () => {
       soundPack: 'arcade',
       avatar: 'neko',
       background: 'winter',
+      errorPersonality: 'roast',
     };
 
     mockMemento = new MockMemento();
@@ -51,6 +52,16 @@ describe('TimerManager', () => {
     it('should update sound pack via setSoundPack', () => {
       timerManager.setSoundPack('zen');
       expect(timerManager.getConfig().soundPack).toBe('zen');
+    });
+
+    it('should update error personality via setErrorPersonality', () => {
+      timerManager.setErrorPersonality('detective');
+      expect(timerManager.getConfig().errorPersonality).toBe('detective');
+    });
+
+    it('should support setting custom avatar via updateConfig', () => {
+      timerManager.updateConfig({ ...config, avatar: 'custom' });
+      expect(timerManager.getSnapshot().avatar).toBe('custom');
     });
   });
 

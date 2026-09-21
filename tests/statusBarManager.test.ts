@@ -103,6 +103,22 @@ describe('StatusBarManager', () => {
     expect(mockItem.text).toContain('$(star-full) ☕ 14:10 [Descanso Largo 🌟]');
   });
 
+  it('should display custom avatar with palette emoji', () => {
+    const snapshot: TimerSnapshot = {
+      mode: 'WORK',
+      status: 'IDLE',
+      remainingSeconds: 25 * 60,
+      totalSeconds: 25 * 60,
+      currentRound: 1,
+      totalRounds: 4,
+      completedRounds: 0,
+      avatar: 'custom',
+    };
+
+    statusBarManager.update(snapshot);
+    expect(mockItem.text).toContain('PomoBuddy: 🎨 Pomodoro listo (25:00)');
+  });
+
   it('should call dispose on the underlying status bar item', () => {
     statusBarManager.dispose();
     expect(mockItem.dispose).toHaveBeenCalled();

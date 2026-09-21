@@ -8,6 +8,7 @@ const AVATAR_EMOJIS: Record<AvatarId, string> = {
   duck: '🦆',
   capy: '☕',
   raccoon: '🦝',
+  custom: '🎨',
 };
 
 export class StatusBarManager {

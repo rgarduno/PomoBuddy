@@ -39,27 +39,30 @@ Este archivo registra el avance en tiempo real del proyecto. Las tareas se irán
 
 ---
 
-## 💎 Fase 4: Capa de Pago (Pro / Premium)
-- [ ] **Módulo de Licencias (License Manager):** Validación de License Keys conectadas a Gumroad / LemonSqueezy con soporte offline (firma criptográfica o caché con 30 días de gracia).
-- [ ] **Custom Avatar Studio (Sube tu avatar):**
-  - [ ] Cargar archivo GIF animado o PNG desde disco local o URL.
-  - [ ] Sanitización y validación de seguridad (límite de peso 2 MB, redimensionamiento automático a resolución retro).
-- [ ] **Personalidades del Avatar ante Errores:**
-  - [ ] Modo Roast My Code / Sarcástico (comentarios mordaces ante bugs).
-  - [ ] Modo Detective (inspección con lupa).
-  - [ ] Modo Pánico con Extintor de Incendios.
-- [x] **Sound Packs Temáticos Sintetizados:**
-  - [x] Pack Zen / Cuenco Tibetano Armónico (tonos meditativos con caída exponencial suave).
-  - [x] Pack Synthwave / Cyberpunk (tonos analógicos contundentes).
-  - [x] Pack Arcade 8-bit Clásico (pitidos estilo NES/GameBoy).
-- [ ] **Modos de Visualización Flexibles:**
-  - [ ] **Mascota Flotante de Escritorio (Desktop Overlay):** Mini ventana transparente Always-On-Top que camina libremente por encima de cualquier ventana y de tu código.
-  - [ ] Modo pestaña completa del editor (Full Editor View para segundo monitor).
-  - [x] Modo mini-avatar dinámico en la barra de estado (`🐱`, `🧙‍♂️`, `🤖`, `🦆`, `☕`, `🦝`).
+## 🚀 Fase 4: Custom Avatar Studio, Personalidades de Error y 100% Open Source (Completada)
+- [x] **100% Free & Open Source (Licencia MIT):** Eliminación total de capas de pago y licencias comerciales; todas las características son libres y gratuitas para la comunidad.
+- [x] **Custom Avatar Studio (Sube tu propio avatar):**
+  - [x] Cargar archivo GIF animado o PNG desde disco local vía diálogo nativo de archivos.
+  - [x] Cargar imagen desde URL directa.
+  - [x] Sanitización y validación de seguridad (límite estricto de 2 MB, redimensionamiento automático a resolución retro, prevención de desbordamiento de memoria).
+  - [x] Integración total con físicas: caminata, persecución de pelota 🎾, salto acrobático y sillita de descanso.
+- [x] **Personalidades del Avatar ante Errores de Código:**
+  - [x] **Modo Roast My Code / Sarcástico:** Comentarios mordaces ante bugs con calavera pixel art y aura de fuego.
+  - [x] **Modo Detective:** Inspección deductiva con lupa pixel art animada buscando la causa raíz del error.
+  - [x] **Modo Pánico con Extintor:** Extintor pixel art con chorro animado de partículas de espuma física y fuego en el suelo.
+  - [x] **Modo Clásico:** Expresiones y frases características de cada compañero.
+- [x] **Paquetes de Sonido Temáticos Sintetizados (Web Audio API):**
+  - [x] **Arcade 16-bit 👾:** Chiptune nostálgico con pitidos y fanfarrias retro.
+  - [x] **Lo-Fi Chill ☕:** Tonos armónicos relajantes con decaimiento suave estilo cuenco zen.
+  - [x] **Synthwave / Cyberpunk 🌆:** Tonos analógicos con ataque rápido y modulación envolvente.
 - [x] **Métricas y Estadísticas de Productividad:**
   - [x] Pomodoros completados hoy y minutos acumulados de trabajo profundo.
   - [x] Contador de racha de días consecutivos de productividad.
   - [x] Gráfico mini de barras de los últimos 7 días con botón de reinicio.
+- [x] **Modos de Visualización Flexibles:**
+  - [x] Barra lateral clásica (Sidebar).
+  - [x] Barra inferior panorámica (Bottom Panel) de ancho completo.
+  - [x] Mini-avatar dinámico en la barra de estado (`🐱`, `🧙‍♂️`, `🤖`, `🦆`, `☕`, `🦝`, `🎨`).
 
 ---
 

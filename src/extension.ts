@@ -3,14 +3,14 @@ import { TimerManager } from './timerManager';
 import { StatusBarManager } from './statusBarManager';
 import { IdeEventsListener } from './ideEvents';
 import { PomoWebviewProvider } from './pomoWebviewProvider';
-import { AvatarId, BackgroundTheme, PomodoroConfig, SoundPack } from './types';
+import { AvatarId, BackgroundTheme, ErrorPersonality, PomodoroConfig, SoundPack } from './types';
 
 export function activate(context: vscode.ExtensionContext) {
-  const config = getExtensionConfig();
+  const config = getExtensionConfig(context);
   const timerManager = new TimerManager(config, context.globalState);
   const statusBarManager = new StatusBarManager();
   const ideEventsListener = new IdeEventsListener();
-  const webviewProvider = new PomoWebviewProvider(context.extensionUri, timerManager);
+  const webviewProvider = new PomoWebviewProvider(context.extensionUri, timerManager, context);
 
   // Registrar Webview Provider para la barra lateral y el panel inferior
   context.subscriptions.push(
@@ -87,7 +87,7 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.workspace.onDidChangeConfiguration((e) => {
       if (e.affectsConfiguration('pomobuddy')) {
-        const updatedConfig = getExtensionConfig();
+        const updatedConfig = getExtensionConfig(context);
         timerManager.updateConfig(updatedConfig);
         webviewProvider.sendConfig(updatedConfig);
       }
@@ -101,7 +101,7 @@ export function activate(context: vscode.ExtensionContext) {
   statusBarManager.update(timerManager.getSnapshot());
 }
 
-function getExtensionConfig(): PomodoroConfig {
+function getExtensionConfig(context: vscode.ExtensionContext): PomodoroConfig {
   const wsConfig = vscode.workspace.getConfiguration('pomobuddy');
   return {
     workDuration: wsConfig.get<number>('workDuration', 25),
@@ -112,6 +112,8 @@ function getExtensionConfig(): PomodoroConfig {
     avatar: wsConfig.get<AvatarId>('avatar', 'neko'),
     background: wsConfig.get<BackgroundTheme>('background', 'winter'),
     soundPack: wsConfig.get<SoundPack>('soundPack', 'arcade'),
+    errorPersonality: wsConfig.get<ErrorPersonality>('errorPersonality', 'roast'),
+    customAvatarData: context.globalState.get<string>('pomobuddy_custom_avatar'),
   };
 }
 

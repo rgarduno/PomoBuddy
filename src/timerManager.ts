@@ -1,6 +1,9 @@
 import * as vscode from 'vscode';
 import {
+  AvatarId,
+  ErrorPersonality,
   DayStat,
+  IdeReactionType,
   PomodoroConfig,
   ProductivityStats,
   SoundPack,
@@ -318,6 +321,12 @@ export class TimerManager {
     this.config.soundPack = soundPack;
     const wsConfig = vscode.workspace.getConfiguration('pomobuddy');
     wsConfig.update('soundPack', soundPack, vscode.ConfigurationTarget.Global);
+  }
+
+  public setErrorPersonality(personality: ErrorPersonality) {
+    this.config.errorPersonality = personality;
+    const wsConfig = vscode.workspace.getConfiguration('pomobuddy');
+    wsConfig.update('errorPersonality', personality, vscode.ConfigurationTarget.Global);
   }
 
   public recordCompletedPomodoro() {

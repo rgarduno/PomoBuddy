@@ -157,10 +157,11 @@
             "robot",
             "duck",
             "capy",
-            "raccoon"
+            "raccoon",
+            "custom"
           ],
           "default": "neko",
-          "description": "Avatar activo en pixel art (neko, wizard, robot, duck, capy, raccoon)"
+          "description": "Avatar activo (neko, wizard, robot, duck, capy, raccoon, custom)"
         },
         "pomobuddy.background": {
           "type": "string",
@@ -182,7 +183,18 @@
             "cyber"
           ],
           "default": "arcade",
-          "description": "Estilo de efectos de sonido sintetizados (arcade, zen, cyber)"
+          "description": "Paquete de sonidos sintetizados: arcade (Arcade 16-bit), zen (Lo-Fi Chill), cyber (Synthwave/Cyberpunk)"
+        },
+        "pomobuddy.errorPersonality": {
+          "type": "string",
+          "enum": [
+            "roast",
+            "detective",
+            "panic",
+            "classic"
+          ],
+          "default": "roast",
+          "description": "Personalidad del avatar ante errores de sintaxis o linter: roast (sarcástico), detective (lupa inspectora), panic (extintor de incendios), classic (reacción base)"
         }
       }
     }

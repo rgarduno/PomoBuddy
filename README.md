@@ -8,7 +8,7 @@
   <a href="https://github.com/rgarduno/PomoBuddy/releases"><img src="https://img.shields.io/badge/version-0.1.0-2ecc71.svg?style=for-the-badge" alt="Version 0.1.0" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-f1c40f.svg?style=for-the-badge" alt="License MIT" /></a>
   <a href="https://github.com/rgarduno/PomoBuddy/pulls"><img src="https://img.shields.io/badge/PRs-welcome-blueviolet.svg?style=for-the-badge" alt="PRs Welcome" /></a>
-  <a href="https://github.com/rgarduno/PomoBuddy"><img src="https://img.shields.io/badge/tests-22%20passed-brightgreen.svg?style=for-the-badge&logo=jest&logoColor=white" alt="Tests" /></a>
+  <a href="https://github.com/rgarduno/PomoBuddy"><img src="https://img.shields.io/badge/tests-29%20passed-brightgreen.svg?style=for-the-badge&logo=jest&logoColor=white" alt="Tests" /></a>
   <a href="https://github.com/rgarduno/PomoBuddy"><img src="https://img.shields.io/badge/size-%3C60KB-success.svg?style=for-the-badge" alt="Package Size" /></a>
 </p>
 
@@ -33,9 +33,9 @@ Instead of boring countdown digits or disruptive notification chimes, PomoBuddy 
 
 ---
 
-## 🐾 Companion Roster (6 Avatars)
+## 🐾 Companion Roster (6 Avatars + Custom Avatar Studio)
 
-Choose your favorite companion from the **`⚙️ Settings`** menu. Each character features procedural pixel rendering, walk cycles, jump physics, and contextual dialogue:
+Choose your favorite companion or create your own from the **`⚙️ Settings`** menu. Each character features full animation, walk cycles, jump physics, and contextual dialogue:
 
 | Companion | Dev Archetype | Visuals & Animation | Signature Quote |
 | :--- | :---: | :--- | :--- |
@@ -45,6 +45,7 @@ Choose your favorite companion from the **`⚙️ Settings`** menu. Each charact
 | **Sir Ducky** 🦆 | *Rubber Duck Debugger* | Bright yellow feathers, orange beak, **black top hat**, dark sunglasses, and a red formal bowtie. Signature waddle walk! | *"QUACK! Walk me through your bug line by line, we'll solve it. 🦆✨"* |
 | **CapyDev** ☕ | *Zen Anti-Burnout Capybara* | Warm brown tones, serene half-closed eyes, **fresh orange with green leaf on head** (*onsen style*), and a steaming coffee mug. | *"Ok I pull up... Take a deep breath. Code compiles in its own time. ☕"* |
 | **Byte** 🦝 | *The Midnight Hacker* | Slate gray fur, **black bandit eye mask**, electric cyan hoodie, striped tail, and a slice of **pizza** 🍕 during breaks. | *"Stealth jump for midnight snacks! Hacking the mainframe... 🦝"* |
+| **Custom** 🎨 | *Your Own Character* | Upload any animated GIF or PNG. Retains original pixel art vibes, walk cycle, ball chase, and armchair rest. | *"Custom companion ready for focus! 🎨"* |
 
 ---
 
@@ -74,30 +75,38 @@ Click the **`🎾`** button on the HUD or tap anywhere on the stage floor to tos
 A modern floating pill crafted in translucent frosted glass (`backdrop-filter: blur(10px)`) that hovers unobtrusively over the scene:
 `[ 🍅 FOCUS 24:50  1/4 ] [ ▶ Start ] [ ↺ ] [ ⏭ ] [ 🎾 ] [ ⚙️ ]`
 
-### 4. 😵‍💫 Real-Time IDE Diagnostics Reactions
-Tied directly into the VS Code Diagnostics API (`vscode.languages.onDidChangeDiagnostics`):
-* If syntax or linter errors appear in your active file, your companion shows concern or gets dizzy.
-* Resolving the issues or saving your work (`Cmd+S` / `Ctrl+S`) triggers an enthusiastic thumbs-up with sparkle particles.
+### 4. 🎨 Custom Avatar Studio (Upload Your Own Companion)
+Bring your own personality to PomoBuddy!
+* **Local Disk or Direct Web URL:** Choose an animated GIF or PNG from your computer using the native OS file picker, or paste any image URL.
+* **Sanitized & Retro-Scaled:** Enforces a strict 2 MB size limit to protect editor memory, automatically re-sampling down to pixel art dimensions with crisp nearest-neighbor rendering.
+* **Full Physics Support:** Your custom avatar walks across the floor, chases the tennis ball 🎾, jumps acrobatically, and rests in the retro armchair during breaks.
 
-### 5. 🔊 Procedural 8-Bit Retro Audio & Sound Packs
+### 5. 🔥 Error Personalities (How Your Buddy Reacts to Bugs)
+Choose how your companion behaves when syntax or linter errors hit your active file:
+* **🔥 Roast My Code (Sarcastic):** Delivers biting, sarcastic dev humor alongside a pixel art skull engulfed in dancing flames.
+* **🔍 Detective:** Pulls out an animated magnifying glass to inspect your code and offers deductive insights.
+* **🧯 Panic Firefighter:** Pulls out a red fire extinguisher, extinguishes floor fires, and continuously sprays simulated physics foam particles.
+* **🐱 Classic:** Gentle, encouraging reactions and cute expressions tailored to each default companion.
+
+### 6. 🔊 Procedural 8-Bit Retro Audio & Sound Packs
 Synthesized on-the-fly using the native **Web Audio API**:
-* **3 Curated Sound Packs:** Switch seamlessly between **Arcade 👾** (authentic chiptune bleeps), **Zen 🧘‍♂️** (calming harmonic Tibetan bowl chimes with soft exponential decay), and **Cyber 🌆** (punchy synthwave tones).
+* **3 Curated Sound Packs:** Switch seamlessly between **Arcade 16-bit 👾** (authentic chiptune bleeps), **Lo-Fi Chill ☕** (calming harmonic tones with soft exponential decay), and **Synthwave / Cyberpunk 🌆** (punchy analog synthesizer tones).
 * **0 KB of external audio files** (zero MP3/WAV dependencies, instant loading).
 * Zero latency, fully offline, and accompanied by a quick mute shortcut (`pomobuddy.toggleMute`) for Zoom/Meet calls.
 
-### 6. 📊 Productivity Stats Dashboard & Daily Streak Tracker
+### 7. 📊 Productivity Stats Dashboard & Daily Streak Tracker
 Track your deep focus momentum right inside the companion settings:
 * **Today's Focus Metrics:** Instant view of completed Pomodoros and accumulated minutes of Deep Work.
 * **Daily Streak Counter:** Keeps you motivated to maintain a consistent daily coding routine.
 * **7-Day Focus Bar Chart:** High-contrast visual mini-bars displaying your daily output over the last week.
 * **Persistent & Privacy-First:** Data stays 100% local inside your VS Code storage (`globalState`), with a 1-click reset option.
 
-### 7. 🐾 Dynamic Companion Mini-Avatar in Status Bar
+### 8. 🐾 Dynamic Companion Mini-Avatar in Status Bar
 Never lose track of your buddy even with panels minimized:
-* Shows your active companion's live emoji (`🐱`, `🧙‍♂️`, `🤖`, `🦆`, `☕`, `🦝`) alongside remaining time, round counter, and state icons.
+* Shows your active companion's live emoji (`🐱`, `🧙‍♂️`, `🤖`, `🦆`, `☕`, `🦝`, `🎨`) alongside remaining time, round counter, and state icons.
 * Click the status bar anytime to instantly bring PomoBuddy to the foreground.
 
-### 8. 🛡️ Sleep Mode Resilient Delta Clock
+### 9. 🛡️ Sleep Mode Resilient Delta Clock
 Unlike naive timers relying on continuous `setInterval` ticks, PomoBuddy computes time remaining using **system clock delta timestamps** (`targetEndTime = Date.now() + delta`). When your laptop lid closes or enters sleep mode, the timer resumes with mathematical precision upon wake-up.
 
 ---
@@ -147,9 +156,9 @@ npm test
 npm run test:coverage
 ```
 
-- **26 Unit Tests across 2 Suites** (`timerManager.test.ts`, `statusBarManager.test.ts`).
+- **29 Unit Tests across 2 Suites** (`timerManager.test.ts`, `statusBarManager.test.ts`).
 - Lightweight VS Code API mocks (`tests/__mocks__/vscode.ts`) execute tests in **~1.8 seconds**.
-- **>83% line coverage** and **>97% function coverage** across core timing and status bar logic.
+- **>85% statement coverage** and **100% function coverage** across core timing and status bar logic.
 
 ---
 
@@ -196,8 +205,10 @@ Customize your settings through the in-extension `⚙️ Settings` modal or dire
   "pomobuddy.longBreakDuration": 15,
   "pomobuddy.roundsBeforeLongBreak": 4,
   "pomobuddy.soundEnabled": true,
+  "pomobuddy.soundPack": "arcade",
   "pomobuddy.avatar": "duck",
-  "pomobuddy.background": "winter"
+  "pomobuddy.background": "winter",
+  "pomobuddy.errorPersonality": "roast"
 }
 ```
 
