@@ -517,7 +517,13 @@ export class PomoWebviewProvider implements vscode.WebviewViewProvider {
               </div>
             </div>
             <div class="stats-chart-wrap">
-              <span class="stats-chart-title">ÚLTIMOS 7 DÍAS</span>
+              <div class="stats-chart-header">
+                <span class="stats-chart-title" id="statsChartTitle">ÚLTIMOS 7 DÍAS</span>
+                <div class="stats-period-tabs">
+                  <button class="stats-period-btn active" id="btnPeriodDays" data-period="days" title="Ver pomodoros por día">📅 Días</button>
+                  <button class="stats-period-btn" id="btnPeriodWeeks" data-period="weeks" title="Ver pomodoros por semana">📆 Semanas</button>
+                </div>
+              </div>
               <div class="stats-bars" id="statsBars"></div>
             </div>
           </div>

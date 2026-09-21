@@ -98,7 +98,7 @@ Generado en tiempo real con la **Web Audio API nativa**:
 Monitorea tu avance y enfoque directamente desde los ajustes de la extensión:
 * **Métricas del Día:** Conteo en tiempo real de Pomodoros completados hoy y minutos acumulados de Trabajo Profundo (*Deep Work*).
 * **Contador de Racha de Días:** Mantén el hábito registrando días continuos de productividad.
-* **Mini Gráfico de Barras de 7 Días:** Visualiza de un vistazo tu constancia a lo largo de la semana.
+* **Gráfico Interactivo de Enfoque (Días y Semanas):** Pestañas interactivas para alternar entre **Últimos 7 Días** y **Últimas 4 Semanas**, con barras proporcionales y tooltips con rango de fechas y horas de Deep Work.
 * **100% Local y Privado:** Tus métricas se guardan de forma segura en `globalState` de VS Code, con botón de reinicio en un clic.
 
 ### 8. 🐾 Mini-Avatar Dinámico en la Barra de Estado

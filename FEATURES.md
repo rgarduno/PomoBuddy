@@ -26,8 +26,7 @@ Este documento es la **fuente de la verdad** del proyecto. PomoBuddy es una exte
 | **Reacción al Guardar Código (Cmd+S)** | ✅ Gesto rápido de pulgar arriba 👍 con destellos | 🟢 Completado (v0.1.0) |
 | **Catálogo Base de Avatares (6 personajes)** | ✅ NekoDev, CodeMage, Robot, Sir Ducky, CapyDev, Byte | 🟢 Completado (v0.1.0) |
 | **Custom Avatar Studio (Sube tu propio avatar)** | ✅ Carga GIF animado o PNG desde disco local o URL (límite 2 MB) | 🟢 Completado (v0.1.0) |
-| **Personalidades del Avatar ante Errores** | ✅ 4 modos: Roast My Code 🔥, Detective 🔍, Pánico con Extintor 🧯, Clásica 🐱 | 🟢 Completado (v0.1.0) |
-| **Estadísticas de Productividad & Rachas** | ✅ Conteo diario, minutos Deep Work, racha consecutiva y gráfico 7 días | 🟢 Completado (v0.1.0) |
+| **Estadísticas de Productividad & Rachas** | ✅ Conteo diario, minutos Deep Work, racha consecutiva y gráfico dual (días y semanas) | 🟢 Completado (v0.1.0) |
 | **Motor de Tiempo Anti-Sleep Mode** | ✅ Deltas matemáticos contra reloj del sistema | 🟢 Completado (v0.1.0) |
 
 ---
@@ -65,7 +64,8 @@ Este documento es la **fuente de la verdad** del proyecto. PomoBuddy es una exte
 - Contador de pomodoros completados en el día.
 - Minutos acumulados de Deep Work.
 - Medidor de racha de días continuos de concentración.
-- Gráfico mini de barras de los últimos 7 días con botón de reinicio.
+- **Gráfico Interactivo Dual:** Selector de período para alternar entre **Últimos 7 Días** y **Últimas 4 Semanas** con barras proporcionales y tooltips de tiempo.
+- Botón de reinicio para resetear el historial local.
 - Datos 100% locales en `globalState`.
 
 ---

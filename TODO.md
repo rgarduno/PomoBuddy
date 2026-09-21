@@ -58,7 +58,7 @@ Este archivo registra el avance en tiempo real del proyecto. Las tareas se irán
 - [x] **Métricas y Estadísticas de Productividad:**
   - [x] Pomodoros completados hoy y minutos acumulados de trabajo profundo.
   - [x] Contador de racha de días consecutivos de productividad.
-  - [x] Gráfico mini de barras de los últimos 7 días con botón de reinicio.
+  - [x] Gráfico interactivo con selector de período: vista por día (últimos 7 días) y por semana (últimas 4 semanas) con botón de reinicio.
 - [x] **Modos de Visualización Flexibles:**
   - [x] Barra lateral clásica (Sidebar).
   - [x] Barra inferior panorámica (Bottom Panel) de ancho completo.

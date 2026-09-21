@@ -10,6 +10,7 @@ import {
   TimerMode,
   TimerSnapshot,
   TimerStatus,
+  WeekStat,
 } from './types';
 
 export class TimerManager {
@@ -393,12 +394,47 @@ export class TimerManager {
       });
     }
 
+    // Últimas 4 semanas (bloques móviles de 7 días)
+    const weekLabels = ['Sem -3', 'Sem -2', 'Sem -1', 'Esta Sem'];
+    const last4Weeks: WeekStat[] = [];
+    for (let w = 3; w >= 0; w--) {
+      const endOffset = w * 7;
+      const startOffset = endOffset + 6;
+
+      const startDate = new Date();
+      startDate.setDate(startDate.getDate() - startOffset);
+      const endDate = new Date();
+      endDate.setDate(endDate.getDate() - endOffset);
+
+      let weekPomodoros = 0;
+      for (let dayOffset = startOffset; dayOffset >= endOffset; dayOffset--) {
+        const curDate = new Date();
+        curDate.setDate(curDate.getDate() - dayOffset);
+        const curDateStr = this.getLocalDateString(curDate);
+        weekPomodoros += history[curDateStr] || 0;
+      }
+
+      const formatShortDate = (d: Date) => {
+        const day = String(d.getDate()).padStart(2, '0');
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        return `${day}/${month}`;
+      };
+
+      last4Weeks.push({
+        weekLabel: weekLabels[3 - w],
+        rangeLabel: `${formatShortDate(startDate)} - ${formatShortDate(endDate)}`,
+        count: weekPomodoros,
+        minutes: weekPomodoros * this.config.workDuration,
+      });
+    }
+
     return {
       todayCount,
       todayMinutes,
       streakDays,
       totalCompleted,
       last7Days,
+      last4Weeks,
     };
   }
 

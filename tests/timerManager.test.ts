@@ -266,7 +266,7 @@ describe('TimerManager', () => {
   });
 
   describe('Productivity Stats & Streaks', () => {
-    it('should initialize with 0 stats and 7 days in history chart', () => {
+    it('should initialize with 0 stats and 7 days and 4 weeks in history chart', () => {
       const stats = timerManager.getStats();
       expect(stats.todayCount).toBe(0);
       expect(stats.todayMinutes).toBe(0);
@@ -274,6 +274,9 @@ describe('TimerManager', () => {
       expect(stats.streakDays).toBe(0);
       expect(stats.last7Days).toHaveLength(7);
       expect(stats.last7Days[stats.last7Days.length - 1].count).toBe(0);
+      expect(stats.last4Weeks).toHaveLength(4);
+      expect(stats.last4Weeks[3].weekLabel).toBe('Esta Sem');
+      expect(stats.last4Weeks[3].count).toBe(0);
     });
 
     it('should record completed pomodoros and emit onStatsUpdated', () => {
@@ -289,6 +292,8 @@ describe('TimerManager', () => {
       expect(stats.todayMinutes).toBe(25);
       expect(stats.totalCompleted).toBe(1);
       expect(stats.streakDays).toBe(1);
+      expect(stats.last4Weeks[3].count).toBe(1);
+      expect(stats.last4Weeks[3].minutes).toBe(25);
       expect(statsSpy).toHaveBeenCalledWith(expect.objectContaining({ todayCount: 1, todayMinutes: 25 }));
     });
 

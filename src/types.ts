@@ -40,12 +40,20 @@ export interface DayStat {
   count: number;
 }
 
+export interface WeekStat {
+  weekLabel: string; // 'Sem -3', 'Sem -2', 'Sem -1', 'Esta Sem'
+  rangeLabel: string; // '01/09 - 07/09'
+  count: number;
+  minutes: number;
+}
+
 export interface ProductivityStats {
   todayCount: number;
   todayMinutes: number;
   streakDays: number;
   totalCompleted: number;
   last7Days: DayStat[];
+  last4Weeks: WeekStat[];
 }
 
 export type IdeReactionType = 'ERROR' | 'FIXED' | 'SAVED' | 'NORMAL';

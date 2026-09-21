@@ -766,11 +766,48 @@ body.vscode-light .hud-progress-wrap {
   text-transform: uppercase;
 }
 
-/* Gráfico de Barras de 7 días */
+/* Gráfico de Barras de 7 días y 4 semanas */
 .stats-chart-wrap {
   display: flex;
   flex-direction: column;
   gap: 4px;
+}
+
+.stats-chart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2px;
+}
+
+.stats-period-tabs {
+  display: flex;
+  gap: 3px;
+  background: rgba(0, 0, 0, 0.25);
+  padding: 2px;
+  border-radius: 4px;
+}
+
+.stats-period-btn {
+  font-size: 8px;
+  padding: 2px 6px;
+  border: none;
+  background: transparent;
+  color: #a4b0be;
+  cursor: pointer;
+  border-radius: 3px;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+
+.stats-period-btn:hover {
+  color: #ffffff;
+}
+
+.stats-period-btn.active {
+  background: #ff4757;
+  color: #ffffff;
+  font-weight: 700;
 }
 
 .stats-chart-title {

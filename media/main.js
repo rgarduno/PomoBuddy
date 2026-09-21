@@ -2289,6 +2289,9 @@
   });
 
   // Tablero de Estadísticas & Rachas de Enfoque
+  let cachedStats = null;
+  let currentStatsPeriod = 'days'; // 'days' | 'weeks'
+
   const btnResetStats = document.getElementById('btnResetStats');
   btnResetStats?.addEventListener('click', () => {
     playClick();
@@ -2296,27 +2299,55 @@
     setDialogue('Historial de estadísticas reiniciado.');
   });
 
-  function updateStatsUI(stats) {
-    if (!stats) return;
-    const elToday = document.getElementById('statTodayCount');
-    const elTime = document.getElementById('statTodayTime');
-    const elStreak = document.getElementById('statStreak');
-    const elTotal = document.getElementById('statTotal');
+  const btnPeriodDays = document.getElementById('btnPeriodDays');
+  const btnPeriodWeeks = document.getElementById('btnPeriodWeeks');
+
+  btnPeriodDays?.addEventListener('click', () => {
+    playClick();
+    currentStatsPeriod = 'days';
+    btnPeriodDays.classList.add('active');
+    btnPeriodWeeks?.classList.remove('active');
+    renderStatsBars();
+  });
+
+  btnPeriodWeeks?.addEventListener('click', () => {
+    playClick();
+    currentStatsPeriod = 'weeks';
+    btnPeriodWeeks.classList.add('active');
+    btnPeriodDays?.classList.remove('active');
+    renderStatsBars();
+  });
+
+  function renderStatsBars() {
+    if (!cachedStats) return;
     const elBars = document.getElementById('statsBars');
+    const elChartTitle = document.getElementById('statsChartTitle');
+    if (!elBars) return;
 
-    if (elToday) elToday.textContent = stats.todayCount || 0;
-    if (elTime) {
-      const mins = stats.todayMinutes || 0;
-      const hrs = Math.floor(mins / 60);
-      const rem = mins % 60;
-      elTime.textContent = hrs > 0 ? `${hrs}h ${rem}m` : `${rem}m`;
-    }
-    if (elStreak) elStreak.textContent = `${stats.streakDays || 0}d`;
-    if (elTotal) elTotal.textContent = stats.totalCompleted || 0;
-
-    if (elBars && stats.last7Days) {
-      const maxVal = Math.max(1, ...stats.last7Days.map((d) => d.count));
-      elBars.innerHTML = stats.last7Days
+    if (currentStatsPeriod === 'weeks' && cachedStats.last4Weeks) {
+      if (elChartTitle) elChartTitle.textContent = 'ÚLTIMAS 4 SEMANAS';
+      const maxVal = Math.max(1, ...cachedStats.last4Weeks.map((w) => w.count));
+      elBars.innerHTML = cachedStats.last4Weeks
+        .map((w) => {
+          const pct = Math.round((w.count / maxVal) * 100);
+          const isEmpty = w.count === 0;
+          const hrs = Math.floor((w.minutes || 0) / 60);
+          const remMins = (w.minutes || 0) % 60;
+          const timeText = hrs > 0 ? `${hrs}h ${remMins}m` : `${remMins}m`;
+          return `
+            <div class="stat-bar-col" title="${w.rangeLabel}: ${w.count} pomodoros (${timeText})">
+              <div class="stat-bar-track">
+                <div class="stat-bar-fill ${isEmpty ? 'empty' : ''}" style="height: ${isEmpty ? '0%' : pct + '%'}"></div>
+              </div>
+              <span class="stat-bar-day">${w.weekLabel}</span>
+            </div>
+          `;
+        })
+        .join('');
+    } else if (cachedStats.last7Days) {
+      if (elChartTitle) elChartTitle.textContent = 'ÚLTIMOS 7 DÍAS';
+      const maxVal = Math.max(1, ...cachedStats.last7Days.map((d) => d.count));
+      elBars.innerHTML = cachedStats.last7Days
         .map((d) => {
           const pct = Math.round((d.count / maxVal) * 100);
           const isEmpty = d.count === 0;
@@ -2331,6 +2362,28 @@
         })
         .join('');
     }
+  }
+
+  function updateStatsUI(stats) {
+    if (stats) cachedStats = stats;
+    if (!cachedStats) return;
+
+    const elToday = document.getElementById('statTodayCount');
+    const elTime = document.getElementById('statTodayTime');
+    const elStreak = document.getElementById('statStreak');
+    const elTotal = document.getElementById('statTotal');
+
+    if (elToday) elToday.textContent = cachedStats.todayCount || 0;
+    if (elTime) {
+      const mins = cachedStats.todayMinutes || 0;
+      const hrs = Math.floor(mins / 60);
+      const rem = mins % 60;
+      elTime.textContent = hrs > 0 ? `${hrs}h ${rem}m` : `${rem}m`;
+    }
+    if (elStreak) elStreak.textContent = `${cachedStats.streakDays || 0}d`;
+    if (elTotal) elTotal.textContent = cachedStats.totalCompleted || 0;
+
+    renderStatsBars();
   }
 
   // --- CUSTOM AVATAR STUDIO LISTENERS ---

@@ -98,7 +98,7 @@ Synthesized on-the-fly using the native **Web Audio API**:
 Track your deep focus momentum right inside the companion settings:
 * **Today's Focus Metrics:** Instant view of completed Pomodoros and accumulated minutes of Deep Work.
 * **Daily Streak Counter:** Keeps you motivated to maintain a consistent daily coding routine.
-* **7-Day Focus Bar Chart:** High-contrast visual mini-bars displaying your daily output over the last week.
+* **Dual Period Focus Chart (Days & Weeks):** Interactive tabs to toggle between **Last 7 Days** and **Last 4 Weeks**, with proportional bars and hover tooltips showing date ranges and Deep Work hours.
 * **Persistent & Privacy-First:** Data stays 100% local inside your VS Code storage (`globalState`), with a 1-click reset option.
 
 ### 8. 🐾 Dynamic Companion Mini-Avatar in Status Bar
